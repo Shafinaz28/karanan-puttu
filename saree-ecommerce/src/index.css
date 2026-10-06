@@ -109,6 +109,18 @@ section[id] {
   scrollbar-width: none;
 }
 
+.saree-rail {
+  padding-inline: calc(50% - 6.5rem);
+  scroll-padding-inline: calc(50% - 6.5rem);
+}
+
+@media (min-width: 768px) {
+  .saree-rail {
+    padding-inline: 0;
+    scroll-padding-inline: 0;
+  }
+}
+
 .arch-rail::-webkit-scrollbar {
   display: none;
 }

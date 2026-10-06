@@ -154,6 +154,15 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const node = rail.current
+    if (!node || window.matchMedia("(min-width: 768px)").matches) return
+    const card = node.querySelector("li")
+    if (!card) return
+    const gap = parseFloat(window.getComputedStyle(node).columnGap) || 0
+    node.scrollLeft = card.offsetWidth + gap
+  }, [])
+
+  useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
     if (media.matches) return undefined
     const timer = window.setInterval(() => {
@@ -259,34 +268,16 @@ export default function Home() {
           railPaused.current = false
         }}
       >
-        <div className="relative mx-auto max-w-6xl">
-          <button
-            type="button"
-            onClick={() => scrollSarees(-1)}
-            aria-label="Previous sarees"
-            className="motion-arrow absolute top-[38%] left-0 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white text-ink shadow"
-          >
-            ‹
-          </button>
-          <ul
-            ref={rail}
-            className="arch-rail flex gap-5 overflow-x-auto scroll-smooth px-12"
-          >
-            {products.map((product) => (
-              <li key={product.id} className="w-[190px] shrink-0">
-                <ProductCard product={product} />
-              </li>
-            ))}
-          </ul>
-          <button
-            type="button"
-            onClick={() => scrollSarees(1)}
-            aria-label="Next sarees"
-            className="motion-arrow absolute top-[38%] right-0 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white text-ink shadow"
-          >
-            ›
-          </button>
-        </div>
+        <ul
+          ref={rail}
+          className="arch-rail saree-rail mx-auto flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth md:max-w-6xl md:snap-none md:gap-5"
+        >
+          {products.map((product) => (
+            <li key={product.id} className="w-52 shrink-0 snap-center md:w-[220px] lg:w-[190px]">
+              <ProductCard product={product} />
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="bg-white px-4 py-16">
