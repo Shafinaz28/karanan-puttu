@@ -5,9 +5,11 @@ import logo from "../assets/images/kpc-logo.png"
 
 const links = [
   { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
   { to: "/shop", label: "Shop" },
-  { to: "/shop?collection=new", label: "New Arrivals" },
-  { to: "/about", label: "About Us" },
+  { to: "/shop?collection=new", label: "New Arrival" },
+  { to: "/locations", label: "Our Locations" },
+  { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact Us" },
 ]
 
@@ -89,13 +91,14 @@ export default function Navbar() {
             alt=""
             className="h-14 w-14 object-contain sm:h-16 sm:w-16"
           />
-          <span className="hidden font-display text-lg tracking-[0.16em] text-cream md:inline">
+          <span className="hidden font-display text-lg tracking-[0.16em] text-cream xl:inline">
             SAREE STORE
           </span>
         </Link>
 
-        <nav className="hidden flex-1 items-center justify-center gap-6 text-[13px] lg:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-3 text-[12px] lg:flex xl:gap-4 xl:text-[13px]">
           <NavLink to="/" label="Home" current={isCurrent("/", location)} />
+          <NavLink to="/about" label="About" current={isCurrent("/about", location)} />
           <NavLink to="/shop" label="Shop" current={isShop(location)} />
 
           <div
@@ -135,10 +138,11 @@ export default function Navbar() {
 
           <NavLink
             to="/shop?collection=new"
-            label="New Arrivals"
+            label="New Arrival"
             current={location.search === "?collection=new"}
           />
-          <NavLink to="/about" label="About Us" current={isCurrent("/about", location)} />
+          <NavLink to="/locations" label="Our Locations" current={isCurrent("/locations", location)} />
+          <NavLink to="/blog" label="Blog" current={isCurrent("/blog", location)} />
           <NavLink to="/contact" label="Contact Us" current={isCurrent("/contact", location)} />
         </nav>
 
@@ -193,7 +197,7 @@ export default function Navbar() {
       {menuOpen && (
         <nav className="max-h-[70vh] overflow-y-auto border-t border-cream/15 px-4 py-2 lg:hidden">
           {links
-            .filter((link) => ["Home", "Shop"].includes(link.label))
+            .filter((link) => ["Home", "About", "Shop"].includes(link.label))
             .map((link) => (
               <Link key={link.label} to={link.to} className="block border-b border-cream/15 py-3 text-sm">
                 {link.label}
@@ -220,7 +224,7 @@ export default function Navbar() {
           )}
 
           {links
-            .filter((link) => ["New Arrivals", "About Us", "Contact Us"].includes(link.label))
+            .filter((link) => ["New Arrival", "Our Locations", "Blog", "Contact Us"].includes(link.label))
             .map((link) => (
             <Link key={link.label} to={link.to} className="block border-b border-cream/15 py-3 text-sm">
               {link.label}
