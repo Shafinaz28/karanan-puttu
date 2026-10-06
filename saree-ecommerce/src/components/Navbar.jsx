@@ -55,7 +55,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 text-primary">
-      <div className="bg-primary text-cream">
+      <div className="hidden bg-primary text-cream md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-[11px] lg:px-8">
           <div className="flex items-center gap-3">
             <SocialLink href="https://instagram.com" label="Instagram">
@@ -148,17 +148,17 @@ export default function Navbar() {
             aria-label="Search sarees"
             aria-expanded={searchOpen}
             onClick={() => setSearchOpen((open) => !open)}
-            className="motion-icon"
+            className="motion-icon hidden lg:inline-flex"
           >
             <SearchIcon />
           </button>
-          <Link to="/wishlist" aria-label="Wishlist" className="motion-icon">
+          <Link to="/wishlist" aria-label="Wishlist" className="motion-icon hidden lg:inline-flex">
             <HeartIcon />
           </Link>
-          <Link to="/account" aria-label="Account" className="motion-icon">
+          <Link to="/account" aria-label="Account" className="motion-icon hidden lg:inline-flex">
             <UserIcon />
           </Link>
-          <Link to="/cart" aria-label={`Cart, ${count} items`} className="motion-icon relative">
+          <Link to="/cart" aria-label={`Cart, ${count} items`} className="motion-icon relative hidden lg:inline-flex">
             <CartIcon />
             <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-secondary px-1 text-[10px] text-ink">
               {count}
@@ -226,6 +226,25 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            className="block w-full border-b border-ink/5 py-3 text-left text-sm"
+            onClick={() => {
+              setMenuOpen(false)
+              setSearchOpen(true)
+            }}
+          >
+            Search
+          </button>
+          <Link to="/wishlist" className="block border-b border-ink/5 py-3 text-sm">
+            Wishlist
+          </Link>
+          <Link to="/account" className="block border-b border-ink/5 py-3 text-sm">
+            Account
+          </Link>
+          <Link to="/cart" className="block border-b border-ink/5 py-3 text-sm">
+            Cart ({count})
+          </Link>
         </nav>
       )}
       </div>

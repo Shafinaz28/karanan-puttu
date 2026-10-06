@@ -12,18 +12,22 @@ const charter = [
   {
     title: "Hand-drawn gold",
     text: "Zari is drawn and set by hand. No machine-made substitute enters the border.",
+    icon: "hand",
   },
   {
     title: "Silk that breathes",
     text: "Mulberry silk is chosen for lustre and for the way it sits on the body.",
+    icon: "silk",
   },
   {
     title: "No synthetic twist",
     text: "The warp stays pure. Tested yarn is refused before it reaches the loom.",
+    icon: "pure",
   },
   {
     title: "Heirloom retention",
     text: "A Karanan Puttu saree is woven to be worn, stored, and passed on.",
+    icon: "heirloom",
   },
 ]
 
@@ -119,6 +123,7 @@ export default function Home() {
   const { addToCart } = useCart()
   const rail = useRef(null)
   const railPaused = useRef(false)
+  const heroPaused = useRef(false)
   const current = slides[slide]
   const featured = [6, 2, 3, 7]
     .map((id) => products.find((product) => product.id === id))
@@ -134,10 +139,6 @@ export default function Home() {
   function addPiece(id) {
     addToCart(id)
     setAddedId(id)
-  }
-
-  function move(step) {
-    setSlide((index) => (index + step + slides.length) % slides.length)
   }
 
   function scrollSarees(direction) {
@@ -162,9 +163,27 @@ export default function Home() {
     return () => window.clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (media.matches) return undefined
+    const timer = window.setInterval(() => {
+      if (heroPaused.current) return
+      setSlide((index) => (index + 1) % slides.length)
+    }, 4000)
+    return () => window.clearInterval(timer)
+  }, [])
+
   return (
     <>
-      <section className="relative min-h-[640px] h-[calc(100vh-7.25rem)]">
+      <section
+        className="relative min-h-[640px] h-[calc(100vh-7.25rem)]"
+        onMouseEnter={() => {
+          heroPaused.current = true
+        }}
+        onMouseLeave={() => {
+          heroPaused.current = false
+        }}
+      >
         <img
           src={current.image}
           alt={current.alt}
@@ -197,31 +216,16 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => move(-1)}
-          aria-label="Previous slide"
-          className="motion-arrow absolute top-1/2 left-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-ink"
-        >
-          ‹
-        </button>
-        <button
-          type="button"
-          onClick={() => move(1)}
-          aria-label="Next slide"
-          className="motion-arrow absolute top-1/2 right-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-ink"
-        >
-          ›
-        </button>
-        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3">
           {slides.map((item, index) => (
             <button
               key={item.title}
               type="button"
               aria-label={`Show slide ${index + 1}`}
+              aria-current={index === slide}
               onClick={() => setSlide(index)}
-              className={`h-2.5 w-2.5 rounded-full ${
-                index === slide ? "bg-white" : "bg-white/45"
+              className={`h-3 w-3 rounded-full border-2 border-white ${
+                index === slide ? "bg-white" : "bg-transparent"
               }`}
             />
           ))}
@@ -519,8 +523,10 @@ export default function Home() {
           </h2>
           <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {charter.map((item) => (
-              <article key={item.title} className="motion-card border border-secondary/30 bg-paper p-6">
-                <p className="text-secondary">◆</p>
+              <article key={item.title} className="motion-card border border-secondary/30 bg-paper p-6 text-center">
+                <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-secondary text-secondary">
+                  <CharterIcon name={item.icon} />
+                </span>
                 <h3 className="mt-4 font-display text-2xl text-primary">{item.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-ink/75">{item.text}</p>
               </article>
@@ -587,6 +593,59 @@ export default function Home() {
       </section>
       <VisitStores />
     </>
+  )
+}
+
+function CharterIcon({ name }) {
+  const common = {
+    viewBox: "0 0 24 24",
+    className: "h-5 w-5",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+  }
+
+  if (name === "hand") {
+    return (
+      <svg {...common}>
+        <path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11" />
+        <path d="M11 10.5V5.5a1.5 1.5 0 0 1 3 0V11" />
+        <path d="M14 10V7.5a1.5 1.5 0 0 1 3 0V14c0 3.2-2.2 5.5-5.2 5.5h-.6C8.5 19.5 7 18 6 16.2L4.2 13a1.4 1.4 0 0 1 2.4-1.5L8 13" />
+      </svg>
+    )
+  }
+
+  if (name === "silk") {
+    return (
+      <svg {...common}>
+        <path d="M3 8c2.2 2 4.2 2 6.4 0S13.6 6 16 8s4.2 2 5 0" />
+        <path d="M3 12c2.2 2 4.2 2 6.4 0S13.6 10 16 12s4.2 2 5 0" />
+        <path d="M3 16c2.2 2 4.2 2 6.4 0S13.6 14 16 16s4.2 2 5 0" />
+      </svg>
+    )
+  }
+
+  if (name === "pure") {
+    return (
+      <svg {...common}>
+        <path d="M8 4v10" />
+        <path d="M16 4v10" />
+        <path d="M6 18h12" />
+        <path d="M9 11l2.2 2.2L16 8" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg {...common}>
+      <path d="M4 9h16v10H4z" />
+      <path d="M4 13h16" />
+      <path d="M12 9v10" />
+      <path d="M8 9c0-2.2 8-2.2 8 0" />
+    </svg>
   )
 }
 
