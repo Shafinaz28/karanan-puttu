@@ -55,7 +55,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 text-primary">
-      <div className="hidden bg-primary text-cream md:block">
+      <div className="hidden border-b border-primary/10 bg-paper text-primary md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-[11px] lg:px-8">
           <div className="flex items-center gap-3">
             <SocialLink href="https://instagram.com" label="Instagram">
@@ -81,7 +81,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      <div className="border-b border-secondary/40 bg-[#f7f1e8]">
+      <div className="border-b border-secondary/50 bg-primary text-cream">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 lg:px-8">
         <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="Saree Store">
           <img
@@ -89,7 +89,7 @@ export default function Navbar() {
             alt=""
             className="h-14 w-14 object-contain sm:h-16 sm:w-16"
           />
-          <span className="hidden font-display text-lg tracking-[0.16em] text-primary md:inline">
+          <span className="hidden font-display text-lg tracking-[0.16em] text-cream md:inline">
             SAREE STORE
           </span>
         </Link>
@@ -142,7 +142,7 @@ export default function Navbar() {
           <NavLink to="/contact" label="Contact Us" current={isCurrent("/contact", location)} />
         </nav>
 
-        <div className="ml-auto flex items-center gap-3 text-primary sm:gap-4">
+        <div className="ml-auto flex items-center gap-3 text-cream sm:gap-4">
           <button
             type="button"
             aria-label="Search sarees"
@@ -166,20 +166,20 @@ export default function Navbar() {
           </Link>
           <button
             type="button"
-            className="motion-icon flex h-9 w-9 flex-col items-center justify-center gap-1.5 rounded-lg border border-primary/30 lg:hidden"
+            className="motion-icon flex h-9 w-9 flex-col items-center justify-center gap-1.5 rounded-lg border border-cream/40 lg:hidden"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <span className="block h-px w-4 bg-primary" />
-            <span className="block h-px w-4 bg-primary" />
-            <span className="block h-px w-4 bg-primary" />
+            <span className="block h-px w-4 bg-cream" />
+            <span className="block h-px w-4 bg-cream" />
+            <span className="block h-px w-4 bg-cream" />
           </button>
         </div>
       </div>
 
       {searchOpen && (
-        <form onSubmit={searchSarees} className="border-t border-ink/10 px-4 py-3 lg:px-8">
+        <form onSubmit={searchSarees} className="border-t border-cream/15 px-4 py-3 lg:px-8">
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -191,11 +191,11 @@ export default function Navbar() {
       )}
 
       {menuOpen && (
-        <nav className="max-h-[70vh] overflow-y-auto border-t border-ink/10 px-4 py-2 lg:hidden">
+        <nav className="max-h-[70vh] overflow-y-auto border-t border-cream/15 px-4 py-2 lg:hidden">
           {links
             .filter((link) => ["Home", "Shop"].includes(link.label))
             .map((link) => (
-              <Link key={link.label} to={link.to} className="block border-b border-ink/5 py-3 text-sm">
+              <Link key={link.label} to={link.to} className="block border-b border-cream/15 py-3 text-sm">
                 {link.label}
               </Link>
             ))}
@@ -204,7 +204,7 @@ export default function Navbar() {
             type="button"
             aria-expanded={collectionsOpen}
             onClick={() => setCollectionsOpen((open) => !open)}
-            className="flex w-full items-center justify-between border-b border-ink/5 py-3 text-left text-sm"
+            className="flex w-full items-center justify-between border-b border-cream/15 py-3 text-left text-sm"
           >
             Collections
             <Chevron open={collectionsOpen} />
@@ -222,13 +222,13 @@ export default function Navbar() {
           {links
             .filter((link) => ["New Arrivals", "About Us", "Contact Us"].includes(link.label))
             .map((link) => (
-            <Link key={link.label} to={link.to} className="block border-b border-ink/5 py-3 text-sm">
+            <Link key={link.label} to={link.to} className="block border-b border-cream/15 py-3 text-sm">
               {link.label}
             </Link>
           ))}
           <button
             type="button"
-            className="block w-full border-b border-ink/5 py-3 text-left text-sm"
+            className="block w-full border-b border-cream/15 py-3 text-left text-sm"
             onClick={() => {
               setMenuOpen(false)
               setSearchOpen(true)
@@ -236,13 +236,13 @@ export default function Navbar() {
           >
             Search
           </button>
-          <Link to="/wishlist" className="block border-b border-ink/5 py-3 text-sm">
+          <Link to="/wishlist" className="block border-b border-cream/15 py-3 text-sm">
             Wishlist
           </Link>
-          <Link to="/account" className="block border-b border-ink/5 py-3 text-sm">
+          <Link to="/account" className="block border-b border-cream/15 py-3 text-sm">
             Account
           </Link>
-          <Link to="/cart" className="block border-b border-ink/5 py-3 text-sm">
+          <Link to="/cart" className="block border-b border-cream/15 py-3 text-sm">
             Cart ({count})
           </Link>
         </nav>
@@ -293,7 +293,7 @@ function NavLink({ to, label, current }) {
       className={
         current
           ? "text-secondary transition-colors duration-300"
-          : "text-primary transition-colors duration-300 hover:text-secondary"
+          : "text-cream transition-colors duration-300 hover:text-secondary"
       }
     >
       {label}

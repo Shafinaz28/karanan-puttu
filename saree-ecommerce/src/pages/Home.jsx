@@ -260,7 +260,7 @@ export default function Home() {
       </section>
 
       <section
-        className="bg-[#f6efe4] px-4 py-12"
+        className="bg-cream px-4 py-12"
         onMouseEnter={() => {
           railPaused.current = true
         }}
@@ -273,7 +273,7 @@ export default function Home() {
           className="arch-rail saree-rail mx-auto flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth md:max-w-6xl md:snap-none md:gap-5"
         >
           {products.map((product) => (
-            <li key={product.id} className="w-52 shrink-0 snap-center md:w-[220px] lg:w-[190px]">
+            <li key={product.id} className="w-52 shrink-0 snap-center rounded-2xl bg-white px-3 py-4 md:w-[220px] lg:w-[190px]">
               <ProductCard product={product} />
             </li>
           ))}
