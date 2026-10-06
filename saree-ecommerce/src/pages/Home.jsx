@@ -144,13 +144,13 @@ export default function Home() {
   function scrollSarees(direction) {
     const node = rail.current
     if (!node) return
-    const step = 230
-    const atEnd = node.scrollLeft + node.clientWidth >= node.scrollWidth - 12
-    if (direction > 0 && atEnd) {
-      node.scrollTo({ left: 0, behavior: "smooth" })
-      return
-    }
-    node.scrollBy({ left: direction * step, behavior: "smooth" })
+    const card = node.querySelector("li")
+    const gap = parseFloat(window.getComputedStyle(node).columnGap) || 20
+    const step = (card?.offsetWidth || 190) + gap
+    const max = node.scrollWidth - node.clientWidth
+    if (direction > 0 && node.scrollLeft >= max - 4) return
+    const next = Math.min(Math.max(node.scrollLeft + direction * step, 0), max)
+    node.scrollTo({ left: next, behavior: "smooth" })
   }
 
   useEffect(() => {
@@ -176,7 +176,7 @@ export default function Home() {
   return (
     <>
       <section
-        className="relative min-h-[640px] h-[calc(100vh-7.25rem)]"
+        className="relative h-[84vh] min-h-[520px] md:h-[calc(100vh-7.25rem)] md:min-h-[640px]"
         onMouseEnter={() => {
           heroPaused.current = true
         }}
@@ -195,10 +195,10 @@ export default function Home() {
             <h1 className="font-display text-5xl leading-[1.05] md:text-7xl">
               {current.title}
             </h1>
-            <p className="mt-5 max-w-md text-sm leading-7 text-cream/85 md:text-base">
+            <p className="mt-4 max-w-md text-sm leading-7 text-cream/85 md:mt-5 md:text-base">
               {current.text}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3 md:mt-8">
               <Link
                 to="/shop"
                 className="motion-btn motion-fill inline-flex items-center gap-3 rounded-sm bg-primary px-5 py-3 text-xs tracking-[0.14em] text-cream uppercase"
