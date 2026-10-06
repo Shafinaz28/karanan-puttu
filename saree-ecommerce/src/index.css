@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4a0e17;
+  --color-primary-soft: #6b1a26;
+  --color-secondary: #c59b27;
+  --color-cream: #f3e8dc;
+  --color-cream-deep: #e7d5c4;
+  --color-paper: #f7f1e8;
+  --color-ink: #1c1917;
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --text-3xl: 1.5rem;
+  --text-3xl--line-height: 1.25;
+  --text-4xl: 1.75rem;
+  --text-4xl--line-height: 1.2;
+  --text-5xl: 2rem;
+  --text-5xl--line-height: 1.2;
+  --text-6xl: 2.35rem;
+  --text-6xl--line-height: 1.15;
+  --text-7xl: 2.75rem;
+  --text-7xl--line-height: 1.15;
+}
+
+.hero-pattern {
+  background-color: #4a0e17;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 2 L54 28 L28 54 L2 28 Z' fill='none' stroke='%23C59B27' stroke-opacity='0.18'/%3E%3C/svg%3E");
+}
+
+section[id] {
+  scroll-margin-top: 8rem;
+}
+
+.font-display {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.service-card {
+  transition:
+    transform 0.45s ease,
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.service-card p {
+  transition: color 0.45s ease;
+}
+
+.service-mark {
+  transition: background-color 0.45s ease, color 0.45s ease;
+}
+
+.service-card:hover {
+  transform: scale(1.06);
+  background-color: #4a0e17;
+  color: #f3e8dc;
+  border-color: #c59b27;
+  box-shadow: 0 16px 34px rgba(74, 14, 23, 0.2);
+}
+
+.service-card:hover p {
+  color: #f3e8dc;
+}
+
+.service-card:hover .service-mark {
+  background-color: #c59b27;
+  color: #4a0e17;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card:hover {
+    transform: none;
+  }
+}
+
+.motion-card {
+  overflow: hidden;
+  border-radius: 0.9rem;
+}
+
+.arch-photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  border-radius: 999px 999px 0.85rem 0.85rem;
+}
+
+.arch-photo img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.group:hover .arch-photo img {
+  transform: scale(1.06);
+}
+
+.arch-rail {
+  scrollbar-width: none;
+}
+
+.arch-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.motion-btn:not(.rounded-full) {
+  border-radius: 0.55rem;
+}
+
+.motion-btn,
+.motion-icon,
+.motion-arrow,
+.motion-step,
+.motion-card,
+.motion-zoom,
+.motion-circle {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    background-color 0.28s ease,
+    color 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.motion-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(74, 14, 23, 0.18);
+}
+
+.motion-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.motion-fill:hover {
+  background-color: #6b1a26;
+}
+
+.motion-gold:hover {
+  background-color: #d4ad3a;
+}
+
+.motion-line:hover {
+  background-color: #4a0e17;
+  color: #f3e8dc;
+  border-color: #4a0e17;
+}
+
+.motion-ghost:hover {
+  background-color: #f3e8dc;
+  color: #4a0e17;
+  border-color: #f3e8dc;
+}
+
+.motion-icon:hover {
+  transform: scale(1.08);
+  color: #c59b27;
+}
+
+.motion-arrow:hover {
+  background-color: #fff;
+  box-shadow: 0 8px 18px rgba(28, 25, 23, 0.16);
+}
+
+.motion-step:hover {
+  background-color: #f3e8dc;
+  color: #4a0e17;
+}
+
+.motion-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 34px rgba(28, 25, 23, 0.12);
+  border-color: rgba(197, 155, 39, 0.55);
+}
+
+.motion-card:hover .motion-zoom {
+  transform: scale(1.06);
+}
+
+.motion-circle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-btn,
+  .motion-icon,
+  .motion-arrow,
+  .motion-card,
+  .motion-zoom,
+  .motion-circle {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .motion-btn:hover,
+  .motion-btn:active,
+  .motion-icon:hover,
+  .motion-card:hover,
+  .motion-card:hover .motion-zoom,
+  .motion-circle:hover,
+  .group:hover .arch-photo img {
+    transform: none;
+  }
+}
