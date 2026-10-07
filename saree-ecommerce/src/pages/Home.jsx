@@ -421,30 +421,30 @@ export default function Home() {
           <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">
             Our Working Process
           </h2>
-          <ol className="mt-14 grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {steps.map((item, index) => (
-              <li key={item.step} className={index % 2 === 1 ? "lg:mt-16" : ""}>
-                <div className="mx-auto h-36 w-36 overflow-hidden rounded-full border-4 border-[#c59b27] p-1">
+          <ol className="mt-14 grid items-start gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            {steps.map((item) => (
+              <li key={item.step} className="flex flex-col items-center text-center">
+                <div className="h-36 w-36 overflow-hidden rounded-full border-4 border-[#c59b27] p-1">
                   <img
                     src={item.image}
                     alt=""
                     className="h-full w-full rounded-full object-cover"
                   />
                 </div>
-                <div className="relative mx-auto -mt-5 flex h-12 w-48 items-center justify-center">
+                <div className="relative -mt-5 flex h-12 w-44 items-center justify-center">
                   <span
                     className="absolute inset-0 border-2 border-[#c59b27] bg-[#fffaf3]"
-                    style={{ clipPath: "polygon(8% 0, 90% 0, 100% 50%, 90% 100%, 8% 100%, 0 50%)" }}
+                    style={{ clipPath: "polygon(8% 0, 92% 0, 100% 50%, 92% 100%, 8% 100%, 0 50%)" }}
                     aria-hidden="true"
                   />
                   <span className="relative rounded-full bg-primary px-3 py-1 text-[10px] tracking-[0.12em] text-cream uppercase">
                     {item.step}
                   </span>
                 </div>
-                <h3 className="mx-auto mt-4 max-w-[14rem] font-display text-2xl leading-tight text-[#b8882d]">
+                <h3 className="mt-4 flex min-h-[5.7rem] max-w-[14rem] items-start justify-center font-display text-2xl leading-tight text-[#b8882d]">
                   {item.title}
                 </h3>
-                <p className="mx-auto mt-2 max-w-[16rem] text-sm leading-6 text-ink/55">
+                <p className="mt-2 max-w-[16rem] text-sm leading-6 text-ink/55">
                   {item.text}
                 </p>
               </li>
