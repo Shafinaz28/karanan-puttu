@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { sareeImages } from "../data/products"
 
 const services = [
   {
@@ -80,7 +81,7 @@ export default function About() {
     <>
       <section className="relative flex min-h-[460px] items-center bg-[#6b2d32]">
         <img
-          src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1600&q=80"
+          src={sareeImages[6]}
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -104,7 +105,7 @@ export default function About() {
         <div className="relative">
           <div className="absolute -top-4 -left-4 hidden h-full w-full rounded-2xl border border-secondary/50 lg:block" />
           <img
-            src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80"
+            src={sareeImages[2]}
             alt="A silk saree with a gold border"
             className="relative h-[480px] w-full rounded-2xl object-cover shadow-lg"
           />

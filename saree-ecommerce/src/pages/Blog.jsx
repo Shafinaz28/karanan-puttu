@@ -1,22 +1,23 @@
 import { Link } from "react-router-dom"
+import { sareeImages } from "../data/products"
 
 const posts = [
   {
     title: "How we price an old silk saree",
     text: "Zari, tears, and the age of the weave all change the offer. The rate is told before you agree.",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+    image: sareeImages[10],
     to: "/contact",
   },
   {
     title: "What to look for in a new Kanchipuram",
     text: "A named silk, a hand-drawn border, and a blouse piece that leaves with the drape.",
-    image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+    image: sareeImages[3],
     to: "/shop",
   },
   {
     title: "A morning at the showroom",
     text: "Daylight is the best way to see gold. Book a visit in Chennai or Bengaluru.",
-    image: "https://images.unsplash.com/photo-1759738096144-b43206226765?auto=format&fit=crop&w=900&q=80",
+    image: sareeImages[7],
     to: "/locations",
   },
 ]
@@ -26,7 +27,7 @@ export default function Blog() {
     <>
       <section className="relative flex min-h-[420px] items-center bg-[#6b2d32]">
         <img
-          src="https://images.unsplash.com/photo-1594140701076-3400bf982497?auto=format&fit=crop&w=1600&q=80"
+          src={sareeImages[4]}
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />

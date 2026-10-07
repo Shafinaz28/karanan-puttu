@@ -1,5 +1,4 @@
-const storePhoto = (id) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`
+import { sareeImages } from "../data/products"
 
 const stores = [
   {
@@ -7,21 +6,21 @@ const stores = [
     name: "T. Nagar",
     address: "T. Nagar showroom, Chennai. Silk is shown by appointment in daylight.",
     query: "T Nagar Chennai",
-    image: storePhoto("1610030469983-98e550d6193c"),
+    image: sareeImages[0],
   },
   {
     city: "Chennai",
     name: "Velachery",
     address: "Velachery showroom, Chennai. Bridal silks and old pattu valuation.",
     query: "Velachery Chennai",
-    image: storePhoto("1617627143750-d86bc21e42bb"),
+    image: sareeImages[1],
   },
   {
     city: "Bengaluru",
     name: "Jayanagar",
     address: "Jayanagar showroom, Bengaluru. Handloom silk and temple borders.",
     query: "Jayanagar Bengaluru",
-    image: storePhoto("1759738096144-b43206226765"),
+    image: sareeImages[6],
   },
 ]
 

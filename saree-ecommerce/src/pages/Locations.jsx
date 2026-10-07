@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom"
 import VisitStores from "../components/VisitStores"
+import { sareeImages } from "../data/products"
 
 export default function Locations() {
   return (
     <>
       <section className="relative flex min-h-[420px] items-center bg-[#6b2d32]">
         <img
-          src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1600&q=80"
+          src={sareeImages[0]}
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />

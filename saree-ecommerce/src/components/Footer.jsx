@@ -116,9 +116,9 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-cream/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 text-xs text-cream/70 md:flex-row md:items-center md:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-center text-xs text-cream/70 lg:flex-row lg:px-8 lg:text-left">
           <p>© 2026 Karnan Pattu Centre. All rights reserved. Handcrafted in India.</p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-end">
             <Link to="/contact" className="hover:text-cream">
               Terms & conditions
             </Link>
@@ -129,9 +129,6 @@ export default function Footer() {
               Shipping & payout policy
             </Link>
           </div>
-          <p className="rounded-full border border-secondary/50 px-3 py-1 tracking-[0.08em] text-secondary uppercase">
-            100% secure payments: UPI · RuPay · Visa · Mastercard
-          </p>
         </div>
       </div>
       </div>

@@ -3,10 +3,9 @@ import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import ProductCard from "../components/ProductCard"
 import VisitStores from "../components/VisitStores"
-import { formatPrice, products } from "../data/products"
+import { formatPrice, products, sareeImages } from "../data/products"
 
-const photo = (id) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&q=80`
+const photo = (index) => sareeImages[index]
 
 const charter = [
   {
@@ -33,19 +32,19 @@ const charter = [
 
 const slides = [
   {
-    image: photo("1610030469983-98e550d6193c"),
+    image: photo(0),
     title: "Buy new silk. Sell your old silk.",
     text: "Shop classic and modern sarees, or turn an old, used, or damaged silk into cash the same day.",
     alt: "A silk saree with a gold border",
   },
   {
-    image: photo("1610030469983-98e550d6193c"),
+    image: photo(2),
     title: "Gold at the border. Silk at the heart.",
     text: "Kanchipuram weaves with a blouse piece included, ready for the tailor.",
     alt: "A wine silk saree with gold work",
   },
   {
-    image: photo("1759738096144-b43206226765"),
+    image: photo(6),
     title: "Woven by hand since 1875.",
     text: "The same loom promise: silk that can be named, and zari that is drawn by hand.",
     alt: "A weaver at a traditional handloom",
@@ -70,22 +69,18 @@ const assurances = [
   },
 ]
 
-const favorites = [
-  { name: "Kalamkari cotton saree", to: "/shop?collection=cotton", image: photo("1742677143629-b9784beab2e1") },
-  { name: "Semi dola saree", to: "/shop?collection=silk", image: photo("1610030469983-98e550d6193c") },
-  { name: "Kalamkari semi silk saree", to: "/shop?collection=silk", image: photo("1692992193981-d3d92fabd9cb") },
-  { name: "Semi raw silk saree", to: "/shop?collection=silk", image: photo("1732381917488-39f31539cd4f") },
-  { name: "Jaipur cotton saree", to: "/shop?collection=cotton", image: photo("1749317776467-6dcf2bfbd26b") },
-  { name: "Banarasi semi crepe saree", to: "/shop?collection=banarasi", image: photo("1594140701076-3400bf982497") },
-  { name: "Semi Mysore silk saree", to: "/shop?collection=silk", image: photo("1617627143750-d86bc21e42bb") },
-]
+const favorites = products.slice(0, 7).map((product) => ({
+  name: product.name,
+  to: `/product/${product.id}`,
+  image: product.image,
+}))
 
 const weaves = [
-  { label: "Kanchipuram", note: "Korvai silk", to: "/shop?category=Silk", image: photo("1610030469983-98e550d6193c") },
-  { label: "Banarasi", note: "Kadhua zari", to: "/shop", image: photo("1594140701076-3400bf982497") },
-  { label: "Mysore crepe", note: "Light drape", to: "/shop?category=Silk", image: photo("1617627143750-d86bc21e42bb") },
-  { label: "Organza tissue", note: "Sheer gold", to: "/shop", image: photo("1624214390234-2849d6a888c0") },
-  { label: "Silk dhotis", note: "Temple wear", to: "/shop?category=Cotton", image: photo("1742677143629-b9784beab2e1") },
+  { label: "Kanchipuram", note: "Korvai silk", to: "/shop?category=Silk", image: photo(1) },
+  { label: "Banarasi", note: "Kadhua zari", to: "/shop?collection=banarasi", image: photo(2) },
+  { label: "Mysore crepe", note: "Light drape", to: "/shop?category=Silk", image: photo(4) },
+  { label: "Organza tissue", note: "Sheer gold", to: "/shop?collection=party", image: photo(3) },
+  { label: "Temple border", note: "Gold edge", to: "/shop?collection=traditional", image: photo(5) },
   { label: "Old saree resale", note: "Gold valuation", to: "/contact" },
 ]
 
@@ -94,25 +89,25 @@ const steps = [
     step: "Step 01",
     title: "Share Your Saree Details",
     text: "Share images of your sarees via WhatsApp or call us for an evaluation.",
-    image: photo("1610030469983-98e550d6193c"),
+    image: photo(8),
   },
   {
     step: "Step 02",
     title: "Get An Instant Price Quote",
     text: "Our experts will assess the silk and offer you the best price.",
-    image: photo("1617627143750-d86bc21e42bb"),
+    image: photo(9),
   },
   {
     step: "Step 03",
     title: "Schedule Pickup Or Visit Our Store",
     text: "Book a doorstep pickup, or visit a showroom for an instant deal.",
-    image: photo("1759738096144-b43206226765"),
+    image: photo(10),
   },
   {
     step: "Step 04",
     title: "Get Instant Payment",
     text: "Accept the offer and receive the payment the same day.",
-    image: photo("1594140701076-3400bf982497"),
+    image: photo(7),
   },
 ]
 
@@ -462,8 +457,8 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2">
           <figure className="relative">
             <img
-              src={photo("1617627143750-d86bc21e42bb")}
-              alt="A silk saree worn in a temple corridor"
+              src={photo(9)}
+              alt="Maroon Kanjivaram silk with gold buttas"
               className="h-[520px] w-full rounded-2xl object-cover"
             />
             <figcaption className="absolute bottom-4 left-4 rounded-xl bg-[#3a0c14] px-4 py-3 text-cream">
