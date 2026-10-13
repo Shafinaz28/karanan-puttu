@@ -16,7 +16,7 @@ const posts = [
   },
   {
     title: "A morning at the showroom",
-    text: "Daylight is the best way to see gold. Book a visit in Chennai or Bengaluru.",
+    text: "Daylight is the best way to see gold. Visit V.V. Puram or Jayanagar in Bengaluru.",
     image: sareeImages[7],
     to: "/locations",
   },

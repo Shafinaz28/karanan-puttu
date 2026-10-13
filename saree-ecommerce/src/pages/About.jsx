@@ -48,7 +48,7 @@ const reasons = [
     mark: "04",
     icon: "pin",
     title: "Showrooms near you",
-    text: "Visit Chennai, Bengaluru, Coimbatore, Madurai, or Karaikudi, or write to the desk.",
+    text: "Visit V.V. Puram or Jayanagar in Bengaluru, or call the desk.",
   },
 ]
 
@@ -86,7 +86,7 @@ export default function About() {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-[#3a1216]/55" />
-        <div className="relative mx-auto w-full max-w-6xl px-6 py-20 text-center text-[#f7f1e8] md:px-10">
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-20 text-center text-[#f7f1e8] lg:px-8">
           <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
             <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
               Home
@@ -101,58 +101,54 @@ export default function About() {
           <span className="mx-auto mt-6 block h-px w-16 bg-[#d7c4a2]" />
         </div>
       </section>
-      <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 lg:grid-cols-2 lg:px-6">
-        <div className="relative">
-          <div className="absolute -top-4 -left-4 hidden h-full w-full rounded-2xl border border-secondary/50 lg:block" />
-          <img
-            src={sareeImages[2]}
-            alt="A silk saree with a gold border"
-            className="relative h-[480px] w-full rounded-2xl object-cover shadow-lg"
-          />
-          <p className="absolute bottom-5 left-5 rounded-full bg-[#3a1216] px-4 py-2 text-xs tracking-[0.16em] text-[#d7c4a2] uppercase">
-            Since 1875
-          </p>
-        </div>
-        <div>
-          <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">
-            Our story
-          </p>
-          <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">
-            The house of Karanan Puttu
-          </h2>
-          <p className="mt-6 text-sm leading-7 text-ink/80">
-            The house began in 1875 with one loom and a written rule: silk that can
-            be named, and gold that can be tested. That rule is still the Karanan
-            purity charter.
-          </p>
-          <p className="mt-4 text-sm leading-7 text-ink/80">
-            Today the showroom is in Mylapore, Chennai. The weaves still come from
-            the Kanchipuram tradition: temple borders, bridal zari, and quieter
-            silks for the week. Every saree includes a blouse piece.
-          </p>
-          <dl className="mt-8 grid grid-cols-3 gap-3">
-            {[
-              ["1875", "First loom"],
-              ["Buy", "New silk"],
-              ["Sell", "Old silk"],
-            ].map(([value, label]) => (
-              <div key={label} className="rounded-xl border border-secondary/30 bg-white px-3 py-4 text-center">
-                <dt className="font-display text-2xl text-primary">{value}</dt>
-                <dd className="mt-1 text-[11px] tracking-[0.08em] text-ink/60 uppercase">{label}</dd>
-              </div>
-            ))}
-          </dl>
-          <Link
-            to="/#charter"
-            className="motion-btn motion-fill mt-8 inline-block bg-primary px-5 py-3 text-[11px] tracking-[0.16em] text-cream uppercase"
-          >
-            Read the charter
-          </Link>
+      <section className="bg-[#f6efe4] py-16">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 lg:grid-cols-2 lg:px-8">
+          <figure className="relative">
+            <img
+              src={sareeImages[9]}
+              alt="Maroon Kanjivaram silk with gold buttas"
+              className="h-[460px] w-full rounded-2xl object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 rounded-xl bg-[#3a0c14] px-4 py-3 text-cream">
+              <p className="font-display text-3xl">150 years</p>
+              <p className="text-xs text-cream/75">22 karat handloom zari, still guaranteed</p>
+            </figcaption>
+          </figure>
+          <div>
+            <p className="text-[11px] tracking-[0.2em] text-[#8a6230] uppercase">
+              A Kanchipuram legacy since 1875
+            </p>
+            <h2 className="mt-3 font-display text-4xl leading-tight text-ink md:text-5xl">
+              Six generations devoted to the art of sacred handloom silk
+            </h2>
+            <p className="mt-5 text-sm leading-7 text-ink/75">
+              Founded in the sacred temple corridors of South India in 1875,
+              Karnan Pattu Centre began with three promises: unmixed silk,
+              tested zari, and drapes for temple patronage and temple brides.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-ink/75">
+              Today the same house still melts old pattu honestly and weaves
+              new silk for the next generation. A heritage drape that leaves
+              our counter is a ceremony in itself.
+            </p>
+            <dl className="mt-8 grid grid-cols-3 gap-3">
+              {[
+                ["1875", "The first loom"],
+                ["450+", "Weaver families"],
+                ["100%", "Zari tested"],
+              ].map(([value, label]) => (
+                <div key={label} className="rounded-xl border border-secondary/30 bg-white px-2 py-4 text-center">
+                  <dt className="font-display text-2xl text-primary md:text-3xl">{value}</dt>
+                  <dd className="mt-1 text-[11px] leading-4 text-ink/60">{label}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </section>
 
-      <section className="bg-white px-4 py-16">
-        <div className="mx-auto max-w-6xl">
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             What we do
           </p>
@@ -163,22 +159,22 @@ export default function About() {
             {services.map((item) => (
               <li
                 key={item.title}
-                className="service-card rounded-2xl border border-secondary/30 bg-[#f7f1e8] p-6 text-primary"
+                className="service-card flex h-full flex-col rounded-2xl border border-secondary/30 bg-[#f7f1e8] p-6 text-primary"
               >
                 <span className="service-mark inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-sm text-[#d7c4a2]">
                   {item.mark}
                 </span>
-                <h3 className="mt-5 font-display text-xl">{item.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-ink/75">{item.text}</p>
+                <h3 className="mt-5 min-h-14 font-display text-xl">{item.title}</h3>
+                <p className="text-sm leading-7 text-ink/75">{item.text}</p>
               </li>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] px-4 py-16">
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
-          <article className="motion-card overflow-hidden rounded-2xl border border-secondary/40 bg-white">
+      <section className="bg-[#f6efe4] py-16">
+        <div className="mx-auto grid max-w-7xl items-stretch gap-6 px-4 md:grid-cols-2 lg:px-8">
+          <article className="motion-card flex h-full flex-col overflow-hidden rounded-2xl border border-secondary/40 bg-white">
             <div className="h-2 bg-secondary" />
             <div className="p-8">
               <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">Looking ahead</p>
@@ -188,7 +184,7 @@ export default function About() {
               </p>
             </div>
           </article>
-          <article className="motion-card overflow-hidden rounded-2xl bg-primary text-cream">
+          <article className="motion-card flex h-full flex-col overflow-hidden rounded-2xl bg-primary text-cream">
             <div className="h-2 bg-[#d7c4a2]" />
             <div className="p-8">
               <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">What we keep</p>
@@ -201,8 +197,8 @@ export default function About() {
         </div>
       </section>
 
-      <section className="px-4 py-16">
-        <div className="mx-auto max-w-6xl">
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             The promise
           </p>
@@ -211,21 +207,21 @@ export default function About() {
           </h2>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {reasons.map((item) => (
-              <li key={item.title} className="motion-card rounded-xl border border-secondary/25 bg-white p-4 text-center shadow-sm">
+              <li key={item.title} className="motion-card flex h-full flex-col rounded-xl border border-secondary/25 bg-white p-4 text-center shadow-sm">
                 <span className="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-secondary/70 text-secondary">
                   <ReasonIcon name={item.icon} />
                 </span>
                 <p className="mt-3 text-[10px] tracking-[0.16em] text-secondary uppercase">{item.mark}</p>
-                <h3 className="mt-1 text-sm font-semibold text-primary">{item.title}</h3>
-                <p className="mt-1 text-xs leading-5 text-ink/70">{item.text}</p>
+                <h3 className="mt-1 min-h-10 text-sm font-semibold text-primary">{item.title}</h3>
+                <p className="text-xs leading-5 text-ink/70">{item.text}</p>
               </li>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="bg-[#f7f1e8] px-4 py-16">
-        <div className="mx-auto max-w-3xl">
+      <section className="bg-[#f7f1e8] py-16">
+        <div className="mx-auto max-w-3xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             Questions
           </p>
@@ -255,6 +251,39 @@ export default function About() {
               )
             })}
           </ul>
+        </div>
+      </section>
+      <section className="relative min-h-[460px]">
+        <img
+          src={sareeImages[6]}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#3a1216]/72" />
+        <div className="relative mx-auto flex min-h-[460px] max-w-3xl flex-col items-center justify-center px-6 py-16 text-center text-cream">
+          <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
+            Same-day desk
+          </p>
+          <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
+            Get the best price for your old silk sarees
+          </h2>
+          <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
+            Instant cash, payable the same day once the silk is checked and you accept the offer.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              to="/contact"
+              className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
+            >
+              Get the best price
+            </Link>
+            <a
+              href="tel:+919894441500"
+              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
+            >
+              Call Chandramuki
+            </a>
+          </div>
         </div>
       </section>
     </>

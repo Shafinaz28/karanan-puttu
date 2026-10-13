@@ -94,6 +94,11 @@ section[id] {
   border-radius: 999px 999px 0.85rem 0.85rem;
 }
 
+.square-rail .arch-photo {
+  aspect-ratio: 1 / 1;
+  border-radius: 0.85rem;
+}
+
 .arch-photo img {
   height: 100%;
   width: 100%;
@@ -107,18 +112,6 @@ section[id] {
 
 .arch-rail {
   scrollbar-width: none;
-}
-
-.saree-rail {
-  padding-inline: calc(50% - 6.5rem);
-  scroll-padding-inline: calc(50% - 6.5rem);
-}
-
-@media (min-width: 768px) {
-  .saree-rail {
-    padding-inline: 0;
-    scroll-padding-inline: 0;
-  }
 }
 
 .arch-rail::-webkit-scrollbar {

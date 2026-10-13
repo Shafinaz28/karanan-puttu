@@ -2,10 +2,23 @@ import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import ProductCard from "../components/ProductCard"
-import VisitStores from "../components/VisitStores"
 import { formatPrice, products, sareeImages } from "../data/products"
 
 const photo = (index) => sareeImages[index]
+
+const galleryLayout = [
+  "md:col-span-1 md:row-span-2",
+  "md:col-span-2 md:row-span-2",
+  "md:col-span-1 md:row-span-2",
+  "md:col-span-2 md:row-span-2",
+  "md:col-span-1 md:row-span-2",
+  "md:col-span-1 md:row-span-2",
+  "md:col-span-2 md:row-span-2",
+  "md:col-span-1 md:row-span-2",
+  "md:col-span-1 md:row-span-2",
+  "md:col-span-2 md:row-span-2",
+  "md:col-span-2 md:row-span-2",
+]
 
 const charter = [
   {
@@ -30,26 +43,12 @@ const charter = [
   },
 ]
 
-const slides = [
-  {
-    image: photo(0),
-    title: "Buy new silk. Sell your old silk.",
-    text: "Shop classic and modern sarees, or turn an old, used, or damaged silk into cash the same day.",
-    alt: "A silk saree with a gold border",
-  },
-  {
-    image: photo(2),
-    title: "Gold at the border. Silk at the heart.",
-    text: "Kanchipuram weaves with a blouse piece included, ready for the tailor.",
-    alt: "A wine silk saree with gold work",
-  },
-  {
-    image: photo(6),
-    title: "Woven by hand since 1875.",
-    text: "The same loom promise: silk that can be named, and zari that is drawn by hand.",
-    alt: "A weaver at a traditional handloom",
-  },
-]
+const hero = {
+  image: "/hero/temple.jpg",
+  title: "We buy old silk sarees.",
+  text: "Used, torn, or faded pattu is welcome. We check the silk and the zari, then pay the best price the same day.",
+  alt: "A maroon silk saree worn at a temple",
+}
 
 const assurances = [
   {
@@ -64,16 +63,10 @@ const assurances = [
   },
   {
     title: "Doorstep pickup",
-    text: "Chennai and nationwide service",
+    text: "Bengaluru doorstep pickup",
     icon: "truck",
   },
 ]
-
-const favorites = products.slice(0, 7).map((product) => ({
-  name: product.name,
-  to: `/product/${product.id}`,
-  image: product.image,
-}))
 
 const weaves = [
   { label: "Kanchipuram", note: "Korvai silk", to: "/shop?category=Silk", image: photo(1) },
@@ -112,14 +105,11 @@ const steps = [
 ]
 
 export default function Home() {
-  const [slide, setSlide] = useState(0)
   const [saved, setSaved] = useState([])
   const [addedId, setAddedId] = useState(null)
   const { addToCart } = useCart()
   const rail = useRef(null)
   const railPaused = useRef(false)
-  const heroPaused = useRef(false)
-  const current = slides[slide]
   const featured = [6, 2, 3, 7]
     .map((id) => products.find((product) => product.id === id))
     .filter(Boolean)
@@ -149,15 +139,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const node = rail.current
-    if (!node || window.matchMedia("(min-width: 768px)").matches) return
-    const card = node.querySelector("li")
-    if (!card) return
-    const gap = parseFloat(window.getComputedStyle(node).columnGap) || 0
-    node.scrollLeft = card.offsetWidth + gap
-  }, [])
-
-  useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
     if (media.matches) return undefined
     const timer = window.setInterval(() => {
@@ -167,72 +148,52 @@ export default function Home() {
     return () => window.clearInterval(timer)
   }, [])
 
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
-    if (media.matches) return undefined
-    const timer = window.setInterval(() => {
-      if (heroPaused.current) return
-      setSlide((index) => (index + 1) % slides.length)
-    }, 4000)
-    return () => window.clearInterval(timer)
-  }, [])
-
   return (
     <>
-      <section
-        className="relative h-[84vh] min-h-[520px] md:h-[calc(100vh-7.25rem)] md:min-h-[640px]"
-        onMouseEnter={() => {
-          heroPaused.current = true
-        }}
-        onMouseLeave={() => {
-          heroPaused.current = false
-        }}
-      >
+      <section className="relative h-[340px] overflow-hidden sm:h-[420px] md:h-[500px]">
         <img
-          src={current.image}
-          alt={current.alt}
-          className="absolute inset-0 h-full w-full object-cover"
+          src={hero.image}
+          alt={hero.alt}
+          className="absolute inset-0 h-full w-full object-cover object-[center_14%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/45 to-ink/10" />
-        <div className="relative flex h-full items-center px-6 md:px-16">
-          <div className="max-w-xl text-cream">
-            <h1 className="font-display text-5xl leading-[1.05] md:text-7xl">
-              {current.title}
-            </h1>
-            <p className="mt-4 max-w-md text-sm leading-7 text-cream/85 md:mt-5 md:text-base">
-              {current.text}
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3 md:mt-8">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,white_0%,rgba(255,255,255,0.92)_18%,rgba(255,255,255,0.55)_36%,transparent_52%)]" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
+            <div className="max-w-xl text-left text-ink">
+              <h1 className="font-display text-3xl leading-[1.05] text-primary sm:text-5xl md:text-6xl">
+                {hero.title}
+              </h1>
+              <p className="mt-3 max-w-md text-xs leading-5 text-ink/75 sm:mt-4 sm:text-sm sm:leading-7 md:text-base">
+                {hero.text}
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-8">
               <Link
                 to="/shop"
-                className="motion-btn motion-fill inline-flex items-center gap-3 rounded-sm bg-primary px-5 py-3 text-xs tracking-[0.14em] text-cream uppercase"
+                className="motion-btn motion-gold inline-flex items-center gap-3 border-0 bg-secondary px-4 py-2.5 text-[10px] tracking-[0.14em] text-ink uppercase sm:px-5 sm:py-3 sm:text-xs"
+                style={{ borderRadius: 0 }}
               >
                 Buy sarees
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
                 to="/contact"
-                className="motion-btn motion-ghost inline-flex items-center gap-3 rounded-sm border border-cream px-5 py-3 text-xs tracking-[0.14em] text-cream uppercase"
+                className="motion-btn inline-flex items-center gap-3 border-2 border-[#4a0e17] px-4 py-2.5 text-[10px] tracking-[0.14em] text-[#4a0e17] uppercase hover:bg-[#4a0e17] hover:text-cream sm:px-5 sm:py-3 sm:text-xs"
+                style={{ borderRadius: 0, borderColor: "#4a0e17" }}
               >
-                Sell old silk sarees
+                Old sarees buying
+                <span aria-hidden="true">→</span>
+              </Link>
+              <Link
+                to="/locations"
+                className="motion-btn inline-flex items-center gap-3 border-2 border-[#4a0e17] px-4 py-2.5 text-[10px] tracking-[0.14em] text-[#4a0e17] uppercase hover:bg-[#4a0e17] hover:text-cream sm:px-5 sm:py-3 sm:text-xs"
+                style={{ borderRadius: 0, borderColor: "#4a0e17" }}
+              >
+                Visit our stores
                 <span aria-hidden="true">→</span>
               </Link>
             </div>
+            </div>
           </div>
-        </div>
-        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3">
-          {slides.map((item, index) => (
-            <button
-              key={item.title}
-              type="button"
-              aria-label={`Show slide ${index + 1}`}
-              aria-current={index === slide}
-              onClick={() => setSlide(index)}
-              className={`h-3 w-3 rounded-full border-2 border-white ${
-                index === slide ? "bg-white" : "bg-transparent"
-              }`}
-            />
-          ))}
         </div>
       </section>
 
@@ -265,14 +226,114 @@ export default function Home() {
       >
         <ul
           ref={rail}
-          className="arch-rail saree-rail mx-auto flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth md:max-w-6xl md:snap-none md:gap-5"
+          className="arch-rail square-rail mx-auto flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth md:max-w-6xl md:gap-5"
         >
           {products.map((product) => (
-            <li key={product.id} className="w-52 shrink-0 snap-center rounded-2xl bg-white px-3 py-4 md:w-[220px] lg:w-[190px]">
+            <li key={product.id} className="w-[calc(50%-0.375rem)] shrink-0 snap-start md:w-[calc(25%-0.9375rem)] lg:w-[calc(20%-1rem)]">
               <ProductCard product={product} />
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="bg-white px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">
+            On the floor
+          </p>
+          <h2 className="mt-2 text-center font-display text-4xl text-ink md:text-5xl">
+            Silk sarees we keep
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-6 text-ink/60">
+            Kanjivaram, Banarasi, tissue, and temple borders. Each drape includes a blouse piece.
+          </p>
+          <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+            {products.slice(0, 8).map((product) => (
+              <li key={product.id}>
+                <Link
+                  to={`/product/${product.id}`}
+                  className="motion-card block overflow-hidden rounded-2xl border border-ink/10 bg-[#f7f1e8]"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="aspect-[4/5] w-full object-cover"
+                  />
+                  <div className="p-3 md:p-4">
+                    <h3 className="font-display text-sm leading-tight text-primary md:text-lg">
+                      {product.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-ink/55 md:text-xs">
+                      {product.line}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 text-center">
+            <Link
+              to="/shop"
+              className="motion-btn motion-fill inline-flex items-center gap-2 bg-primary px-6 py-3 text-xs tracking-[0.14em] text-cream uppercase"
+            >
+              Shop all sarees
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#f6efe4] px-4 py-16">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+          <div className="relative mx-auto w-full max-w-md">
+            <span
+              className="absolute top-8 -left-2 hidden h-28 w-16 bg-[radial-gradient(circle,#c59b27_1.2px,transparent_1.4px)] bg-[length:12px_12px] opacity-70 sm:block"
+              aria-hidden="true"
+            />
+            <img
+              src="/hero/gold-saree.png"
+              alt="A gold silk saree worn on temple steps"
+              className="ml-auto h-[460px] w-[78%] rounded-sm object-cover object-top shadow-sm"
+            />
+            <div className="absolute top-10 left-0 bg-[#c48a3a] px-5 py-4 text-white shadow-md">
+              <p className="font-display text-4xl leading-none">30+</p>
+              <p className="mt-1 text-xs tracking-wide">Years of experience</p>
+            </div>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-[#c48a3a]">
+              — Welcome to Karnan Pattu Centre
+            </p>
+            <h2 className="mt-3 font-display text-4xl leading-tight text-[#4a0e17] md:text-5xl">
+              Old silk saree buyers in Bengaluru
+            </h2>
+            <p className="mt-5 text-sm font-medium text-ink">
+              Old silk saree buyers in Bengaluru
+            </p>
+            <p className="mt-3 text-sm leading-7 text-ink/75">
+              Karnan Pattu Centre buys old silk sarees at V.V. Puram and Jayanagar. Kanjivaram, Mysore, tissue, and brocade are welcome in any condition. We collect from your door and pay a fair cash price.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-ink/75">
+              A silk saree can leave the cupboard and still hold its value. Unused, worn, or damaged, it is checked for the weave and the zari before a rate is named.
+            </p>
+            <h3 className="mt-6 text-base font-semibold text-ink">
+              Sell old silk sarees in Bengaluru
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-ink/75">
+              Share clear photos, the fabric, and the condition. We tell you the price before you agree, and the amount is paid the same day once the saree is checked.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-ink/75">
+              Call Chandramuki, or bring the saree to the shop. Gold shows best in daylight.
+            </p>
+            <Link
+              to="/contact"
+              className="motion-btn motion-fill mt-8 inline-flex items-center gap-2 bg-primary px-6 py-3 text-xs tracking-[0.14em] text-cream uppercase"
+            >
+              Get a price
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
       </section>
 
       <section className="bg-white px-4 py-16">
@@ -319,31 +380,31 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="square-rail mt-8 grid grid-cols-2 gap-3 sm:gap-6 xl:grid-cols-4">
             {featured.map((product) => (
               <article key={product.id} className="group">
                 <div className="arch-photo">
                   <Link to={`/product/${product.id}`}>
                     <img src={product.image} alt={product.name} />
                   </Link>
-                  <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-secondary px-3 py-1 text-[11px] font-medium whitespace-nowrap text-ink">
+                  <span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-secondary px-2 py-0.5 text-[9px] font-medium whitespace-nowrap text-ink md:bottom-3 md:px-3 md:py-1 md:text-[11px]">
                     {product.offer || product.badge}
                   </span>
                   <button
                     type="button"
                     aria-label={saved.includes(product.id) ? "Remove from saved" : "Save saree"}
                     onClick={() => savePiece(product.id)}
-                    className="motion-icon absolute top-[46%] right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-primary hover:bg-cream"
+                    className="motion-icon absolute top-[46%] right-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm text-primary hover:bg-cream md:right-3 md:h-8 md:w-8"
                   >
                     {saved.includes(product.id) ? "♥" : "♡"}
                   </button>
                 </div>
-                <div className="p-4">
-                  <h3 className="font-display text-2xl leading-tight text-ink">
+                <div className="p-2 md:p-4">
+                  <h3 className="font-display text-sm leading-tight text-ink md:text-2xl">
                     <Link to={`/product/${product.id}`}>{product.name}</Link>
                   </h3>
-                  <p className="mt-1 text-xs text-ink/55">{product.line}</p>
-                  <p className="mt-3 text-sm">
+                  <p className="mt-1 line-clamp-2 text-[11px] text-ink/55 md:text-xs">{product.line}</p>
+                  <p className="mt-2 text-xs md:mt-3 md:text-sm">
                     {product.compareAt && (
                       <span className="mr-2 text-ink/40 line-through">
                         {formatPrice(product.compareAt)}
@@ -356,7 +417,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => addPiece(product.id)}
-                    className="motion-btn motion-line mt-4 w-full border border-primary py-2.5 text-[11px] tracking-[0.16em] text-primary uppercase"
+                    className="motion-btn motion-line mt-3 w-full border border-primary py-2 text-[9px] tracking-[0.12em] text-primary uppercase md:mt-4 md:py-2.5 md:text-[11px] md:tracking-[0.16em]"
                   >
                     {addedId === product.id ? "Added to bag" : "Add to bag"}
                   </button>
@@ -367,48 +428,93 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#6b2d32] px-4 py-16 text-[#f7f1e8]">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="font-display text-2xl text-[#d7c4a2] md:text-4xl">
-            Turn Your Old Silk Sarees Into Instant Cash!
-          </p>
-          <h2 className="mt-6 font-display text-4xl leading-[1.15] md:text-6xl">
-            We Buy Old, Used & Damaged Silk Sarees At The Best Price
-          </h2>
-        </div>
-        <div className="mx-auto mt-12 grid max-w-6xl gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-          <div className="text-center lg:text-left">
-            <p className="text-sm leading-7 text-[#f7f1e8]/80">
-              Torn borders, faded zari, and sarees you no longer wear are welcome.
-              We check the silk and pay the best price the same day.
+      <section className="relative overflow-hidden bg-[#6b2d32] py-16 text-[#f7f1e8]">
+        <img
+          src="/hero/family-saree.jpg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[#6b2d32]/75" />
+        <div className="relative mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="font-display text-2xl text-[#d7c4a2] md:text-4xl">
+              Turn Your Old Silk Sarees Into Instant Cash!
             </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
-              <Link
-                to="/contact"
-                className="motion-btn motion-gold bg-[#d7c4a2] px-4 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
-              >
-                Get the best price
-              </Link>
-              <a
-                href="https://wa.me/917200016300"
-                className="motion-btn motion-ghost border border-[#f7f1e8]/40 px-4 py-3 text-[11px] tracking-[0.14em] uppercase"
-              >
-                WhatsApp the desk
-              </a>
+            <h2 className="mt-6 font-display text-4xl leading-[1.15] md:text-6xl">
+              We Buy Old, Used & Damaged Silk Sarees At The Best Price
+            </h2>
+          </div>
+          <div className="mt-12 grid items-center gap-8 lg:grid-cols-2">
+            <div className="text-center lg:text-left">
+              <p className="text-sm leading-7 text-[#f7f1e8]/80">
+                Torn borders, faded zari, and sarees you no longer wear are welcome.
+                We check the silk and pay the best price the same day.
+              </p>
+              <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
+                <Link
+                  to="/contact"
+                  className="motion-btn motion-gold bg-[#d7c4a2] px-4 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
+                >
+                  Get the best price
+                </Link>
+                <a
+                  href="https://wa.me/917200016300"
+                  className="motion-btn motion-ghost border border-[#f7f1e8]/40 px-4 py-3 text-[11px] tracking-[0.14em] uppercase"
+                >
+                  WhatsApp the desk
+                </a>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                ["Old, used or damaged", "We buy silk sarees in any condition, including torn and faded pieces."],
+                ["Instant cash", "Once the saree is checked, the amount is paid the same day."],
+                ["Best price", "Silk and zari are valued before a rate is offered."],
+                ["Free doorstep pickup", "We collect the saree from your home across the city."],
+              ].map(([title, text]) => (
+                <article key={title} className="motion-card flex h-full flex-col border border-[#d7c4a2]/30 bg-[#5a2429] p-4 text-left">
+                  <h3 className="min-h-10 text-sm text-[#d7c4a2]">{title}</h3>
+                  <p className="mt-2 text-xs leading-5 text-[#f7f1e8]/75">{text}</p>
+                </article>
+              ))}
             </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              ["Old, used or damaged", "We buy silk sarees in any condition, including torn and faded pieces."],
-              ["Instant cash", "Once the saree is checked, the amount is paid the same day."],
-              ["Best price", "Silk and zari are valued before a rate is offered."],
-              ["Free doorstep pickup", "We collect the saree from your home across the city."],
-            ].map(([title, text]) => (
-              <article key={title} className="motion-card border border-[#d7c4a2]/30 bg-[#5a2429] p-4 text-left">
-                <h3 className="text-sm text-[#d7c4a2]">{title}</h3>
-                <p className="mt-2 text-xs leading-5 text-[#f7f1e8]/75">{text}</p>
-              </article>
-            ))}
+        </div>
+      </section>
+
+      <section className="bg-[#fbf7f1] px-4 py-16">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <img
+            src="/hero/gold-saree.png"
+            alt="A gold silk saree worn on temple steps"
+            className="h-[420px] w-full rounded-2xl object-cover object-top md:h-[520px]"
+          />
+          <div>
+            <p className="text-center text-[11px] tracking-[0.22em] text-[#c48a3a] uppercase">
+              Our promise
+            </p>
+            <h2 className="mt-2 text-center font-display text-4xl text-primary md:text-5xl">
+              Why choose us
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-7 text-ink/70">
+              We buy old silk and sell new silk in Bengaluru. The saree is checked first, the price is told before you agree, and the money is paid the same day.
+            </p>
+            <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+              {[
+                ["A careful check", "Silk and zari are looked at in daylight before a rate is offered."],
+                ["A clear price", "You hear the amount first. Nothing is settled until you accept."],
+                ["Same-day cash", "Once the saree is checked and you agree, the payment is made that day."],
+                ["Any condition", "Old, used, torn, and faded silk is welcome, including Kanjivaram and Banarasi."],
+              ].map(([title, text]) => (
+                <li key={title} className="rounded-xl border border-[#ead9bf] bg-white p-4">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#c48a3a] text-sm text-white">
+                    ✓
+                  </span>
+                  <h3 className="mt-3 text-sm font-semibold text-primary">{title}</h3>
+                  <p className="mt-1 text-xs leading-5 text-ink/65">{text}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -453,50 +559,34 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] px-4 py-16">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2">
-          <figure className="relative">
-            <img
-              src={photo(9)}
-              alt="Maroon Kanjivaram silk with gold buttas"
-              className="h-[520px] w-full rounded-2xl object-cover"
-            />
-            <figcaption className="absolute bottom-4 left-4 rounded-xl bg-[#3a0c14] px-4 py-3 text-cream">
-              <p className="font-display text-3xl">150 years</p>
-              <p className="text-xs text-cream/75">22 karat handloom zari, still guaranteed</p>
-            </figcaption>
-          </figure>
-          <div>
-            <p className="text-[11px] tracking-[0.2em] text-[#8a6230] uppercase">
-              A Kanchipuram legacy since 1875
-            </p>
-            <h2 className="mt-3 font-display text-4xl leading-tight text-ink md:text-5xl">
-              Six generations devoted to the art of sacred handloom silk
-            </h2>
-            <p className="mt-5 text-sm leading-7 text-ink/75">
-              Founded in the sacred temple corridors of South India in 1875,
-              Karnan Pattu Centre began with three promises: unmixed silk,
-              tested zari, and drapes for temple patronage and temple brides.
-            </p>
-            <p className="mt-4 text-sm leading-7 text-ink/75">
-              Today the same house still melts old pattu honestly and weaves
-              new silk for the next generation. A heritage drape that leaves
-              our counter is a ceremony in itself.
-            </p>
-            <dl className="mt-8 grid grid-cols-3 gap-4">
-              {[
-                ["1875", "The first loom"],
-                ["450+", "Weaver families"],
-                ["100%", "Zari tested"],
-              ].map(([value, label]) => (
-                <div key={label}>
-                  <dt className="font-display text-3xl text-primary">{value}</dt>
-                  <dd className="text-xs text-ink/60">{label}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
+      <section className="relative overflow-hidden">
+        <img
+          src={photo(10)}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#8a1f2a]/80" />
+        <ul className="relative mx-auto grid max-w-6xl grid-cols-2 text-center md:grid-cols-4">
+          {[
+            ["4", "Shops in Bengaluru"],
+            ["1875", "House founded"],
+            ["Same day", "Cash after the check"],
+            ["11", "Silks on this floor"],
+          ].map(([value, label], index) => (
+            <li
+              key={label}
+              className={`relative px-4 py-8 md:py-10 ${
+                index % 2 === 0 ? "border-r border-white/50 md:border-r-0" : ""
+              } ${index < 2 ? "border-b border-white/50 md:border-b-0" : ""}`}
+            >
+              {index < 3 && (
+                <span className="absolute top-1/2 right-0 hidden h-14 w-px -translate-y-1/2 bg-white/70 md:block" />
+              )}
+              <p className="font-display text-4xl text-[#e6a21a] md:text-5xl">{value}</p>
+              <p className="mt-2 text-sm text-white">{label}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section id="charter" className="border-y border-secondary/30 bg-cream">
@@ -521,63 +611,30 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f7f1e8] px-4 py-14 lg:px-6">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-center font-display text-4xl text-primary md:text-5xl">
-            Timeless Favorites
+      <section className="bg-[#f7f1e8] px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">
+            The counter
+          </p>
+          <h2 className="mt-2 text-center font-display text-4xl text-primary md:text-5xl">
+            Gallery
           </h2>
-          <ul className="arch-rail mt-8 flex gap-3 overflow-x-auto pb-2">
-            {favorites.map((item) => (
-              <li key={item.name} className="w-40 shrink-0 sm:w-44">
-                <Link to={item.to} className="group relative block h-72 overflow-hidden rounded-lg">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <span className="absolute inset-x-0 bottom-0 flex items-end gap-2 bg-gradient-to-t from-black/75 to-transparent px-3 pt-10 pb-3 text-[10px] leading-4 tracking-[0.08em] text-white uppercase">
-                    <span>{item.name}</span>
-                    <span className="mb-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white text-[9px]">
-                      i
-                    </span>
-                  </span>
-                </Link>
+          <p className="mx-auto mt-3 max-w-lg text-center text-sm leading-6 text-ink/60">
+            Silks from the floor at V.V. Puram and Jayanagar.
+          </p>
+          <ul className="mt-10 grid grid-cols-2 gap-2 md:grid-cols-4 md:auto-rows-[100px] md:gap-1.5 lg:auto-rows-[130px]">
+            {sareeImages.map((src, index) => (
+              <li key={src} className={`overflow-hidden ${galleryLayout[index]}`}>
+                <img
+                  src={src}
+                  alt=""
+                  className="h-full min-h-36 w-full object-cover md:min-h-0"
+                />
               </li>
             ))}
           </ul>
         </div>
       </section>
-      <section className="bg-white px-4 py-12">
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
-          <article className="rounded-2xl border border-ink/10 bg-paper p-8">
-            <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Buy</p>
-            <h2 className="mt-3 font-display text-3xl text-primary">Buy a new saree</h2>
-            <p className="mt-3 text-sm leading-7 text-ink/75">
-              Classic and modern silks for weddings, temples, and the week. Every drape includes a blouse piece.
-            </p>
-            <Link
-              to="/shop"
-              className="motion-btn motion-fill mt-6 inline-block bg-primary px-5 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
-            >
-              Buy sarees
-            </Link>
-          </article>
-          <article className="rounded-2xl bg-primary p-8 text-cream">
-            <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Sell</p>
-            <h2 className="mt-3 font-display text-3xl">Sell your old silk</h2>
-            <p className="mt-3 text-sm leading-7 text-cream/80">
-              We buy old, used, and damaged silk sarees at the best price. Send a photo or visit a showroom and get paid the same day.
-            </p>
-            <Link
-              to="/contact"
-              className="motion-btn motion-gold mt-6 inline-block bg-secondary px-5 py-3 text-[11px] tracking-[0.14em] text-ink uppercase"
-            >
-              Sell old silk
-            </Link>
-          </article>
-        </div>
-      </section>
-      <VisitStores />
     </>
   )
 }

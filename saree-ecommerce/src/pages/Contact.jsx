@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import VisitStores from "../components/VisitStores"
 import { sareeImages } from "../data/products"
 
 const emptyForm = { name: "", email: "", message: "" }
@@ -96,7 +95,36 @@ export default function Contact() {
         </form>
       )}
     </section>
-    <VisitStores />
+    <section className="bg-white px-4 py-12">
+      <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+        <article className="rounded-2xl border border-ink/10 bg-paper p-8">
+          <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Buy</p>
+          <h2 className="mt-3 font-display text-3xl text-primary">Buy a new saree</h2>
+          <p className="mt-3 text-sm leading-7 text-ink/75">
+            Classic and modern silks for weddings, temples, and the week. Every drape includes a blouse piece.
+          </p>
+          <Link
+            to="/shop"
+            className="motion-btn motion-fill mt-6 inline-block bg-primary px-5 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
+          >
+            Buy sarees
+          </Link>
+        </article>
+        <article className="rounded-2xl bg-primary p-8 text-cream">
+          <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Sell</p>
+          <h2 className="mt-3 font-display text-3xl">Sell your old silk</h2>
+          <p className="mt-3 text-sm leading-7 text-cream/80">
+            We buy old, used, and damaged silk sarees at the best price. Send a photo or visit a showroom and get paid the same day.
+          </p>
+          <a
+            href="#write"
+            className="motion-btn motion-gold mt-6 inline-block bg-secondary px-5 py-3 text-[11px] tracking-[0.14em] text-ink uppercase"
+          >
+            Sell old silk
+          </a>
+        </article>
+      </div>
+    </section>
     </>
   )
 }
