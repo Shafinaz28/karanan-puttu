@@ -207,7 +207,7 @@ export default function About() {
           </h2>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {reasons.map((item) => (
-              <li key={item.title} className="motion-card flex h-full flex-col rounded-xl border border-secondary/25 bg-white p-4 text-center shadow-sm">
+              <li key={item.title} className="motion-card flex h-full flex-col rounded-xl border border-[#e2b94a] bg-[#f6d56b] p-4 text-center shadow-sm">
                 <span className="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-secondary/70 text-secondary">
                   <ReasonIcon name={item.icon} />
                 </span>

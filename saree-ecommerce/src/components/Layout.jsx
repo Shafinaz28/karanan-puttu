@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
+import usePageMotion from "../hooks/usePageMotion"
 import Footer from "./Footer"
 import Navbar from "./Navbar"
 
@@ -14,6 +15,8 @@ export default function Layout({ children }) {
     const section = document.querySelector(hash)
     if (section) section.scrollIntoView({ behavior: "smooth" })
   }, [hash, pathname])
+
+  usePageMotion(pathname)
 
   return (
     <div className="min-h-screen bg-paper font-sans text-ink">
