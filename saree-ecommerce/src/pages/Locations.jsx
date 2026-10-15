@@ -1,18 +1,11 @@
 import { Link } from "react-router-dom"
 import VisitStores from "../components/VisitStores"
-import { sareeImages } from "../data/products"
 
 export default function Locations() {
   return (
     <>
-      <section className="relative flex min-h-[420px] items-center bg-[#6b2d32]">
-        <img
-          src={sareeImages[0]}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[#3a1216]/55" />
-        <div className="relative mx-auto w-full max-w-6xl px-6 py-20 text-center text-[#f7f1e8] md:px-10">
+      <section className="flex min-h-[320px] items-center bg-[#4a1520] sm:min-h-[380px]">
+        <div className="mx-auto w-full max-w-6xl px-6 py-16 text-center text-[#f7f1e8] md:px-10">
           <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
             <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
               Home

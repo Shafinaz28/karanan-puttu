@@ -79,14 +79,9 @@ export default function About() {
   const [open, setOpen] = useState(0)
   return (
     <>
-      <section className="relative flex min-h-[460px] items-center bg-[#6b2d32]">
-        <img
-          src={sareeImages[6]}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[#3a1216]/55" />
-        <div className="relative mx-auto w-full max-w-7xl px-4 py-20 text-center text-[#f7f1e8] lg:px-8">
+      <section className="flex min-h-[320px] flex-col bg-[linear-gradient(160deg,#4a0e17_0%,#6b1a26_48%,#c59b27_100%)] sm:min-h-[380px]">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
+          <div className="w-full">
           <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
             <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
               Home
@@ -98,7 +93,8 @@ export default function About() {
           <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85">
             A house that sells new silk, and buys old silk, with the same care.
           </p>
-          <span className="mx-auto mt-6 block h-px w-16 bg-[#d7c4a2]" />
+          <span className="mx-auto mt-6 block h-0.5 w-16 bg-[linear-gradient(to_right,#4a0e17,#c59b27)]" aria-hidden="true" />
+          </div>
         </div>
       </section>
       <section className="bg-[#f6efe4] py-16">
@@ -109,9 +105,9 @@ export default function About() {
               alt="Maroon Kanjivaram silk with gold buttas"
               className="h-[460px] w-full rounded-2xl object-cover"
             />
-            <figcaption className="absolute bottom-4 left-4 rounded-xl bg-[#3a0c14] px-4 py-3 text-cream">
-              <p className="font-display text-3xl">150 years</p>
-              <p className="text-xs text-cream/75">22 karat handloom zari, still guaranteed</p>
+            <figcaption className="absolute bottom-5 left-5 rounded-lg bg-[#c59b27] px-4 py-3 text-[#3a1216] shadow-md">
+              <p className="font-display text-3xl leading-none">150 years</p>
+              <p className="mt-1 text-xs">Handloom zari, still checked by hand</p>
             </figcaption>
           </figure>
           <div>
@@ -137,9 +133,9 @@ export default function About() {
                 ["450+", "Weaver families"],
                 ["100%", "Zari tested"],
               ].map(([value, label]) => (
-                <div key={label} className="rounded-xl border border-secondary/30 bg-white px-2 py-4 text-center">
-                  <dt className="font-display text-2xl text-primary md:text-3xl">{value}</dt>
-                  <dd className="mt-1 text-[11px] leading-4 text-ink/60">{label}</dd>
+                <div key={label} className="rounded-lg bg-[#c59b27] px-2 py-4 text-center text-[#3a1216]">
+                  <dt className="font-display text-2xl md:text-3xl">{value}</dt>
+                  <dd className="mt-1 text-[11px] leading-4">{label}</dd>
                 </div>
               ))}
             </dl>
@@ -159,9 +155,9 @@ export default function About() {
             {services.map((item) => (
               <li
                 key={item.title}
-                className="service-card flex h-full flex-col rounded-2xl border border-secondary/30 bg-[#f7f1e8] p-6 text-primary"
+                className="service-card flex h-full flex-col rounded-2xl border border-[#ead9bf] bg-[#fbf7f1] p-6 text-primary"
               >
-                <span className="service-mark inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-sm text-[#d7c4a2]">
+                <span className="service-mark inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#c59b27] bg-[#c59b27] font-display text-sm text-[#3a1216]">
                   {item.mark}
                 </span>
                 <h3 className="mt-5 min-h-14 font-display text-xl">{item.title}</h3>
@@ -207,13 +203,13 @@ export default function About() {
           </h2>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {reasons.map((item) => (
-              <li key={item.title} className="motion-card flex h-full flex-col rounded-xl border border-[#e2b94a] bg-[#f6d56b] p-4 text-center shadow-sm">
-                <span className="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-secondary/70 text-secondary">
+              <li key={item.title} className="motion-card flex h-full flex-col rounded-xl bg-[#4a1520] p-5 text-center text-[#f7f1e8]">
+                <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-[#d7c4a2] text-[#d7c4a2]">
                   <ReasonIcon name={item.icon} />
                 </span>
-                <p className="mt-3 text-[10px] tracking-[0.16em] text-secondary uppercase">{item.mark}</p>
-                <h3 className="mt-1 min-h-10 text-sm font-semibold text-primary">{item.title}</h3>
-                <p className="text-xs leading-5 text-ink/70">{item.text}</p>
+                <p className="mt-3 text-[10px] tracking-[0.16em] text-[#d7c4a2] uppercase">{item.mark}</p>
+                <h3 className="mt-1 min-h-10 text-sm font-semibold">{item.title}</h3>
+                <p className="text-xs leading-5 text-[#f7f1e8]/75">{item.text}</p>
               </li>
             ))}
           </ul>
@@ -240,7 +236,7 @@ export default function About() {
                     className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                   >
                     <span className="font-display text-lg text-primary">{item.question}</span>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-lg text-[#d7c4a2]" aria-hidden="true">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-lg text-primary" aria-hidden="true">
                       {shown ? "−" : "+"}
                     </span>
                   </button>

@@ -1,24 +1,10 @@
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import ProductCard from "../components/ProductCard"
 import { formatPrice, products, sareeImages } from "../data/products"
 
 const photo = (index) => sareeImages[index]
-
-const galleryLayout = [
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-2 md:row-span-2",
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-2 md:row-span-2",
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-2 md:row-span-2",
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-2 md:row-span-2",
-  "md:col-span-2 md:row-span-2",
-]
 
 const charter = [
   {
@@ -44,7 +30,7 @@ const charter = [
 ]
 
 const hero = {
-  image: "/hero/temple.jpg",
+  image: "/hero/temple.avif",
   title: "We buy old silk sarees.",
   text: "Used, torn, or faded pattu is welcome. We check the silk and the zari, then pay the best price the same day.",
   alt: "A maroon silk saree worn at a temple",
@@ -151,8 +137,6 @@ export default function Home() {
   const [saved, setSaved] = useState([])
   const [addedId, setAddedId] = useState(null)
   const { addToCart } = useCart()
-  const rail = useRef(null)
-  const railPaused = useRef(false)
   const featured = [6, 2, 3, 7]
     .map((id) => products.find((product) => product.id === id))
     .filter(Boolean)
@@ -169,37 +153,15 @@ export default function Home() {
     setAddedId(id)
   }
 
-  function scrollSarees(direction) {
-    const node = rail.current
-    if (!node) return
-    const card = node.querySelector("li")
-    const gap = parseFloat(window.getComputedStyle(node).columnGap) || 20
-    const step = (card?.offsetWidth || 190) + gap
-    const max = node.scrollWidth - node.clientWidth
-    if (direction > 0 && node.scrollLeft >= max - 4) return
-    const next = Math.min(Math.max(node.scrollLeft + direction * step, 0), max)
-    node.scrollTo({ left: next, behavior: "smooth" })
-  }
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
-    if (media.matches) return undefined
-    const timer = window.setInterval(() => {
-      if (railPaused.current) return
-      scrollSarees(1)
-    }, 2800)
-    return () => window.clearInterval(timer)
-  }, [])
-
   return (
     <>
-      <section className="relative h-[500px] overflow-hidden sm:h-[560px] md:h-[640px]">
+      <section className="relative h-screen overflow-hidden">
         <img
           src={hero.image}
           alt={hero.alt}
           className="absolute inset-0 h-full w-full object-cover object-[center_14%]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a080e_0%,rgba(42,8,14,0.92)_22%,rgba(42,8,14,0.72)_42%,rgba(42,8,14,0.28)_62%,transparent_78%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(90,28,38,0.55)_0%,rgba(90,28,38,0.38)_28%,rgba(90,28,38,0.16)_50%,transparent_68%)]" />
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
             <div className="max-w-xl text-left text-[#f7f1e8]">
@@ -240,11 +202,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f6efe4]">
+      <section>
         <ul className="mx-auto grid max-w-5xl gap-8 px-4 py-8 sm:grid-cols-3">
           {assurances.map((item) => (
             <li key={item.title} className="flex items-center justify-center gap-3 text-left">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-secondary/80 text-secondary">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-secondary text-secondary">
                 <AssuranceIcon name={item.icon} />
               </span>
               <span>
@@ -258,50 +220,41 @@ export default function Home() {
         </ul>
       </section>
 
-      <section
-        className="bg-cream px-4 py-12"
-        onMouseEnter={() => {
-          railPaused.current = true
-        }}
-        onMouseLeave={() => {
-          railPaused.current = false
-        }}
-      >
-        <ul
-          ref={rail}
-          className="arch-rail square-rail mx-auto flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth md:max-w-6xl md:gap-5"
-        >
-          {products.map((product) => (
-            <li key={product.id} className="w-[calc(50%-0.375rem)] shrink-0 snap-start md:w-[calc(25%-0.9375rem)] lg:w-[calc(20%-1rem)]">
-              <ProductCard product={product} />
-            </li>
-          ))}
-        </ul>
+      <section className="bg-[#f7f1e8] px-4 py-14">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="text-center font-display text-4xl text-primary md:text-5xl">
+            New Arrival
+          </h2>
+          <ul className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+            {products.slice(0, 4).map((product) => (
+              <li key={product.id}>
+                <ProductCard product={product} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section className="bg-white px-4 py-16">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-center font-display text-3xl text-primary md:text-5xl">
-            Old sarees we buy
+          <h2 className="text-center font-display text-4xl text-primary md:text-5xl">
+            Sarees We Buy
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-6 text-ink/70">
-            Bring pure silk that is used, stored, or damaged. Each piece is checked for the weave and the zari, then paid the same day.
-          </p>
           <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {oldSilks.map((item) => (
               <li key={item.name}>
                 <Link
                   to="/contact"
-                  className="motion-card block overflow-hidden rounded-md border-2 border-[#c48a3a] bg-[#c48a3a]"
+                  className="motion-card block overflow-hidden border-2 border-[#c59b27] bg-[#3a1216]"
                 >
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="aspect-[4/3] w-full object-cover"
+                    className="aspect-[5/4] w-full object-cover"
                   />
-                  <div className="px-3 py-3 text-[#3a2410] md:px-4 md:py-4">
+                  <div className="px-3 py-3 text-[#f7f1e8] md:px-4 md:py-4">
                     <h3 className="font-display text-sm leading-tight md:text-lg">{item.name}</h3>
-                    <p className="mt-1 text-[11px] leading-5 md:text-xs">{item.text}</p>
+                    <p className="mt-1 text-[11px] leading-5 text-[#f7f1e8]/75 md:text-xs">{item.text}</p>
                   </div>
                 </Link>
               </li>
@@ -319,7 +272,7 @@ export default function Home() {
             />
             <div className="relative mb-10 mr-auto w-[78%] sm:mr-0 sm:mb-12 sm:ml-auto sm:w-[78%]">
               <img
-                src="/hero/gold-saree.png"
+                src="/hero/gold-saree.avif"
                 alt="A gold silk saree worn on temple steps"
                 className="h-[420px] w-full rounded-sm object-cover object-top shadow-sm sm:h-[460px]"
               />
@@ -334,7 +287,7 @@ export default function Home() {
               — Welcome to Karnan Pattu Centre
             </p>
             <h2 className="mt-3 font-display text-4xl leading-tight text-[#4a0e17] md:text-5xl">
-              Old silk saree buyers in Bengaluru
+              Old Silk Saree Buyers
             </h2>
             <p className="mt-5 text-sm font-medium text-ink">
               Old silk saree buyers in Bengaluru
@@ -368,10 +321,10 @@ export default function Home() {
       <section className="bg-white px-4 py-16">
         <div className="mx-auto max-w-6xl">
           <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">
-            Handcrafted disciplines
+            The loom
           </p>
-          <h2 className="mt-2 text-center font-display text-4xl text-ink">
-            Explore by handloom weave
+          <h2 className="mt-2 text-center font-display text-4xl text-primary">
+            Handcrafted Disciplines
           </h2>
           <ul className="mt-8 grid grid-cols-3 gap-4 sm:grid-cols-6">
             {weaves.map((weave) => (
@@ -400,8 +353,8 @@ export default function Home() {
               <p className="text-[11px] tracking-[0.2em] text-[#8a6230] uppercase">
                 Atelier loom archive
               </p>
-              <h2 className="mt-2 font-display text-4xl text-ink">
-                Curated bridal & handloom masterpieces
+              <h2 className="mt-2 font-display text-4xl text-primary">
+                Curated Bridals & Handloom Heirlooms
               </h2>
             </div>
             <p className="max-w-xs text-sm text-ink/60">
@@ -459,7 +412,7 @@ export default function Home() {
 
       <section className="relative overflow-hidden bg-[#6b2d32] py-16 text-[#f7f1e8]">
         <img
-          src="/hero/family-saree.jpg"
+          src="/hero/family-saree.avif"
           alt=""
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
@@ -547,7 +500,7 @@ export default function Home() {
             — How it works —
           </p>
           <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">
-            Our Working Process
+            Working Process
           </h2>
           <ol className="mt-14 grid items-start gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {steps.map((item) => (
@@ -611,18 +564,18 @@ export default function Home() {
         </ul>
       </section>
 
-      <section id="charter" className="border-y border-secondary/30 bg-cream">
-        <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
-          <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
+      <section id="charter" className="bg-[#f7f1e8] py-16">
+        <div className="mx-auto max-w-7xl px-4 lg:px-6">
+          <p className="text-center text-[11px] tracking-[0.24em] text-[#c59b27] uppercase">
             The standard
           </p>
           <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">
-            The Karanan purity charter
+            Purity Charter
           </h2>
           <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {charter.map((item) => (
-              <article key={item.title} className="motion-card border border-secondary/30 bg-paper p-6 text-center">
-                <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-secondary text-secondary">
+              <article key={item.title} className="motion-card border border-[#c59b27]/40 bg-white p-6 text-center">
+                <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-[#c59b27] text-[#c59b27]">
                   <CharterIcon name={item.icon} />
                 </span>
                 <h3 className="mt-4 font-display text-2xl text-primary">{item.title}</h3>
@@ -630,31 +583,6 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="bg-[#f7f1e8] px-4 py-16">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">
-            The counter
-          </p>
-          <h2 className="mt-2 text-center font-display text-4xl text-primary md:text-5xl">
-            Gallery
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-center text-sm leading-6 text-ink/60">
-            Silks from the floor at V.V. Puram and Jayanagar.
-          </p>
-          <ul className="mt-10 grid grid-cols-2 gap-2 md:grid-cols-4 md:auto-rows-[100px] md:gap-1.5 lg:auto-rows-[130px]">
-            {sareeImages.map((src, index) => (
-              <li key={src} className={`overflow-hidden ${galleryLayout[index]}`}>
-                <img
-                  src={src}
-                  alt=""
-                  className="h-full min-h-36 w-full object-cover md:min-h-0"
-                />
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
     </>

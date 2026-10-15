@@ -1,13 +1,23 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { useCart } from "../context/CartContext"
 import { formatPrice } from "../data/products"
 
 export default function ProductCard({ product }) {
+  const { addToCart } = useCart()
+  const [added, setAdded] = useState(false)
   const off =
     product.offer ||
     (product.compareAt > product.price
       ? `${Math.round((1 - product.price / product.compareAt) * 100)}% off`
       : null)
   const code = `KN${String(product.id).padStart(4, "0")}`
+
+  useEffect(() => {
+    if (!added) return undefined
+    const timer = window.setTimeout(() => setAdded(false), 1200)
+    return () => window.clearTimeout(timer)
+  }, [added])
 
   return (
     <article className="group">
@@ -33,6 +43,16 @@ export default function ProductCard({ product }) {
           )}
         </p>
       </Link>
+      <button
+        type="button"
+        onClick={() => {
+          addToCart(product.id)
+          setAdded(true)
+        }}
+        className="motion-btn motion-line mt-3 w-full border border-primary py-2 text-[10px] tracking-[0.12em] text-primary uppercase"
+      >
+        {added ? "Added" : "Add to cart"}
+      </button>
     </article>
   )
 }

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import logo from "../assets/images/kpc-logo.png"
+import logo from "../assets/images/kpc-logo.avif"
 
 const collections = [
   { to: "/shop?category=Silk", label: "Kanchipuram silk" },
@@ -42,26 +42,11 @@ export default function Footer() {
             We buy old, used and damaged silk sarees at the best price, and
             we still weave new Kanchipuram silk for the next ceremony.
           </p>
-          <p className="mt-4 text-sm leading-6 text-cream/80">
-            Hotline:{" "}
-            <a href="tel:+917200016300" className="hover:text-secondary">
-              +91 72000 16300
-            </a>
-            {" / "}
-            <a href="tel:+914424441875" className="hover:text-secondary">
-              044-2444-1875
-            </a>
-            <br />
-            WhatsApp valuation:{" "}
-            <a href="https://wa.me/917200016300" className="hover:text-secondary">
-              +91 72000 16300
-            </a>
-            <br />
-            Email:{" "}
-            <a href="mailto:care@karananpattucentre.com" className="hover:text-secondary">
-              care@karananpattucentre.com
-            </a>
-          </p>
+          <div className="mt-5 flex gap-3">
+            <FooterSocial href="https://instagram.com" label="Instagram" name="instagram" />
+            <FooterSocial href="https://facebook.com" label="Facebook" name="facebook" />
+            <FooterSocial href="https://youtube.com" label="YouTube" name="youtube" />
+          </div>
         </div>
 
         <FooterColumn title="Collections">
@@ -119,10 +104,10 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-center text-xs text-cream/70 lg:flex-row lg:px-8 lg:text-left">
           <p>© 2026 Karnan Pattu Centre. All rights reserved. Handcrafted in India.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-end">
-            <Link to="/contact" className="hover:text-cream">
+            <Link to="/terms" className="hover:text-cream">
               Terms & conditions
             </Link>
-            <Link to="/contact" className="hover:text-cream">
+            <Link to="/privacy" className="hover:text-cream">
               Privacy policy
             </Link>
             <Link to="/contact" className="hover:text-cream">
@@ -142,5 +127,44 @@ function FooterColumn({ title, children }) {
       <p className="mb-1 text-xs tracking-[0.18em] text-secondary uppercase">{title}</p>
       {children}
     </div>
+  )
+}
+
+function FooterSocial({ href, label, name }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={label}
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d7c4a2]/50 text-[#d7c4a2] transition-colors duration-300 hover:bg-[#d7c4a2] hover:text-[#3a0c14]"
+    >
+      <SocialGlyph name={name} />
+    </a>
+  )
+}
+
+function SocialGlyph({ name }) {
+  const common = { viewBox: "0 0 24 24", className: "h-4 w-4", "aria-hidden": true }
+  if (name === "instagram") {
+    return (
+      <svg {...common} fill="none" stroke="currentColor" strokeWidth="1.6">
+        <rect x="4" y="4" width="16" height="16" rx="4" />
+        <circle cx="12" cy="12" r="3.5" />
+        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+      </svg>
+    )
+  }
+  if (name === "facebook") {
+    return (
+      <svg {...common} fill="currentColor">
+        <path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-2c0-.6.4-1 1-1z" />
+      </svg>
+    )
+  }
+  return (
+    <svg {...common} fill="currentColor">
+      <path d="M22 12.2s0-3.2-.4-4.6c-.2-.9-.9-1.6-1.8-1.8C18.2 5.4 12 5.4 12 5.4s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 9 2 12.2 2 12.2s0 3.2.4 4.6c.2.9.9 1.6 1.8 1.8 1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.4.4-4.6.4-4.6zM10 15.5v-6.6l5.2 3.3-5.2 3.3z" />
+    </svg>
   )
 }

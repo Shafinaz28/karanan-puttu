@@ -9,8 +9,10 @@ import Checkout from "./pages/Checkout"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
 import Locations from "./pages/Locations"
+import Privacy from "./pages/Privacy"
 import ProductDetails from "./pages/ProductDetails"
 import Shop from "./pages/Shop"
+import Terms from "./pages/Terms"
 import Wishlist from "./pages/Wishlist"
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/account" element={<Account />} />
           </Routes>

@@ -90,8 +90,8 @@ section[id] {
 .arch-photo {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
-  border-radius: 999px 999px 0.85rem 0.85rem;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.85rem;
 }
 
 .square-rail .arch-photo {
