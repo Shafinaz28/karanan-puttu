@@ -97,30 +97,21 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="relative flex h-[72px] items-center justify-between bg-[#f6efe4] px-3 text-primary lg:h-[100px] lg:px-12">
-        <button
-          type="button"
-          className="z-10 flex h-9 w-9 flex-col items-center justify-center gap-1.5 lg:hidden"
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span className="block h-px w-4 bg-primary" />
-          <span className="block h-px w-4 bg-primary" />
-          <span className="block h-px w-4 bg-primary" />
-        </button>
         <Link
           to="/"
-          className="absolute left-1/2 -translate-x-1/2 text-center lg:static lg:translate-x-0 lg:text-left"
+          className="text-left"
           aria-label="Karnan Pattu Centre"
         >
           <span className="flex items-center justify-center gap-2 lg:justify-start lg:gap-2.5">
-            <img src={logo} alt="" className="h-8 w-8 object-contain lg:h-11 lg:w-11" />
-            <span className="font-display text-[26px] leading-[0.85] font-medium text-primary lg:text-[36px]">
-              Karnan
+            <img src={logo} alt="" className="h-10 w-10 object-contain lg:h-14 lg:w-14" />
+            <span className="text-left leading-none">
+              <span className="block font-display text-[26px] leading-none font-medium text-primary lg:text-[36px]">
+                Karnan
+              </span>
+              <span className="mt-1 block text-[8px] tracking-[0.22em] text-primary lg:text-[9px]">
+                PATTU CENTRE
+              </span>
             </span>
-          </span>
-          <span className="mt-1 block text-center text-[8px] tracking-[0.23em] text-primary lg:mt-1.5 lg:pl-[54px] lg:text-left">
-            PATTU CENTRE
           </span>
         </Link>
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-4 text-[11px] whitespace-nowrap text-primary xl:gap-6 lg:flex">
@@ -133,10 +124,10 @@ export default function Navbar() {
           <Link to="/contact" className="transition-colors duration-200 hover:text-secondary">Contact</Link>
         </nav>
         <div className="z-10 ml-auto flex items-center text-primary lg:gap-3">
-          <button type="button" aria-label="Search" className="p-1.5 lg:p-2" onClick={() => setSearchOpen((open) => !open)}>
+          <button type="button" aria-label="Search" className="hidden p-2 lg:block" onClick={() => setSearchOpen((open) => !open)}>
             <SearchIcon />
           </button>
-          <Link to="/wishlist" aria-label="Wishlist" className="p-1.5 lg:p-2">
+          <Link to="/wishlist" aria-label="Wishlist" className="hidden p-2 lg:block">
             <HeartIcon />
           </Link>
           <Link to="/cart" aria-label={`Cart, ${count} items`} className="relative p-1.5 lg:p-2">
@@ -145,6 +136,17 @@ export default function Navbar() {
               {count}
             </span>
           </Link>
+          <button
+            type="button"
+            className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 lg:hidden"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span className="block h-px w-4 bg-primary" />
+            <span className="block h-px w-4 bg-primary" />
+            <span className="block h-px w-4 bg-primary" />
+          </button>
         </div>
       </div>
       {searchOpen && (

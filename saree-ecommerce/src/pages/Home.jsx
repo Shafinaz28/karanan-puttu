@@ -209,7 +209,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative h-screen overflow-hidden">
+      <section className="relative h-[82vh] overflow-hidden md:h-screen">
         {heroSlides.map((slide, index) => (
           <img
             key={slide.src}
@@ -225,7 +225,7 @@ export default function Home() {
           />
         ))}
         <div className="absolute inset-0 bg-gradient-to-t from-[#1c080c]/88 via-[#1c080c]/25 to-transparent md:bg-[linear-gradient(to_right,rgba(28,8,12,0.82)_0%,rgba(28,8,12,0.62)_32%,rgba(28,8,12,0.28)_52%,transparent_70%)]" />
-        <div className="absolute inset-0 flex items-end pb-16 md:items-center md:pb-0">
+        <div className="absolute inset-0 flex items-end pb-10 md:items-center md:pb-0">
           <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
             <div data-slide="left" className="max-w-xl text-left text-[#f6efe4]">
               <p className="text-[11px] tracking-[0.28em] text-[#d7c4a2] uppercase">Karnan Pattu Centre</p>
