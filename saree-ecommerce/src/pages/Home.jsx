@@ -224,7 +224,7 @@ export default function Home() {
           />
         ))}
         <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.94)_0%,rgba(28,8,12,0.86)_46%,rgba(28,8,12,0.62)_72%,rgba(28,8,12,0.28)_100%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.78)_36%,rgba(28,8,12,0.42)_58%,transparent_76%)]" />
-        <div className="absolute inset-0 flex items-end pb-20 md:items-center md:pb-0">
+        <div className="absolute inset-0 flex items-end pb-28 md:items-center md:pb-0">
           <div className="mx-auto w-full min-w-0 max-w-7xl px-4 lg:px-8">
             <div data-slide="left" className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]">
               <p className="text-[11px] tracking-[0.28em] text-[#d7c4a2] uppercase">Karnan Pattu Centre</p>
