@@ -425,7 +425,7 @@ export default function Home() {
                     </button>
                   </div>
                   <p className="mt-3 text-[10px] tracking-[0.18em] text-ink/40 uppercase">{product.fabric}</p>
-                  <Link to={`/product/${product.id}`} className="mt-1 block font-display text-[22px] leading-tight text-primary">
+                  <Link to={`/product/${product.id}`} className="mt-1 block truncate font-display text-[22px] leading-tight text-primary">
                     {product.name}
                   </Link>
                   <p className="mt-1 text-sm text-ink/80">{formatPrice(product.price)}</p>

@@ -22,7 +22,7 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-clip bg-shell font-sans text-ink">
       <Navbar />
-      <main className="w-full max-w-full overflow-x-clip pb-24 md:pb-0">{children}</main>
+      <main className="w-full max-w-full overflow-x-clip">{children}</main>
       <Footer />
       {createPortal(
         <a

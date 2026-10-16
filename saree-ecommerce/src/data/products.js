@@ -15,7 +15,7 @@ export const sareeImages = [
 export const products = [
   {
     id: 1,
-    name: "Royal Kanjivaram Silk",
+    name: "Royal",
     category: "Silk",
     price: 11490,
     badge: "Signature weave",
@@ -30,7 +30,7 @@ export const products = [
   },
   {
     id: 2,
-    name: "Gulabi Soft Silk",
+    name: "Gulabi",
     category: "Silk",
     price: 5990,
     badge: "New arrival",
@@ -45,7 +45,7 @@ export const products = [
   },
   {
     id: 3,
-    name: "The Emerald Banarasi",
+    name: "Emerald",
     category: "Silk",
     price: 8490,
     badge: "Bestseller",
@@ -119,7 +119,7 @@ export const products = [
   },
   {
     id: 8,
-    name: "The Ivory Heirloom",
+    name: "Ivory",
     category: "Bridal",
     price: 12990,
     badge: "Wedding edit",
