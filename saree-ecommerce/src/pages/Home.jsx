@@ -98,43 +98,43 @@ const weaves = [
 
 const oldSilks = [
   {
-    name: "Old and used pure silk",
-    text: "Worn silk is welcome. The body and the border are checked before a price is named.",
+    name: "Old silk",
+    text: "Worn silk is welcome.",
     image: photo(0),
   },
   {
-    name: "Banarasi silk",
-    text: "Kadhua and tissue Banarasi, faded or still bright. The zari is part of the rate.",
+    name: "Banarasi",
+    text: "Faded or still bright.",
     image: photo(2),
   },
   {
     name: "Brocade",
-    text: "Heavy brocade and split pallus are taken in. The weave is looked at in daylight.",
+    text: "Heavy brocade and split pallus.",
     image: photo(10),
   },
   {
-    name: "Kanjivaram silk",
-    text: "Korvai and temple borders from Kanchipuram, including pieces with tired zari.",
+    name: "Kanjivaram",
+    text: "Temple borders from Kanchipuram.",
     image: photo(1),
   },
   {
-    name: "Antique silk",
-    text: "Older heirloom drapes are checked for the handwork that is still on the cloth.",
+    name: "Antique",
+    text: "Heirloom drapes with handwork.",
     image: photo(5),
   },
   {
-    name: "Mysore silk",
-    text: "Plain and crepe Mysore silk, light or heavy, folded away or already worn.",
+    name: "Mysore",
+    text: "Plain or crepe, worn or folded.",
     image: photo(7),
   },
   {
-    name: "Tussar silk",
-    text: "Tussar with a soft gold or a plain body. Stains and small tears do not rule it out.",
+    name: "Tussar",
+    text: "Soft gold or a plain body.",
     image: photo(8),
   },
   {
-    name: "Tissue sarees",
-    text: "Gold and silver tissue, even when a panel has caught or the edge has frayed.",
+    name: "Tissue",
+    text: "Gold and silver tissue.",
     image: photo(4),
   },
 ]
@@ -209,7 +209,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative h-[82vh] w-full max-w-full overflow-hidden md:h-screen">
+      <section className="relative h-[92vh] w-full max-w-full overflow-hidden md:h-screen">
         {heroSlides.map((slide, index) => (
           <img
             key={slide.src}
@@ -224,7 +224,7 @@ export default function Home() {
           />
         ))}
         <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.94)_0%,rgba(28,8,12,0.86)_46%,rgba(28,8,12,0.62)_72%,rgba(28,8,12,0.28)_100%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.78)_36%,rgba(28,8,12,0.42)_58%,transparent_76%)]" />
-        <div className="absolute inset-0 flex items-end pb-10 md:items-center md:pb-0">
+        <div className="absolute inset-0 flex items-end pb-20 md:items-center md:pb-0">
           <div className="mx-auto w-full min-w-0 max-w-7xl px-4 lg:px-8">
             <div data-slide="left" className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]">
               <p className="text-[11px] tracking-[0.28em] text-[#d7c4a2] uppercase">Karnan Pattu Centre</p>
@@ -274,7 +274,7 @@ export default function Home() {
       </section>
 
       <section className="border-y border-primary/10 bg-[#f6efe4]">
-        <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-8 px-5 py-8 pr-16 lg:grid-cols-4 lg:gap-6 lg:pr-5">
+        <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-8 px-5 py-8 lg:grid-cols-4 lg:gap-6">
           {assurances.map((item, index) => (
             <li
               key={item.title}
@@ -290,7 +290,7 @@ export default function Home() {
 
       <section className="bg-[#f6efe4] px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="flex min-w-0 items-end justify-between gap-8">
+          <div className="flex min-w-0 flex-col items-center gap-8 text-center md:flex-row md:items-end md:justify-between md:text-left">
             <div data-slide="left" className="min-w-0">
               <p className="text-[11px] tracking-[0.28em] text-[#3a2a24]/70 uppercase">Choose by the weave</p>
               <h2 className="mt-4 font-display text-[40px] leading-none text-[#2c1814] md:text-[56px]">
@@ -328,7 +328,7 @@ export default function Home() {
           </ul>
           <Link
             to="/shop"
-            className="mt-6 inline-flex items-center gap-2 border-b border-[#2c1814]/70 pb-0.5 text-[13px] text-[#2c1814] md:hidden"
+            className="mx-auto mt-6 flex w-fit items-center gap-2 border-b border-[#2c1814]/70 pb-0.5 text-[13px] text-[#2c1814] md:hidden"
           >
             Shop all sarees
             <span aria-hidden="true">↗</span>
@@ -408,7 +408,7 @@ export default function Home() {
                       <span className="quick-view">View saree</span>
                     </Link>
                     {product.badge && (
-                      <span className="absolute bottom-3 left-3 z-10 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
+                      <span className="absolute bottom-12 left-3 z-10 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
                         {product.badge}
                       </span>
                     )}
@@ -459,12 +459,12 @@ export default function Home() {
           </h2>
           <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {oldSilks.map((item, index) => (
-              <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"}>
-                <Link to="/old-silk" className="motion-card block overflow-hidden border-2 border-[#c59b27] bg-[#3a1216]">
-                  <img src={item.image} alt={item.name}  decoding="async" className="aspect-[5/4] w-full object-cover" />
-                  <div className="px-3 py-3 text-[#f7f1e8] md:px-4 md:py-4">
-                    <h3 className="font-display text-sm leading-tight md:text-lg">{item.name}</h3>
-                    <p className="mt-1 text-[11px] leading-5 text-[#f7f1e8]/75 md:text-xs">{item.text}</p>
+              <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full">
+                <Link to="/old-silk" className="motion-card flex h-full flex-col overflow-hidden border-2 border-[#c59b27] bg-[#3a1216]">
+                  <img src={item.image} alt={item.name} decoding="async" className="aspect-[4/3] w-full object-cover object-center" />
+                  <div className="flex flex-1 flex-col items-center px-3 py-3 text-center text-[#f7f1e8]">
+                    <h3 className="font-display text-base leading-tight">{item.name}</h3>
+                    <p className="mt-1 text-[11px] leading-4 text-[#f7f1e8]/75">{item.text}</p>
                   </div>
                 </Link>
               </li>
@@ -473,23 +473,22 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="overflow-x-clip bg-[#f6efe4] px-4 py-16">
+      <section className="bg-[#f6efe4] px-4 py-16">
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
           <div data-slide="left" className="relative mx-auto w-full max-w-md">
-            <div className="relative mb-10 mr-auto w-[78%] sm:mr-0 sm:mb-12 sm:ml-auto sm:w-[78%]">
+            <div className="relative mx-auto mb-8 w-[72%] max-w-sm lg:mr-0 lg:mb-12 lg:ml-auto lg:w-[78%] lg:max-w-none">
               <img
                 src="/hero/gold-saree.avif"
                 alt="A gold silk saree worn on temple steps"
                 decoding="async"
-                className="h-[420px] w-full object-cover object-top shadow-sm sm:h-[460px]"
+                className="mx-auto h-[380px] w-full object-cover object-center shadow-sm sm:h-[460px]"
               />
-              <div className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 bg-[#c48a3a] px-4 py-3 text-white shadow-md sm:px-5 sm:py-4">
+              <div className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 bg-[#c48a3a] px-4 py-3 text-left text-white shadow-md">
                 <p className="font-display text-3xl leading-none sm:text-4xl">30+</p>
-                <p className="mt-1 text-xs tracking-wide">Years of experience</p>
               </div>
             </div>
           </div>
-          <div data-slide="right">
+          <div data-slide="right" className="text-center lg:text-left">
             <p className="text-sm font-medium text-[#c48a3a]">— Welcome to Karnan Pattu Centre</p>
             <h2 className="mt-3 font-display text-4xl leading-tight text-[#4a0e17] md:text-5xl">Old Silk Saree Buyers</h2>
             <p className="mt-5 text-sm font-medium text-ink">Old silk saree buyers in Bengaluru</p>
