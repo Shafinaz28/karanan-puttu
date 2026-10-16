@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+html {
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: #f7f1e8;
+}
+
+#root {
+  overflow-x: clip;
+  min-height: 100%;
+}
+
 @theme {
   --color-primary: #4a0e17;
   --color-primary-soft: #6b1a26;
@@ -40,6 +55,13 @@ section[id] {
 .font-display {
   font-weight: 500;
   letter-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-transform: capitalize;
 }
 
 .service-card {

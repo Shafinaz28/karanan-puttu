@@ -43,33 +43,6 @@ const services = [
   },
 ]
 
-const reasons = [
-  {
-    mark: "01",
-    icon: "tag",
-    title: "Best price for old silk",
-    text: "Torn borders and faded zari are still valued. The rate is told before you agree.",
-  },
-  {
-    mark: "02",
-    icon: "seal",
-    title: "Silk you can trust",
-    text: "New drapes follow the house rule: named silk, and zari that is drawn by hand.",
-  },
-  {
-    mark: "03",
-    icon: "cash",
-    title: "Same-day cash",
-    text: "Once the saree is checked, the amount is paid the same day.",
-  },
-  {
-    mark: "04",
-    icon: "pin",
-    title: "Showrooms near you",
-    text: "Visit V.V. Puram or Jayanagar in Bengaluru, or call the desk.",
-  },
-]
-
 const faqs = [
   {
     question: "Do you buy damaged silk sarees?",
@@ -115,20 +88,20 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-[#f6efe4] py-16">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 lg:grid-cols-2 lg:px-8">
-          <figure className="relative">
+      <section className="bg-[#f6efe4] py-8 md:py-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 lg:grid-cols-2 lg:px-8">
+          <figure className="relative order-2 lg:order-1">
             <img
               src={sareeImages[9]}
               alt="Maroon Kanjivaram silk with gold buttas"
-              className="h-[460px] w-full rounded-2xl object-cover"
+              className="h-72 w-full rounded-2xl object-cover md:h-[460px]"
             />
             <figcaption className="absolute bottom-5 left-5 rounded-lg bg-[#c59b27] px-4 py-3 text-[#3a1216] shadow-md">
               <p className="font-display text-3xl leading-none">30+</p>
               <p className="mt-1 text-xs">Years old</p>
             </figcaption>
           </figure>
-          <div>
+          <div className="order-1 lg:order-2">
             <p className="text-[11px] tracking-[0.2em] text-[#8a6230] uppercase">
               A Kanchipuram legacy since 1875
             </p>
@@ -160,8 +133,8 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-white px-4 py-16 md:px-8 md:py-20">
-        <ul className="mx-auto grid max-w-6xl gap-10 md:grid-cols-3">
+      <section className="bg-white px-4 py-8 md:px-8 md:py-10">
+        <ul className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {beliefs.map((item) => (
             <li key={item.title} className="flex flex-col items-center text-center">
               <BeliefIcon name={item.icon} />
@@ -171,9 +144,9 @@ export default function About() {
           ))}
         </ul>
       </section>
-      <section className="bg-[#f6efe4] px-4 py-16 md:px-8 md:py-24">
+      <section className="bg-[#f6efe4] px-4 py-8 md:px-8 md:py-12">
         <div className="mx-auto max-w-6xl">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
             <img
               src="/hero/green-palace.avif"
               alt="A green Banarasi silk with gold buttas"
@@ -204,7 +177,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-white pt-16 pb-24 md:pb-28">
+      <section className="bg-white pt-10 pb-16 md:pt-12 md:pb-20">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             What we do
@@ -212,7 +185,7 @@ export default function About() {
           <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">
             Our Service
           </h2>
-          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((item) => (
               <li
                 key={item.title}
@@ -229,7 +202,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] py-16">
+      <section className="bg-[#f6efe4] py-12 md:py-16">
         <div className="mx-auto grid max-w-7xl items-stretch gap-6 px-4 md:grid-cols-2 lg:px-8">
           <article className="motion-card flex h-full flex-col overflow-hidden rounded-2xl border border-secondary/40 bg-white">
             <div className="h-2 bg-secondary" />
@@ -254,30 +227,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
-            The promise
-          </p>
-          <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">
-            Why Choose Us
-          </h2>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {reasons.map((item) => (
-              <li key={item.title} className="motion-card flex h-full flex-col rounded-xl bg-[#4a1520] p-5 text-center text-[#f7f1e8]">
-                <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-[#d7c4a2] text-[#d7c4a2]">
-                  <ReasonIcon name={item.icon} />
-                </span>
-                <p className="mt-3 text-[10px] tracking-[0.16em] text-[#d7c4a2] uppercase">{item.mark}</p>
-                <h3 className="mt-1 min-h-10 text-sm font-semibold">{item.title}</h3>
-                <p className="text-xs leading-5 text-[#f7f1e8]/75">{item.text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="bg-[#f7f1e8] py-16">
+      <section className="bg-[#f7f1e8] py-8 md:py-10">
         <div className="mx-auto max-w-3xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             Questions
@@ -285,7 +235,7 @@ export default function About() {
           <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">
             FAQ
           </h2>
-          <ul className="mt-10 space-y-3">
+          <ul className="mt-6 space-y-3">
             {faqs.map((item, index) => {
               const shown = open === index
               return (
@@ -310,14 +260,14 @@ export default function About() {
           </ul>
         </div>
       </section>
-      <section className="relative min-h-[460px]">
+      <section className="relative min-h-[360px]">
         <img
           src={sareeImages[6]}
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-[#3a1216]/72" />
-        <div className="relative mx-auto flex min-h-[460px] max-w-3xl flex-col items-center justify-center px-6 py-16 text-center text-cream">
+        <div className="relative mx-auto flex min-h-[360px] max-w-3xl flex-col items-center justify-center px-6 py-12 text-center text-cream">
           <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
             Sell and buy
           </p>
@@ -387,52 +337,6 @@ function BeliefIcon({ name }) {
     <svg {...common}>
       <path d="M20 12a8 8 0 1 1-2.2-5.5" />
       <path d="M20 4v4h-4" />
-    </svg>
-  )
-}
-
-function ReasonIcon({ name }) {
-  const common = {
-    viewBox: "0 0 24 24",
-    className: "h-4 w-4",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    "aria-hidden": true,
-  }
-
-  if (name === "tag") {
-    return (
-      <svg {...common}>
-        <path d="M12 4h6v6l-8 8-6-6 8-8z" />
-        <circle cx="16" cy="8" r="1" />
-      </svg>
-    )
-  }
-
-  if (name === "seal") {
-    return (
-      <svg {...common}>
-        <circle cx="12" cy="10" r="5" />
-        <path d="M9 14.5 8 20l4-2 4 2-1-5.5" />
-      </svg>
-    )
-  }
-
-  if (name === "cash") {
-    return (
-      <svg {...common}>
-        <rect x="3" y="6" width="18" height="12" rx="2" />
-        <circle cx="12" cy="12" r="2.2" />
-        <path d="M7 12h.01M17 12h.01" />
-      </svg>
-    )
-  }
-
-  return (
-    <svg {...common}>
-      <path d="M12 21s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10z" />
-      <circle cx="12" cy="11" r="2" />
     </svg>
   )
 }

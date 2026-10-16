@@ -30,6 +30,8 @@ export default function ProductDetails() {
       <img
         src={product.image}
         alt={product.name}
+        fetchPriority="high"
+        decoding="async"
         className="w-full rounded-2xl object-cover"
       />
       <div>

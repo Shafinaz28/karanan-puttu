@@ -209,25 +209,24 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative h-[82vh] overflow-hidden md:h-screen">
+      <section className="relative h-[82vh] w-full max-w-full overflow-hidden md:h-screen">
         {heroSlides.map((slide, index) => (
           <img
             key={slide.src}
             src={slide.src}
             alt={index === heroIndex ? slide.alt : ""}
             aria-hidden={index === heroIndex ? undefined : true}
-            fetchPriority={index === 0 ? "high" : "low"}
-            loading={index === 0 ? "eager" : "lazy"}
+            fetchPriority={index === 0 ? "high" : "auto"}
             decoding="async"
             className={`hero-slide absolute inset-0 h-full w-full object-cover ${slide.frame} ${
               index === heroIndex ? "opacity-100" : "opacity-0"
             }`}
           />
         ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1c080c]/88 via-[#1c080c]/25 to-transparent md:bg-[linear-gradient(to_right,rgba(28,8,12,0.82)_0%,rgba(28,8,12,0.62)_32%,rgba(28,8,12,0.28)_52%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.94)_0%,rgba(28,8,12,0.86)_46%,rgba(28,8,12,0.62)_72%,rgba(28,8,12,0.28)_100%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.78)_36%,rgba(28,8,12,0.42)_58%,transparent_76%)]" />
         <div className="absolute inset-0 flex items-end pb-10 md:items-center md:pb-0">
-          <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
-            <div data-slide="left" className="max-w-xl text-left text-[#f6efe4]">
+          <div className="mx-auto w-full min-w-0 max-w-7xl px-4 lg:px-8">
+            <div data-slide="left" className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]">
               <p className="text-[11px] tracking-[0.28em] text-[#d7c4a2] uppercase">Karnan Pattu Centre</p>
               <h1 className="mt-4 font-display text-4xl leading-[1.05] text-[#f6efe4] sm:text-6xl md:text-7xl">
                 New silk to wear.
@@ -236,10 +235,10 @@ export default function Home() {
               <p className="mt-5 max-w-md text-sm leading-7 text-[#f6efe4]/85 md:text-base">
                 Kanchipuram and Banarasi leave the counter ready to drape. Bring the saree you no longer wear, and we pay a fair cash price the same day.
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-8 flex w-full max-w-md flex-col gap-3 md:flex-row md:flex-wrap">
                 <Link
                   to="/shop"
-                  className="motion-btn motion-gold inline-flex items-center gap-3 bg-secondary px-5 py-3 text-[11px] tracking-[0.16em] text-ink uppercase"
+                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-3 bg-secondary px-5 py-3 text-[11px] tracking-[0.16em] text-ink uppercase md:w-auto"
                   style={{ borderRadius: 0 }}
                 >
                   Shop new silk
@@ -247,7 +246,7 @@ export default function Home() {
                 </Link>
                 <Link
                   to="/old-silk"
-                  className="motion-btn inline-flex items-center gap-3 border border-[#f6efe4] px-5 py-3 text-[11px] tracking-[0.16em] text-[#f6efe4] uppercase hover:bg-[#f6efe4] hover:text-primary"
+                  className="motion-btn inline-flex w-full items-center justify-center gap-3 border border-[#f6efe4] px-5 py-3 text-[11px] tracking-[0.16em] text-[#f6efe4] uppercase hover:bg-[#f6efe4] hover:text-primary md:w-auto"
                   style={{ borderRadius: 0 }}
                 >
                   Sell old silk
@@ -275,12 +274,12 @@ export default function Home() {
       </section>
 
       <section className="border-y border-primary/10 bg-[#f6efe4]">
-        <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-8 px-5 py-8 lg:grid-cols-4 lg:gap-6">
+        <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-8 px-5 py-8 pr-16 lg:grid-cols-4 lg:gap-6 lg:pr-5">
           {assurances.map((item, index) => (
             <li
               key={item.title}
               data-slide={index === 0 ? "left" : index === 3 ? "right" : "up"}
-              className="flex items-center gap-2.5 text-left text-primary"
+              className="flex flex-col items-center gap-3 text-center text-primary"
             >
               <AssuranceIcon name={item.icon} />
               <span className="font-display text-[15px] leading-snug sm:text-[17px]">{item.title}</span>
@@ -291,8 +290,8 @@ export default function Home() {
 
       <section className="bg-[#f6efe4] px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="flex items-end justify-between gap-8">
-            <div data-slide="left">
+          <div className="flex min-w-0 items-end justify-between gap-8">
+            <div data-slide="left" className="min-w-0">
               <p className="text-[11px] tracking-[0.28em] text-[#3a2a24]/70 uppercase">Choose by the weave</p>
               <h2 className="mt-4 font-display text-[40px] leading-none text-[#2c1814] md:text-[56px]">
                 Find the silk that suits you.
@@ -313,7 +312,6 @@ export default function Home() {
                   <img
                     src={item.image}
                     alt={item.label}
-                    loading="lazy"
                     decoding="async"
                     className={`aspect-[3/4] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${item.frame}`}
                   />
@@ -404,14 +402,13 @@ export default function Home() {
                       <img
                         src={product.image}
                         alt={product.name}
-                        loading="lazy"
                         decoding="async"
                         className={`aspect-[3/4] w-full object-cover ${product.frame || "object-[center_18%]"}`}
                       />
                       <span className="quick-view">View saree</span>
                     </Link>
                     {product.badge && (
-                      <span className="absolute top-3 left-3 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
+                      <span className="absolute bottom-3 left-3 z-10 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
                         {product.badge}
                       </span>
                     )}
@@ -464,7 +461,7 @@ export default function Home() {
             {oldSilks.map((item, index) => (
               <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"}>
                 <Link to="/old-silk" className="motion-card block overflow-hidden border-2 border-[#c59b27] bg-[#3a1216]">
-                  <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="aspect-[5/4] w-full object-cover" />
+                  <img src={item.image} alt={item.name}  decoding="async" className="aspect-[5/4] w-full object-cover" />
                   <div className="px-3 py-3 text-[#f7f1e8] md:px-4 md:py-4">
                     <h3 className="font-display text-sm leading-tight md:text-lg">{item.name}</h3>
                     <p className="mt-1 text-[11px] leading-5 text-[#f7f1e8]/75 md:text-xs">{item.text}</p>
@@ -476,14 +473,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] px-4 py-16">
+      <section className="overflow-x-clip bg-[#f6efe4] px-4 py-16">
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
           <div data-slide="left" className="relative mx-auto w-full max-w-md">
             <div className="relative mb-10 mr-auto w-[78%] sm:mr-0 sm:mb-12 sm:ml-auto sm:w-[78%]">
               <img
                 src="/hero/gold-saree.avif"
                 alt="A gold silk saree worn on temple steps"
-                loading="lazy"
                 decoding="async"
                 className="h-[420px] w-full object-cover object-top shadow-sm sm:h-[460px]"
               />
@@ -525,7 +521,7 @@ export default function Home() {
               <li key={weave.label} data-slide={index < 3 ? "left" : "right"}>
                 <Link to={weave.to} className="flex flex-col items-center text-center">
                   {weave.image ? (
-                    <img src={weave.image} alt="" loading="lazy" decoding="async" className="motion-circle h-20 w-20 rounded-full object-cover" />
+                    <img src={weave.image} alt=""  decoding="async" className="motion-circle h-20 w-20 rounded-full object-cover" />
                   ) : (
                     <span className="motion-circle flex h-20 w-20 items-center justify-center rounded-full border border-secondary text-2xl text-secondary">
                       ₹
@@ -551,7 +547,6 @@ export default function Home() {
             <img
               src="/hero/temple.avif"
               alt="A silk saree in a temple courtyard at sunset"
-              loading="lazy"
               decoding="async"
               className="mt-8 h-72 w-full max-w-md object-cover object-[68%_center]"
             />
@@ -582,7 +577,7 @@ export default function Home() {
           <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((item, index) => (
               <li key={item.step} data-slide={index % 2 === 0 ? "left" : "right"} className="flex flex-col items-center px-2 text-center">
-                <img src={item.image} alt="" loading="lazy" decoding="async" className="h-28 w-28 rounded-full object-cover" />
+                <img src={item.image} alt=""  decoding="async" className="h-28 w-28 rounded-full object-cover" />
                 <p className="mt-4 text-[11px] tracking-[0.16em] text-[#c48a3a] uppercase">{item.step}</p>
                 <h3 className="mt-2 flex min-h-14 max-w-[15rem] items-center font-display text-xl leading-snug whitespace-pre-line text-primary">
                   {item.title}
@@ -595,7 +590,7 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden py-14 text-[#f6efe4] md:py-16">
-        <img src={photo(10)} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={photo(10)} alt=""  decoding="async" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-[#4a0e17]/88" />
         <ul className="relative mx-auto grid max-w-5xl gap-4 px-4 sm:grid-cols-3 sm:gap-6">
           {[

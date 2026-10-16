@@ -81,14 +81,6 @@ export default function usePageMotion(pathname) {
         ease: "power2.out",
         clearProps: "transform",
       })
-      gsap.from("a[aria-label='WhatsApp']", {
-        scale: 0.7,
-        autoAlpha: 0,
-        duration: 0.45,
-        delay: 0.35,
-        ease: "back.out(1.7)",
-        clearProps: "transform",
-      })
     })
 
     return () => ctx.revert()
@@ -105,9 +97,10 @@ export default function usePageMotion(pathname) {
 
         const slides = [...section.querySelectorAll("[data-slide]")]
         if (slides.length) {
+          const narrow = window.matchMedia("(max-width: 767px)").matches
           slides.forEach((node, slideIndex) => {
             const dir = node.dataset.slide
-            const from = dir === "left" ? { x: -84 } : dir === "right" ? { x: 84 } : { y: 64 }
+            const from = !narrow && dir === "left" ? { x: -84 } : !narrow && dir === "right" ? { x: 84 } : { y: 48 }
             gsap.from(node, {
               ...from,
               autoAlpha: 0,

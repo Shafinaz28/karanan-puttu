@@ -23,7 +23,7 @@ export default function ProductCard({ product }) {
     <article className="group">
       <Link to={`/product/${product.id}`} className="block">
         <div className="arch-photo">
-          <img src={product.image} alt={product.name} />
+          <img src={product.image} alt={product.name} decoding="async" fetchPriority="high" />
           {off && (
             <span className="absolute top-3 left-3 bg-[#f7f1e8] px-2 py-1 text-[10px] tracking-wide text-primary">
               {off}

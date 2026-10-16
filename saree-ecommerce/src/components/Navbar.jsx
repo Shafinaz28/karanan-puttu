@@ -66,7 +66,7 @@ export default function Navbar() {
       {pinned && <div style={{ height: barHeight }} aria-hidden="true" />}
       <header
         ref={headerRef}
-        className={pinned ? "fixed inset-x-0 top-0 z-50 overflow-visible text-ink shadow-md" : "relative z-50 overflow-visible text-ink"}
+        className={pinned ? "fixed inset-x-0 top-0 z-50 w-full overflow-x-clip text-ink shadow-md" : "relative z-50 w-full overflow-x-clip text-ink"}
       >
       <div className="hidden items-center justify-between gap-4 bg-primary px-4 py-2 text-[11px] whitespace-nowrap text-[#f6efe4] lg:flex lg:px-12 lg:text-[12px]">
         <div className="flex items-center gap-5 lg:gap-7">

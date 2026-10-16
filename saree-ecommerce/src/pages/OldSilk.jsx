@@ -80,7 +80,7 @@ export default function OldSilk() {
             {bought.map((item, index) => (
               <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"}>
                 <article className="overflow-hidden border-2 border-[#c59b27] bg-[#3a1216]">
-                  <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="aspect-[5/4] w-full object-cover" />
+                  <img src={item.image} alt={item.name} decoding="async" fetchPriority="high" className="aspect-[5/4] w-full object-cover" />
                   <div className="px-3 py-3 text-[#f7f1e8] md:px-4 md:py-4">
                     <h3 className="font-display text-sm leading-tight md:text-lg">{item.name}</h3>
                     <p className="mt-1 text-[11px] leading-5 text-[#f7f1e8]/75 md:text-xs">{item.text}</p>
