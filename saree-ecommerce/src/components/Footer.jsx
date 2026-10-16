@@ -59,7 +59,7 @@ export default function Footer() {
 
         <FooterColumn title="Old saree services">
           {services.map((item) => (
-            <Link key={item} to="/contact" className="hover:text-secondary">
+            <Link key={item} to="/old-silk" className="hover:text-secondary">
               {item}
             </Link>
           ))}

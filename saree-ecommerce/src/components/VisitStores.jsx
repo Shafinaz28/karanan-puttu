@@ -43,7 +43,7 @@ export default function VisitStores({ preview = false }) {
       </p>
       <h2 className="mt-4 font-display text-4xl text-primary md:text-5xl">Visit Our Stores</h2>
       <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-ink/60">
-        V.V. Puram and Jayanagar. Call Chandramuki on {phoneLabel}.
+        V.V. Puram and Jayanagar. Call the desk on {phoneLabel}.
       </p>
       <ul className="mx-auto mt-10 grid max-w-6xl items-stretch gap-6 text-left md:grid-cols-2">
         {stores.map((store, index) => (

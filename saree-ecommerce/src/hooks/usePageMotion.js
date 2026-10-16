@@ -103,6 +103,30 @@ export default function usePageMotion(pathname) {
         const onScreen = index === 0
         const blocks = revealTargets(section)
 
+        const slides = [...section.querySelectorAll("[data-slide]")]
+        if (slides.length) {
+          slides.forEach((node, slideIndex) => {
+            const dir = node.dataset.slide
+            const from = dir === "left" ? { x: -84 } : dir === "right" ? { x: 84 } : { y: 64 }
+            gsap.from(node, {
+              ...from,
+              autoAlpha: 0,
+              duration: 0.95,
+              ease: "power3.out",
+              delay: (onScreen ? 0.06 : 0) + slideIndex * 0.1,
+              clearProps: "transform,opacity,visibility",
+              scrollTrigger: onScreen
+                ? undefined
+                : {
+                    trigger: section,
+                    start: "top 86%",
+                    once: true,
+                  },
+            })
+          })
+          return
+        }
+
         if (onScreen) {
           const heading = section.querySelector("h1")
           const parent = heading?.parentElement

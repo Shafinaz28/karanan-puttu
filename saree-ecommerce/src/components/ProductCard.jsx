@@ -25,10 +25,11 @@ export default function ProductCard({ product }) {
         <div className="arch-photo">
           <img src={product.image} alt={product.name} />
           {off && (
-            <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-secondary px-3 py-1 text-[11px] font-medium whitespace-nowrap text-ink">
+            <span className="absolute top-3 left-3 bg-[#f7f1e8] px-2 py-1 text-[10px] tracking-wide text-primary">
               {off}
             </span>
           )}
+          <span className="quick-view">View saree</span>
         </div>
         <h3 className="mt-3 text-sm leading-5 font-medium text-primary">{product.name}</h3>
         <p className="mt-1 truncate text-[11px] text-ink/45">

@@ -2,6 +2,24 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { sareeImages } from "../data/products"
 
+const beliefs = [
+  {
+    icon: "leaf",
+    title: "At the loom",
+    text: "Korvai borders and hand-drawn zari stay the house rule.",
+  },
+  {
+    icon: "diamond",
+    title: "Chosen in daylight",
+    text: "Named silk is checked at the counter before it leaves.",
+  },
+  {
+    icon: "cycle",
+    title: "A second price",
+    text: "Old, used, and torn silk is welcome. The rate is told first.",
+  },
+]
+
 const services = [
   {
     mark: "01",
@@ -106,8 +124,8 @@ export default function About() {
               className="h-[460px] w-full rounded-2xl object-cover"
             />
             <figcaption className="absolute bottom-5 left-5 rounded-lg bg-[#c59b27] px-4 py-3 text-[#3a1216] shadow-md">
-              <p className="font-display text-3xl leading-none">150 years</p>
-              <p className="mt-1 text-xs">Handloom zari, still checked by hand</p>
+              <p className="font-display text-3xl leading-none">30+</p>
+              <p className="mt-1 text-xs">Years old</p>
             </figcaption>
           </figure>
           <div>
@@ -142,8 +160,51 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      <section className="bg-white py-16">
+      <section className="bg-white px-4 py-16 md:px-8 md:py-20">
+        <ul className="mx-auto grid max-w-6xl gap-10 md:grid-cols-3">
+          {beliefs.map((item) => (
+            <li key={item.title} className="flex flex-col items-center text-center">
+              <BeliefIcon name={item.icon} />
+              <h2 className="mt-4 font-display text-2xl text-[#3a221c]">{item.title}</h2>
+              <p className="mt-2 max-w-xs text-sm leading-6 text-ink/65">{item.text}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="bg-[#f6efe4] px-4 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <img
+              src="/hero/green-palace.avif"
+              alt="A green Banarasi silk with gold buttas"
+              data-slide="left"
+              className="h-[520px] w-full object-cover object-[center_12%] md:h-[640px]"
+            />
+            <div data-slide="right">
+              <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Our house</p>
+              <h2 className="mt-4 font-display text-[40px] leading-[1.05] text-[#3a221c] md:text-[56px]">
+                A drape is more
+                <span className="block">than six yards.</span>
+              </h2>
+              <p className="mt-6 max-w-md text-sm leading-7 text-ink/70">
+                Karnan Pattu Centre sells new Kanchipuram and Banarasi, and buys the silk you no longer wear. Both are looked at in daylight before a price is named.
+              </p>
+              <p className="mt-4 max-w-md text-sm leading-7 text-ink/70">
+                A new drape leaves with a blouse piece. An old one is welcome in any condition. The rate is told first, and the money is paid the same day.
+              </p>
+              <Link
+                to="/shop"
+                className="motion-btn motion-fill mt-8 inline-flex items-center gap-2 bg-primary px-5 py-2.5 text-sm text-[#f6efe4]"
+                style={{ borderRadius: 0 }}
+              >
+                See the weaves
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="bg-white pt-16 pb-24 md:pb-28">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             What we do
@@ -155,12 +216,12 @@ export default function About() {
             {services.map((item) => (
               <li
                 key={item.title}
-                className="service-card flex h-full flex-col rounded-2xl border border-[#ead9bf] bg-[#fbf7f1] p-6 text-primary"
+                className="service-card flex h-full flex-col items-center rounded-2xl border border-[#ead9bf] bg-[#fbf7f1] p-6 text-center text-primary"
               >
                 <span className="service-mark inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#c59b27] bg-[#c59b27] font-display text-sm text-[#3a1216]">
                   {item.mark}
                 </span>
-                <h3 className="mt-5 min-h-14 font-display text-xl">{item.title}</h3>
+                <h3 className="mt-5 font-display text-xl">{item.title}</h3>
                 <p className="text-sm leading-7 text-ink/75">{item.text}</p>
               </li>
             ))}
@@ -258,31 +319,75 @@ export default function About() {
         <div className="absolute inset-0 bg-[#3a1216]/72" />
         <div className="relative mx-auto flex min-h-[460px] max-w-3xl flex-col items-center justify-center px-6 py-16 text-center text-cream">
           <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
-            Same-day desk
+            Sell and buy
           </p>
           <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-            Get the best price for your old silk sarees
+            New sarees to wear. Old silk we buy.
           </h2>
           <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
-            Instant cash, payable the same day once the silk is checked and you accept the offer.
+            New Kanchipuram and Banarasi leave the counter with a blouse piece. Old, used, and torn silk is checked in daylight, and the money is paid the same day.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              to="/contact"
+              to="/shop"
               className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
             >
-              Get the best price
+              Shop new silk
+            </Link>
+            <Link
+              to="/old-silk"
+              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
+            >
+              Sell old silk
             </Link>
             <a
               href="tel:+919894441500"
               className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
             >
-              Call Chandramuki
+              Call the desk
             </a>
           </div>
         </div>
       </section>
     </>
+  )
+}
+
+function BeliefIcon({ name }) {
+  const common = {
+    viewBox: "0 0 24 24",
+    className: "h-7 w-7 text-[#8a6230]",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.3,
+    "aria-hidden": true,
+  }
+
+  if (name === "leaf") {
+    return (
+      <svg {...common}>
+        <path d="M12 21V10" />
+        <path d="M12 13c0-4 2.5-7 7-8-1 5-4 8-7 8z" />
+        <path d="M12 15c0-3-2-5.5-6-6.5 1 4 3.2 6.5 6 6.5z" />
+      </svg>
+    )
+  }
+
+  if (name === "diamond") {
+    return (
+      <svg {...common}>
+        <path d="M4 9h16l-8 11L4 9z" />
+        <path d="M4 9 8 4h8l4 5" />
+        <path d="M8 4 12 9l4-5" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg {...common}>
+      <path d="M20 12a8 8 0 1 1-2.2-5.5" />
+      <path d="M20 4v4h-4" />
+    </svg>
   )
 }
 
