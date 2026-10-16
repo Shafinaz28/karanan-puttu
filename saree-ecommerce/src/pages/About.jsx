@@ -133,7 +133,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-white px-4 py-8 md:px-8 md:py-10">
+      <section className="bg-shell px-4 py-8 md:px-8 md:py-10">
         <ul className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {beliefs.map((item) => (
             <li key={item.title} className="flex flex-col items-center text-center">
@@ -177,7 +177,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-white pt-10 pb-16 md:pt-12 md:pb-20">
+      <section className="bg-shell pt-10 pb-16 md:pt-12 md:pb-20">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
             What we do

@@ -154,7 +154,7 @@ export default function Contact() {
         )}
       </div>
     </section>
-    <section className="bg-white px-4 py-12">
+    <section className="bg-shell px-4 py-12">
       <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
         <article className="rounded-2xl border border-ink/10 bg-paper p-8">
           <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Buy</p>

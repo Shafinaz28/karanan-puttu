@@ -96,7 +96,7 @@ export default function Navbar() {
           Locate Us
         </Link>
       </div>
-      <div className="relative flex h-[72px] items-center justify-between bg-[#f6efe4] px-3 text-primary lg:h-[100px] lg:px-12">
+      <div className="relative flex h-[72px] items-center justify-between bg-shell px-3 text-primary lg:h-[100px] lg:px-12">
         <Link
           to="/"
           className="text-left"
@@ -150,7 +150,7 @@ export default function Navbar() {
         </div>
       </div>
       {searchOpen && (
-        <form onSubmit={searchSarees} className="border-t border-primary/15 bg-[#f6efe4] px-4 py-3 lg:px-12">
+        <form onSubmit={searchSarees} className="border-t border-primary/15 bg-shell px-4 py-3 lg:px-12">
           <div className="mx-auto flex max-w-md items-center border border-primary/20 bg-white px-4">
             <input
               value={query}

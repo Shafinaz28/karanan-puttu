@@ -7,7 +7,7 @@ html {
 body {
   margin: 0;
   overflow-x: clip;
-  background: #f7f1e8;
+  background: oklch(87.9% 0.03 65);
 }
 
 #root {
@@ -22,6 +22,7 @@ body {
   --color-cream: #f3e8dc;
   --color-cream-deep: #e7d5c4;
   --color-paper: #f7f1e8;
+  --color-shell: oklch(87.9% 0.03 65);
   --color-ink: #1c1917;
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", sans-serif;

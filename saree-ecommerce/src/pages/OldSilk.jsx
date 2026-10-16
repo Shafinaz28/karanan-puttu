@@ -92,7 +92,7 @@ export default function OldSilk() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-16">
+      <section className="bg-shell px-4 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
           {[
             ["01", "Show the saree", "Bring it to V.V. Puram or Jayanagar, or ask for a doorstep pickup in Bengaluru."],

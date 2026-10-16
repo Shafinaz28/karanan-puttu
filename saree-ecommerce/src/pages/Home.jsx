@@ -452,7 +452,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-16">
+      <section className="bg-shell px-4 py-16">
         <div className="mx-auto max-w-6xl">
           <h2 data-slide="up" className="text-center font-display text-4xl text-primary md:text-5xl">
             Sarees We Buy
@@ -510,7 +510,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-16">
+      <section className="bg-shell px-4 py-16">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up">
             <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">The loom</p>
@@ -536,7 +536,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#fbf7f1] px-4 py-16">
+      <section className="bg-[#f6efe4] px-4 py-16">
         <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div data-slide="left" className="lg:pt-2">
             <p className="text-[11px] tracking-[0.22em] text-[#c48a3a] uppercase">Our promise</p>
@@ -568,7 +568,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-16">
+      <section className="bg-shell px-4 py-16">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up" className="text-center">
             <p className="text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">How it works</p>

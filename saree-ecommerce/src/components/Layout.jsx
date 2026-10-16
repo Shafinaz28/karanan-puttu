@@ -20,7 +20,7 @@ export default function Layout({ children }) {
   usePageMotion(pathname)
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-clip bg-paper font-sans text-ink">
+    <div className="min-h-screen w-full max-w-full overflow-x-clip bg-shell font-sans text-ink">
       <Navbar />
       <main className="w-full max-w-full overflow-x-clip pb-24 md:pb-0">{children}</main>
       <Footer />
