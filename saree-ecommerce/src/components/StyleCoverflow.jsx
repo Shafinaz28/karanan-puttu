@@ -14,8 +14,6 @@ const slides = [
   { image: "/sarees/worn/worn-plum-leaf.jpg", to: "/product/9" },
 ]
 
-const STEP_DEG = 32
-
 function wrapOffset(index, active, length) {
   let offset = index - active
   if (offset > length / 2) offset -= length
@@ -23,38 +21,42 @@ function wrapOffset(index, active, length) {
   return offset
 }
 
-function cardTransform(offset, radius) {
-  const angle = offset * STEP_DEG
-  const rad = (angle * Math.PI) / 180
-  const x = Math.sin(rad) * radius
-  const z = (Math.cos(rad) - 1) * radius
+function cardStyle(offset, gap) {
   const abs = Math.abs(offset)
-  const scale = Math.max(0.72, 1 - abs * 0.08)
-  return `translate(-50%, -50%) translate3d(${x}px, 0, ${z}px) rotateY(${-angle}deg) scale(${scale})`
+  const x = offset * gap
+  const rotate = offset * -28
+  const scale = abs === 0 ? 1 : abs === 1 ? 0.88 : 0.78
+  const z = abs === 0 ? 40 : abs === 1 ? 20 : 0
+  return {
+    transform: `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) rotateY(${rotate}deg) scale(${scale})`,
+    zIndex: 10 - abs,
+    opacity: abs > 2 ? 0 : abs === 2 ? 0.55 : 1,
+    pointerEvents: abs > 2 ? "none" : "auto",
+  }
 }
 
 export default function StyleCoverflow() {
   const [active, setActive] = useState(0)
-  const [radius, setRadius] = useState(380)
+  const [gap, setGap] = useState(160)
   const total = slides.length
 
   useEffect(() => {
-    function syncRadius() {
+    function syncGap() {
       const width = window.innerWidth
-      if (width < 640) setRadius(200)
-      else if (width < 1024) setRadius(300)
-      else setRadius(420)
+      if (width < 640) setGap(110)
+      else if (width < 1024) setGap(150)
+      else setGap(190)
     }
-    syncRadius()
-    window.addEventListener("resize", syncRadius)
-    return () => window.removeEventListener("resize", syncRadius)
+    syncGap()
+    window.addEventListener("resize", syncGap)
+    return () => window.removeEventListener("resize", syncGap)
   }, [])
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
     const id = window.setInterval(() => {
       setActive((current) => (current + 1) % total)
-    }, 3800)
+    }, 4000)
     return () => window.clearInterval(id)
   }, [total])
 
@@ -73,24 +75,19 @@ export default function StyleCoverflow() {
         </p>
       </div>
 
-      <div className="relative mx-auto mt-10 max-w-6xl">
+      <div className="relative mx-auto mt-10 max-w-5xl">
         <div className="coverflow" aria-roledescription="carousel">
           <div className="coverflow-stage">
             {slides.map((slide, index) => {
               const offset = wrapOffset(index, active, total)
               const abs = Math.abs(offset)
               const isActive = offset === 0
-              const hidden = abs > 2
+              if (abs > 2) return null
               return (
                 <article
                   key={slide.image}
                   className={`coverflow-card ${isActive ? "is-active" : ""}`}
-                  style={{
-                    transform: cardTransform(offset, radius),
-                    zIndex: total - abs,
-                    opacity: hidden ? 0 : 1 - abs * 0.15,
-                    pointerEvents: hidden ? "none" : "auto",
-                  }}
+                  style={cardStyle(offset, gap)}
                   aria-hidden={!isActive}
                 >
                   {isActive ? (
@@ -117,7 +114,7 @@ export default function StyleCoverflow() {
           type="button"
           aria-label="Previous style"
           onClick={() => go(-1)}
-          className="absolute top-1/2 left-1 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white text-primary shadow-sm md:left-4 md:h-12 md:w-12"
+          className="absolute top-1/2 left-0 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white text-primary shadow-sm md:left-2 md:h-12 md:w-12"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
             <path d="M15 5l-7 7 7 7" />
@@ -127,7 +124,7 @@ export default function StyleCoverflow() {
           type="button"
           aria-label="Next style"
           onClick={() => go(1)}
-          className="absolute top-1/2 right-1 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white text-primary shadow-sm md:right-4 md:h-12 md:w-12"
+          className="absolute top-1/2 right-0 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white text-primary shadow-sm md:right-2 md:h-12 md:w-12"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
             <path d="M9 5l7 7-7 7" />

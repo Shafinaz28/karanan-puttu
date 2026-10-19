@@ -256,9 +256,9 @@ h4 {
 }
 
 .coverflow {
-  perspective: 1400px;
-  perspective-origin: 50% 48%;
-  height: clamp(380px, 64vw, 540px);
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  height: clamp(360px, 58vw, 480px);
 }
 
 .coverflow-stage {
@@ -271,13 +271,14 @@ h4 {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(44vw, 230px);
+  width: min(48vw, 220px);
   aspect-ratio: 3 / 4;
   margin: 0;
   transform-style: preserve-3d;
   transform-origin: center center;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
   will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .coverflow-card.is-active {
@@ -291,11 +292,11 @@ h4 {
   overflow: hidden;
   padding: 0;
   border: 0;
-  border-radius: 1.35rem;
+  border-radius: 1.25rem;
   background: #f0e6d8;
   box-shadow:
-    0 26px 44px rgba(44, 24, 20, 0.2),
-    0 8px 16px rgba(44, 24, 20, 0.1);
+    0 18px 36px rgba(44, 24, 20, 0.18),
+    0 6px 12px rgba(44, 24, 20, 0.08);
   cursor: pointer;
 }
 
@@ -309,7 +310,7 @@ h4 {
 
 @media (min-width: 768px) {
   .coverflow-card {
-    width: min(28vw, 280px);
+    width: min(30vw, 260px);
   }
 }
 
