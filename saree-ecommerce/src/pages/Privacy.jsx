@@ -23,7 +23,7 @@ const sections = [
   },
   {
     title: "Your choices",
-    text: "You can ask us to correct or delete a message you sent. Email care@karananpattucentre.com or call +91 72000 16300. You can also clear the bag by removing the sarees in your browser.",
+    text: "You can ask us to correct or delete a message you sent. Email karnanpattucenter@gmail.com or call +91 98944 41500. You can also clear the bag by removing the sarees in your browser.",
   },
 ]
 

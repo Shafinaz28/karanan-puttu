@@ -3,11 +3,10 @@ import { Link } from "react-router-dom"
 import logo from "../assets/images/kpc-logo.avif"
 
 const collections = [
-  { to: "/shop?category=Silk", label: "Kanchipuram silk" },
-  { to: "/shop?category=Bridal", label: "Bridal muhurtham sarees" },
-  { to: "/shop", label: "Banarasi & tissue" },
-  { to: "/shop?category=Silk", label: "Soft silk sarees" },
-  { to: "/shop", label: "Temple korvai borders" },
+  { to: "/shop", label: "Soft silk sarees" },
+  { to: "/shop", label: "Wedding soft silks" },
+  { to: "/shop", label: "Day-wear soft silks" },
+  { to: "/old-silk", label: "Sell old soft silk" },
 ]
 
 const services = [
@@ -39,13 +38,12 @@ export default function Footer() {
             className="h-24 w-24 object-contain"
           />
           <p className="mt-4 max-w-xs text-sm leading-6 text-cream/75">
-            We buy old, used and damaged silk sarees at the best price, and
-            we still weave new Kanchipuram silk for the next ceremony.
+            We buy old, used and damaged soft silk at the best price, and
+            we sell new soft silks for the next occasion.
           </p>
           <div className="mt-5 flex gap-3">
-            <FooterSocial href="https://instagram.com" label="Instagram" name="instagram" />
-            <FooterSocial href="https://facebook.com" label="Facebook" name="facebook" />
-            <FooterSocial href="https://youtube.com" label="YouTube" name="youtube" />
+            <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
+            <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
           </div>
         </div>
 
@@ -70,7 +68,7 @@ export default function Footer() {
             VIP newsletter
           </p>
           <p className="mt-3 text-sm leading-6 text-cream/75">
-            Subscribe to get privileged previews of bridal launches and seasonal
+            Subscribe to get privileged previews of soft silk launches and seasonal
             handloom drops.
           </p>
           {joined ? (

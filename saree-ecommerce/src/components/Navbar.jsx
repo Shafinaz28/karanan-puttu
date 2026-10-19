@@ -70,23 +70,23 @@ export default function Navbar() {
       >
       <div className="hidden items-center justify-between gap-4 bg-primary px-4 py-2 text-[11px] whitespace-nowrap text-[#f6efe4] lg:flex lg:px-12 lg:text-[12px]">
         <div className="flex items-center gap-5 lg:gap-7">
-          <a href="tel:+917200016300" className="inline-flex items-center gap-1.5 hover:text-secondary">
+          <a href="tel:+919894441500" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <PhoneIcon />
-            +91 72000 16300
+            +91 98944 41500
           </a>
-          <a href="mailto:care@karananpattucentre.com" className="inline-flex items-center gap-1.5 hover:text-secondary">
+          <a href="tel:+919944055900" className="inline-flex items-center gap-1.5 hover:text-secondary">
+            <PhoneIcon />
+            +91 99440 55900
+          </a>
+          <a href="mailto:karnanpattucenter@gmail.com" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <MailIcon />
-            care@karananpattucentre.com
+            karnanpattucenter@gmail.com
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
-            <FacebookIcon />
-            Like us
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
+          <a href="https://www.instagram.com/karnan_pattu_centre_karnataka" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <InstagramIcon />
             Follow us
           </a>
-          <a href="https://youtube.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
+          <a href="https://youtube.com/@karnanpattucenterkarnataka" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <YouTubeIcon />
             Watch
           </a>
@@ -119,7 +119,6 @@ export default function Navbar() {
           <Link to="/about" className="transition-colors duration-200 hover:text-secondary">Our Story</Link>
           <Link to="/shop" className="transition-colors duration-200 hover:text-secondary">Shop</Link>
           <Link to="/old-silk" className="transition-colors duration-200 hover:text-secondary">Old silk</Link>
-          <Link to="/shop?collection=new" className="transition-colors duration-200 hover:text-secondary">New Arrivals</Link>
           <Link to="/blog" className="transition-colors duration-200 hover:text-secondary">Blog</Link>
           <Link to="/contact" className="transition-colors duration-200 hover:text-secondary">Contact</Link>
         </nav>
@@ -127,8 +126,8 @@ export default function Navbar() {
           <button type="button" aria-label="Search" className="hidden p-2 lg:block" onClick={() => setSearchOpen((open) => !open)}>
             <SearchIcon />
           </button>
-          <Link to="/wishlist" aria-label="Wishlist" className="hidden p-2 lg:block">
-            <HeartIcon />
+          <Link to="/login" aria-label="Login" className="p-1.5 lg:p-2">
+            <UserIcon />
           </Link>
           <Link to="/cart" aria-label={`Cart, ${count} items`} className="relative p-1.5 lg:p-2">
             <CartIcon />
@@ -184,12 +183,11 @@ export default function Navbar() {
           <Link to="/about" className="block border-b border-ink/10 py-3 text-sm">Our Story</Link>
           <Link to="/shop" className="block border-b border-ink/10 py-3 text-sm">Shop</Link>
           <Link to="/old-silk" className="block border-b border-ink/10 py-3 text-sm">Old silk</Link>
-          <Link to="/shop?collection=new" className="block border-b border-ink/10 py-3 text-sm">New Arrivals</Link>
           <Link to="/blog" className="block border-b border-ink/10 py-3 text-sm">Blog</Link>
           <Link to="/contact" className="block border-b border-ink/10 py-3 text-sm">Contact</Link>
           <Link to="/locations" className="block border-b border-ink/10 py-3 text-sm">Locate Us</Link>
-          <Link to="/wishlist" className="block border-b border-ink/10 py-3 text-sm">Wishlist</Link>
           <Link to="/cart" className="block border-b border-ink/10 py-3 text-sm">Cart ({count})</Link>
+          <Link to="/login" className="block border-b border-ink/10 py-3 text-sm">Login</Link>
           <Link to="/account" className="block py-3 text-sm">Account</Link>
         </div>
       )}
@@ -259,10 +257,11 @@ function SearchIcon() {
   )
 }
 
-function HeartIcon() {
+function UserIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-[19px] w-[19px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-      <path d="M12 19s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z" />
+      <circle cx="12" cy="8" r="3.2" />
+      <path d="M5.5 19.2c1.8-3.2 4-4.8 6.5-4.8s4.7 1.6 6.5 4.8" />
     </svg>
   )
 }

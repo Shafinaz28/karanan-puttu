@@ -8,12 +8,13 @@ import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
+import Login from "./pages/Login"
 import Locations from "./pages/Locations"
 import OldSilk from "./pages/OldSilk"
 import Privacy from "./pages/Privacy"
 import ProductDetails from "./pages/ProductDetails"
 import Shop from "./pages/Shop"
-import Terms from "./pages/Terms"
+ import Terms from "./pages/Terms"
 import Wishlist from "./pages/Wishlist"
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/account" element={<Account />} />
           </Routes>
         </Layout>

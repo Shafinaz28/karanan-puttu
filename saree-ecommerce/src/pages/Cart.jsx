@@ -59,7 +59,7 @@ export default function Cart() {
                         <img
                           src={line.product.image}
                           alt=""
-                          className="h-20 w-16 rounded-lg object-cover"
+                          className="h-20 w-16 rounded-lg object-contain"
                         />
                         <span className="font-display text-xl text-primary">
                           {line.product.name}
@@ -140,7 +140,7 @@ export default function Cart() {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="motion-zoom aspect-[3/4] w-full object-cover"
+                    className="motion-zoom block w-full"
                   />
                 </Link>
                 <div className="p-3">

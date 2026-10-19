@@ -15,38 +15,15 @@ const beliefs = [
   },
   {
     icon: "cycle",
-    title: "A second price",
-    text: "Old, used, and torn silk is welcome. The rate is told first.",
-  },
-]
-
-const services = [
-  {
-    mark: "01",
-    title: "New silk sarees",
-    text: "Kanchipuram, Banarasi, and soft silks for weddings, temples, and the week.",
-  },
-  {
-    mark: "02",
-    title: "Bridal drapes",
-    text: "Heavy zari bridal sarees with a blouse piece, kept ready for the tailor.",
-  },
-  {
-    mark: "03",
     title: "We buy old silk",
-    text: "Old, used, and damaged silk sarees are welcome. We pay the best price.",
-  },
-  {
-    mark: "04",
-    title: "Doorstep check",
-    text: "We collect the saree from your home, test the silk, and pay the same day.",
+    text: "Old, used, and torn silk is welcome. The rate is told first.",
   },
 ]
 
 const faqs = [
   {
-    question: "Do you buy damaged silk sarees?",
-    answer: "Yes. Old, used, torn, and faded silk sarees are welcome. We check the silk and the zari before we name a price.",
+    question: "Do you buy damaged soft silk sarees?",
+    answer: "Yes. Old, used, torn, and faded soft silk sarees are welcome. We check the silk before we name a price.",
   },
   {
     question: "How do I get a price?",
@@ -82,7 +59,7 @@ export default function About() {
           </p>
           <h1 className="mt-4 font-display text-5xl md:text-7xl">About Us</h1>
           <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85">
-            A house that sells new silk, and buys old silk, with the same care.
+            A house that sells soft silk, and buys old soft silk, with the same care.
           </p>
           <span className="mx-auto mt-6 block h-0.5 w-16 bg-[linear-gradient(to_right,#4a0e17,#c59b27)]" aria-hidden="true" />
           </div>
@@ -92,8 +69,8 @@ export default function About() {
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 lg:grid-cols-2 lg:px-8">
           <figure className="relative order-2 lg:order-1">
             <img
-              src={sareeImages[9]}
-              alt="Maroon Kanjivaram silk with gold buttas"
+              src={sareeImages[2]}
+              alt="Maroon soft silk with gold buttas"
               className="h-72 w-full rounded-2xl object-cover md:h-[460px]"
             />
             <figcaption className="absolute bottom-5 left-5 rounded-lg bg-[#c59b27] px-4 py-3 text-[#3a1216] shadow-md">
@@ -103,24 +80,24 @@ export default function About() {
           </figure>
           <div className="order-1 lg:order-2">
             <p className="text-[11px] tracking-[0.2em] text-[#8a6230] uppercase">
-              A Kanchipuram legacy since 1875
+              A soft silk house since 1985
             </p>
             <h2 className="mt-3 font-display text-4xl leading-tight text-ink md:text-5xl">
-              Six generations devoted to the art of sacred handloom silk
+              Soft silks chosen for every occasion
             </h2>
             <p className="mt-5 text-sm leading-7 text-ink/75">
-              Founded in the sacred temple corridors of South India in 1875,
-              Karnan Pattu Centre began with three promises: unmixed silk,
-              tested zari, and drapes for temple patronage and temple brides.
+              Founded in South India in 1985, Karnan Pattu Centre began with three
+              promises: soft silk you can name, a fair check at the counter, and
+              drapes ready for temple days and weddings.
             </p>
             <p className="mt-4 text-sm leading-7 text-ink/75">
-              Today the same house still melts old pattu honestly and weaves
-              new silk for the next generation. A heritage drape that leaves
-              our counter is a ceremony in itself.
+              Today the same house still buys old soft silk honestly and sells
+              new soft silk for the next occasion. A drape that leaves our
+              counter is ready to wear.
             </p>
             <dl className="mt-8 grid grid-cols-3 gap-3">
               {[
-                ["1875", "The first loom"],
+                ["1985", "The first loom"],
                 ["450+", "Weaver families"],
                 ["100%", "Zari tested"],
               ].map(([value, label]) => (
@@ -149,7 +126,7 @@ export default function About() {
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
             <img
               src="/hero/green-palace.avif"
-              alt="A green Banarasi silk with gold buttas"
+              alt="A green soft silk with gold buttas"
               data-slide="left"
               className="h-[520px] w-full object-cover object-[center_12%] md:h-[640px]"
             />
@@ -160,7 +137,7 @@ export default function About() {
                 <span className="block">than six yards.</span>
               </h2>
               <p className="mt-6 max-w-md text-sm leading-7 text-ink/70">
-                Karnan Pattu Centre sells new Kanchipuram and Banarasi, and buys the silk you no longer wear. Both are looked at in daylight before a price is named.
+                Karnan Pattu Centre sells new soft silks, and buys the soft silk you no longer wear. Both are looked at in daylight before a price is named.
               </p>
               <p className="mt-4 max-w-md text-sm leading-7 text-ink/70">
                 A new drape leaves with a blouse piece. An old one is welcome in any condition. The rate is told first, and the money is paid the same day.
@@ -177,31 +154,6 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-shell pt-10 pb-16 md:pt-12 md:pb-20">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
-            What we do
-          </p>
-          <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">
-            Our Service
-          </h2>
-          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((item) => (
-              <li
-                key={item.title}
-                className="service-card flex h-full flex-col items-center rounded-2xl border border-[#ead9bf] bg-[#fbf7f1] p-6 text-center text-primary"
-              >
-                <span className="service-mark inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#c59b27] bg-[#c59b27] font-display text-sm text-[#3a1216]">
-                  {item.mark}
-                </span>
-                <h3 className="mt-5 font-display text-xl">{item.title}</h3>
-                <p className="text-sm leading-7 text-ink/75">{item.text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       <section className="bg-[#f6efe4] py-12 md:py-16">
         <div className="mx-auto grid max-w-7xl items-stretch gap-6 px-4 md:grid-cols-2 lg:px-8">
           <article className="motion-card flex h-full flex-col overflow-hidden rounded-2xl border border-secondary/40 bg-white">
@@ -210,7 +162,7 @@ export default function About() {
               <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">Looking ahead</p>
               <h2 className="mt-3 font-display text-4xl text-primary">Vision</h2>
               <p className="mt-4 text-sm leading-7 text-ink/75">
-                To be the trusted house of South India for pure silk: a place where a new bridal drape is woven with care, and an old saree is turned into honest cash.
+                To be the trusted house of South India for soft silk: a place where a new soft silk is chosen with care, and an old soft silk is turned into honest cash.
               </p>
             </div>
           </article>
@@ -220,7 +172,7 @@ export default function About() {
               <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">What we keep</p>
               <h2 className="mt-3 font-display text-4xl">Mission</h2>
               <p className="mt-4 text-sm leading-7 text-cream/80">
-                We sell silk that can be named, and we buy old, used, and damaged silk sarees at the best price. Every piece is checked before a rate is offered, and the amount is paid the same day.
+                We sell soft silk that can be named, and we buy old, used, and damaged soft silk at the best price. Every piece is checked before a rate is offered, and the amount is paid the same day.
               </p>
             </div>
           </article>
@@ -272,10 +224,10 @@ export default function About() {
             Sell and buy
           </p>
           <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-            New sarees to wear. Old silk we buy.
+            New soft silks to wear. Old soft silk we buy.
           </h2>
           <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
-            New Kanchipuram and Banarasi leave the counter with a blouse piece. Old, used, and torn silk is checked in daylight, and the money is paid the same day.
+            New soft silks leave the counter with a blouse piece. Old, used, and torn soft silk is checked in daylight, and the money is paid the same day.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link

@@ -3,21 +3,21 @@ import { sareeImages } from "../data/products"
 
 const posts = [
   {
-    title: "How we price an old silk saree",
-    text: "Zari, tears, and the age of the weave all change the offer. The rate is told before you agree.",
-    image: sareeImages[10],
+    title: "How we price an old soft silk",
+    text: "Borders, tears, and the age of the weave all change the offer. The rate is told before you agree.",
+    image: sareeImages[6],
     to: "/contact",
   },
   {
-    title: "What to look for in a new Kanchipuram",
-    text: "A named silk, a hand-drawn border, and a blouse piece that leaves with the drape.",
+    title: "What to look for in a new soft silk",
+    text: "A soft silk you can name, a clear border, and a blouse piece that leaves with the drape.",
     image: sareeImages[3],
     to: "/shop",
   },
   {
     title: "A morning at the showroom",
     text: "Daylight is the best way to see gold. Visit V.V. Puram or Jayanagar in Bengaluru.",
-    image: sareeImages[7],
+    image: sareeImages[1],
     to: "/locations",
   },
 ]

@@ -14,24 +14,17 @@ const stores = [
   },
   {
     city: "Bengaluru",
-    name: "Jayanagar Small Shop",
+    name: "Jayanagar 4th Block",
     address:
       "67, 29th C Cross, Geetha Colony, 4th Block, Jayanagar, Bengaluru 560011",
     image: sareeImages[1],
   },
   {
     city: "Bengaluru",
-    name: "Jayanagar Big Shop",
-    address:
-      "#70, 27th Cross, 9th Main, 4th Block, Jayanagar, Bengaluru 560011",
-    image: sareeImages[6],
-  },
-  {
-    city: "Bengaluru",
     name: "Jayanagar 9th Block",
     address:
       "#1329/B2, Tulasi Plaza, 24th A Main, 41st Cross, Jayanagar 9th Block, Bangalore 560069",
-    image: sareeImages[9],
+    image: sareeImages[3],
   },
 ]
 
@@ -39,7 +32,7 @@ export default function VisitStores({ preview = false }) {
   return (
     <section className="bg-[#f7f1e8] px-4 py-16 text-center">
       <p className="mx-auto w-fit rounded-full bg-white px-4 py-1.5 text-[10px] tracking-[0.18em] text-primary uppercase shadow-sm">
-        4 shops in Bengaluru
+        3 shops in Bengaluru
       </p>
       <h2 className="mt-4 font-display text-4xl text-primary md:text-5xl">Visit Our Stores</h2>
       <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-ink/60">

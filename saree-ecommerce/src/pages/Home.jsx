@@ -1,29 +1,19 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import StyleCoverflow from "../components/StyleCoverflow"
 import { useCart } from "../context/CartContext"
 import { formatPrice, products, sareeImages } from "../data/products"
 
-const photo = (index) => sareeImages[index]
+const photo = (index) => sareeImages[index % sareeImages.length]
 
-const heroSlides = [
-  {
-    src: "/hero/maroon-courtyard.avif",
-    alt: "A maroon silk saree in a temple courtyard",
-    frame: "object-[72%_center] md:object-[center_22%]",
-  },
-  {
-    src: "/hero/family-hall.avif",
-    alt: "Four women in silk sarees at a flower-decked home",
-    frame: "object-[center_35%] md:object-[center_22%]",
-  },
-]
+const heroImage = {
+  src: "/hero/hero-soft-silk.jpg",
+  alt: "A soft silk saree with a coral gold border",
+}
 
 const saleFilters = [
-  { id: "all", label: "All sarees" },
-  { id: "kanjivaram", label: "Kanjivaram" },
-  { id: "banarasi", label: "Banarasi" },
+  { id: "all", label: "All soft silks" },
   { id: "soft", label: "Soft silk" },
-  { id: "bridal", label: "Bridal" },
 ]
 
 const assurances = [
@@ -37,29 +27,29 @@ const kinds = [
   {
     label: "Kanjivaram",
     note: "Handloom temple border",
-    to: "/shop?collection=traditional",
+    to: "/shop",
     image: "/hero/maroon-courtyard.avif",
     frame: "object-[78%_center]",
   },
   {
     label: "Banarasi",
     note: "Zari worked by hand",
-    to: "/shop?collection=banarasi",
+    to: "/shop",
     image: "/hero/green-palace.avif",
+    frame: "object-[center_12%]",
+  },
+  {
+    label: "Mysore Silk",
+    note: "Since 1985",
+    to: "/shop",
+    image: "/hero/ivory-gold.avif",
     frame: "object-[center_12%]",
   },
   {
     label: "Soft Silks",
     note: "Silk light on the body",
-    to: "/shop?collection=silk",
+    to: "/shop",
     image: "/hero/gulabi-silk.avif",
-    frame: "object-[center_12%]",
-  },
-  {
-    label: "The Bridal Edit",
-    note: "Woven for the wedding",
-    to: "/shop?collection=wedding",
-    image: "/hero/ivory-gold.avif",
     frame: "object-[center_12%]",
   },
 ]
@@ -88,54 +78,54 @@ const charter = [
 ]
 
 const weaves = [
-  { label: "Kanchipuram", note: "Korvai silk", to: "/shop?category=Silk", image: photo(1) },
-  { label: "Banarasi", note: "Kadhua zari", to: "/shop?collection=banarasi", image: photo(2) },
-  { label: "Mysore crepe", note: "Light drape", to: "/shop?category=Silk", image: photo(4) },
-  { label: "Organza tissue", note: "Sheer gold", to: "/shop?collection=party", image: photo(3) },
-  { label: "Temple border", note: "Gold edge", to: "/shop?collection=traditional", image: photo(5) },
-  { label: "Old saree resale", note: "Gold valuation", to: "/old-silk" },
+  { label: "Soft silk", note: "Light drape", to: "/shop", image: photo(1) },
+  { label: "Soft silk", note: "Gold border", to: "/shop", image: photo(2) },
+  { label: "Soft silk", note: "Day wear", to: "/shop", image: photo(4) },
+  { label: "Soft silk", note: "Evening wear", to: "/shop", image: photo(3) },
+  { label: "Soft silk", note: "Wedding ready", to: "/shop", image: photo(5) },
+  { label: "Old soft silk", note: "We buy", to: "/old-silk" },
 ]
 
 const oldSilks = [
   {
-    name: "Old silk",
-    text: "Worn silk is welcome.",
-    image: photo(0),
+    name: "Old Soft Silk",
+    text: "Worn soft silk is welcome.",
+    image: "/sarees/soft/soft-02.jpg",
   },
   {
-    name: "Banarasi",
+    name: "Faded Soft Silk",
     text: "Faded or still bright.",
-    image: photo(2),
+    image: "/sarees/soft/soft-01.jpg",
   },
   {
-    name: "Brocade",
-    text: "Heavy brocade and split pallus.",
-    image: photo(10),
+    name: "Torn Soft Silk",
+    text: "Torn borders are welcome.",
+    image: "/sarees/soft/soft-08.jpg",
   },
   {
-    name: "Kanjivaram",
-    text: "Temple borders from Kanchipuram.",
-    image: photo(1),
+    name: "Unused Soft Silk",
+    text: "Folded away or never worn.",
+    image: "/sarees/soft/soft-04.jpg",
   },
   {
-    name: "Antique",
-    text: "Heirloom drapes with handwork.",
-    image: photo(5),
+    name: "Antique Soft Silk",
+    text: "Heirloom soft silk drapes.",
+    image: "/sarees/soft/soft-10.jpg",
   },
   {
-    name: "Mysore",
-    text: "Plain or crepe, worn or folded.",
-    image: photo(7),
+    name: "Plain Soft Silk",
+    text: "Plain body, worn or folded.",
+    image: "/sarees/soft/soft-06.jpg",
   },
   {
-    name: "Tussar",
-    text: "Soft gold or a plain body.",
-    image: photo(8),
+    name: "Gold Soft Silk",
+    text: "Soft silk with a gold border.",
+    image: "/sarees/soft/soft-07.jpg",
   },
   {
-    name: "Tissue",
-    text: "Gold and silver tissue.",
-    image: photo(4),
+    name: "Butta Soft Silk",
+    text: "Buttas and a woven pallu.",
+    image: "/sarees/soft/soft-11.jpg",
   },
 ]
 
@@ -144,25 +134,25 @@ const steps = [
     step: "Step 01",
     title: "Share Your Saree Details",
     text: "Share images of your sarees via WhatsApp or call us for an evaluation.",
-    image: photo(8),
+    image: photo(0),
   },
   {
     step: "Step 02",
     title: "Get An Instant Price Quote",
     text: "Our experts will assess the silk and offer you the best price.",
-    image: photo(9),
+    image: photo(1),
   },
   {
     step: "Step 03",
     title: "Schedule Pickup\nOr Visit Our Store",
     text: "Book a doorstep pickup, or visit a showroom for an instant deal.",
-    image: photo(10),
+    image: photo(2),
   },
   {
     step: "Step 04",
     title: "Get Instant Payment",
     text: "Accept the offer and receive the payment the same day.",
-    image: photo(7),
+    image: photo(3),
   },
 ]
 
@@ -170,34 +160,18 @@ const promises = [
   ["check", "A careful check", "Silk and zari are looked at in daylight before a rate is offered."],
   ["price", "A clear price", "You hear the amount first. Nothing is settled until you accept."],
   ["cash", "Same-day cash", "Once the saree is checked and you agree, the payment is made that day."],
-  ["silk", "Any condition", "Old, used, torn, and faded silk is welcome, including Kanjivaram and Banarasi."],
+  ["silk", "Any condition", "Old, used, torn, and faded soft silk is welcome."],
 ]
 
 export default function Home() {
-  const [saved, setSaved] = useState([])
   const [addedId, setAddedId] = useState(null)
-  const [heroIndex, setHeroIndex] = useState(0)
   const [saleFilter, setSaleFilter] = useState("all")
   const { addToCart } = useCart()
-  const saleProducts = [3, 2, 8, 1]
+  const saleProducts = [3, 1, 4, 2]
     .map((id) => products.find((product) => product.id === id))
     .filter(Boolean)
   const shownSales =
     saleFilter === "all" ? saleProducts : saleProducts.filter((product) => product.saleGroup === saleFilter)
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
-    const id = window.setInterval(() => {
-      setHeroIndex((current) => (current + 1) % heroSlides.length)
-    }, 6000)
-    return () => window.clearInterval(id)
-  }, [])
-
-  function savePiece(id) {
-    setSaved((currentIds) =>
-      currentIds.includes(id) ? currentIds.filter((item) => item !== id) : [...currentIds, id],
-    )
-  }
 
   function addPiece(id) {
     addToCart(id)
@@ -210,63 +184,40 @@ export default function Home() {
   return (
     <>
       <section className="relative h-[92vh] w-full max-w-full overflow-hidden md:h-screen">
-        {heroSlides.map((slide, index) => (
-          <img
-            key={slide.src}
-            src={slide.src}
-            alt={index === heroIndex ? slide.alt : ""}
-            aria-hidden={index === heroIndex ? undefined : true}
-            fetchPriority={index === 0 ? "high" : "auto"}
-            decoding="async"
-            className={`hero-slide absolute inset-0 h-full w-full object-cover ${slide.frame} ${
-              index === heroIndex ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.94)_0%,rgba(28,8,12,0.86)_46%,rgba(28,8,12,0.62)_72%,rgba(28,8,12,0.28)_100%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.78)_36%,rgba(28,8,12,0.42)_58%,transparent_76%)]" />
+        <img
+          src={heroImage.src}
+          alt={heroImage.alt}
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-[72%_center] md:object-[center_22%]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.72)_42%,rgba(28,8,12,0.35)_70%,rgba(28,8,12,0.18)_100%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.88)_0%,rgba(28,8,12,0.7)_34%,rgba(28,8,12,0.28)_58%,transparent_78%)]" />
         <div className="absolute inset-0 flex items-end pb-28 md:items-center md:pb-0">
           <div className="mx-auto w-full min-w-0 max-w-7xl px-4 lg:px-8">
             <div data-slide="left" className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]">
               <p className="text-[11px] tracking-[0.28em] text-[#d7c4a2] uppercase">Karnan Pattu Centre</p>
               <h1 className="mt-4 font-display text-4xl leading-[1.05] text-[#f6efe4] sm:text-6xl md:text-7xl">
-                New silk to wear.
-                <span className="mt-1 block italic">Old silk we buy.</span>
+                Soft Silk To Wear.
+                <span className="mt-1 block">Old Soft Silk We Buy.</span>
               </h1>
               <p className="mt-5 max-w-md text-sm leading-7 text-[#f6efe4]/85 md:text-base">
-                Kanchipuram and Banarasi leave the counter ready to drape. Bring the saree you no longer wear, and we pay a fair cash price the same day.
+                Soft silks leave the counter ready to drape. Bring the soft silk you no longer wear, and we pay a fair cash price the same day.
               </p>
               <div className="mt-8 flex w-full max-w-md flex-col gap-3 md:flex-row md:flex-wrap">
                 <Link
                   to="/shop"
                   className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-3 bg-secondary px-5 py-3 text-[11px] tracking-[0.16em] text-ink uppercase md:w-auto"
-                  style={{ borderRadius: 0 }}
                 >
-                  Shop new silk
+                  Shop soft silk
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link
                   to="/old-silk"
                   className="motion-btn inline-flex w-full items-center justify-center gap-3 border border-[#f6efe4] px-5 py-3 text-[11px] tracking-[0.16em] text-[#f6efe4] uppercase hover:bg-[#f6efe4] hover:text-primary md:w-auto"
-                  style={{ borderRadius: 0 }}
                 >
-                  Sell old silk
+                  Sell soft silk
                   <span aria-hidden="true">→</span>
                 </Link>
-              </div>
-              <div className="mt-8 flex items-center gap-2" role="tablist" aria-label="Hero photos">
-                {heroSlides.map((slide, index) => (
-                  <button
-                    key={slide.src}
-                    type="button"
-                    role="tab"
-                    aria-selected={index === heroIndex}
-                    aria-label={`Show photo ${index + 1}`}
-                    onClick={() => setHeroIndex(index)}
-                    className={`h-2 rounded-full transition-all ${
-                      index === heroIndex ? "w-7 bg-[#f6efe4]" : "w-2 bg-[#f6efe4]/40"
-                    }`}
-                  />
-                ))}
               </div>
             </div>
           </div>
@@ -336,46 +287,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-primary px-4 py-12 text-[#f7f1e8] md:py-16">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 md:grid-cols-[auto_1fr_auto] md:gap-12">
-          <div
-            data-slide="left"
-            className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border border-secondary text-center"
-          >
-            <span className="text-[11px] tracking-[0.16em] text-secondary uppercase">
-              Since
-              <span className="mt-1 block text-sm tracking-[0.18em]">1875</span>
-            </span>
-          </div>
-          <div data-slide="up">
-            <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Old silk, a fair price</p>
-            <h2 className="mt-3 font-display text-3xl leading-tight md:text-5xl">
-              Some sarees are ready for a second price.
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-[#f7f1e8]/80">
-              Torn borders, faded zari, and sarees you no longer wear are welcome. We check the silk and pay the best price the same day.
-            </p>
-          </div>
-          <div data-slide="right" className="text-center md:text-right">
-            <Link
-              to="/old-silk"
-              className="motion-btn motion-gold inline-flex items-center justify-center gap-2 bg-secondary px-5 py-3 text-[11px] tracking-[0.14em] text-ink uppercase"
-              style={{ borderRadius: 0 }}
-            >
-              Sell an old saree
-              <span aria-hidden="true">→</span>
-            </Link>
-            <p className="mt-3 text-xs text-[#f7f1e8]/70">Checked in daylight. Paid the same day.</p>
-          </div>
-        </div>
-      </section>
+      <StyleCoverflow />
 
       <section className="bg-[#f7f1e8] px-4 py-16 md:py-20">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up" className="mx-auto max-w-xl text-center">
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">On the counter</p>
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Silk ready to leave.</h2>
-            <p className="mt-3 text-sm text-ink/70">Kanjivaram, Banarasi, and softer silks, photographed as they are.</p>
+            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Soft silk ready to leave.</h2>
+            <p className="mt-3 text-sm text-ink/70">Soft silks only, photographed as they are.</p>
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-ink/55">
             {saleFilters.map((filter) => (
@@ -393,17 +312,17 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-6">
+          <ul className="mt-8 grid grid-cols-2 items-stretch gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-6">
             {shownSales.map((product, index) => (
-              <li key={product.id} data-slide={index % 2 === 0 ? "left" : "right"}>
-                <article>
+              <li key={product.id} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full">
+                <article className="flex h-full flex-col">
                   <div className="group relative overflow-hidden">
-                    <Link to={`/product/${product.id}`} className="block">
+                    <Link to={`/product/${product.id}`} className="relative block aspect-[3/4]">
                       <img
                         src={product.image}
                         alt={product.name}
                         decoding="async"
-                        className={`aspect-[3/4] w-full object-cover ${product.frame || "object-[center_18%]"}`}
+                        className="h-full w-full object-cover object-top"
                       />
                       <span className="quick-view">View saree</span>
                     </Link>
@@ -412,30 +331,21 @@ export default function Home() {
                         {product.badge}
                       </span>
                     )}
-                    <button
-                      type="button"
-                      aria-label={saved.includes(product.id) ? "Remove from saved" : "Save saree"}
-                      aria-pressed={saved.includes(product.id)}
-                      onClick={() => savePiece(product.id)}
-                      className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-primary shadow-sm"
-                    >
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill={saved.includes(product.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-                        <path d="M12 19s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z" />
-                      </svg>
-                    </button>
                   </div>
                   <p className="mt-3 text-[10px] tracking-[0.18em] text-ink/40 uppercase">{product.fabric}</p>
                   <Link to={`/product/${product.id}`} className="mt-1 block truncate font-display text-[22px] leading-tight text-primary">
                     {product.name}
                   </Link>
                   <p className="mt-1 text-sm text-ink/80">{formatPrice(product.price)}</p>
-                  <button
-                    type="button"
-                    onClick={() => addPiece(product.id)}
-                    className="motion-btn motion-line mt-3 w-full border border-primary py-2 text-[10px] tracking-[0.12em] text-primary uppercase"
-                  >
-                    {addedId === product.id ? "Added" : "Add to cart"}
-                  </button>
+                  <div className="mt-auto pt-3">
+                    <button
+                      type="button"
+                      onClick={() => addPiece(product.id)}
+                      className="motion-btn motion-line w-full border border-primary py-2 text-[10px] tracking-[0.12em] text-primary uppercase"
+                    >
+                      {addedId === product.id ? "Added" : "Add to cart"}
+                    </button>
+                  </div>
                 </article>
               </li>
             ))}
@@ -460,10 +370,18 @@ export default function Home() {
           <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {oldSilks.map((item, index) => (
               <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full">
-                <Link to="/old-silk" className="motion-card flex h-full flex-col overflow-hidden border-2 border-[#c59b27] bg-[#3a1216]">
-                  <img src={item.image} alt={item.name} decoding="async" className="aspect-[4/3] w-full object-cover object-center" />
-                  <div className="flex flex-1 flex-col items-center px-3 py-3 text-center text-[#f7f1e8]">
-                    <h3 className="font-display text-base leading-tight">{item.name}</h3>
+                <Link
+                  to="/old-silk"
+                  className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216]"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    decoding="async"
+                    className="aspect-[3/4] w-full object-cover object-center"
+                  />
+                  <div className="px-3 py-3 text-center text-[#f7f1e8]">
+                    <h3 className="font-display text-base leading-tight md:text-lg">{item.name}</h3>
                     <p className="mt-1 text-[11px] leading-4 text-[#f7f1e8]/75">{item.text}</p>
                   </div>
                 </Link>
@@ -473,38 +391,53 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] px-4 py-16">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
-          <div data-slide="left" className="relative mx-auto w-full max-w-md">
-            <div className="relative mx-auto mb-8 w-[72%] max-w-sm lg:mr-0 lg:mb-12 lg:ml-auto lg:w-[78%] lg:max-w-none">
+      <section className="bg-[#f6efe4] px-4 py-16 md:py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div data-slide="left" className="text-center lg:max-w-md lg:text-left">
+            <h2 className="font-display text-4xl leading-tight text-[#2c1814] md:text-5xl">
+              Silk for every occasion.
+            </h2>
+            <p className="mt-5 text-sm leading-7 text-ink/70 md:text-base">
+              From a temple morning to a wedding evening, each soft silk leaves the counter ready to drape. Chosen in daylight and ready to wear.
+            </p>
+            <Link
+              to="/shop"
+              className="motion-btn motion-fill mt-8 inline-flex items-center justify-center bg-primary px-7 py-3.5 text-[11px] tracking-[0.16em] text-cream uppercase"
+              style={{ borderRadius: 0 }}
+            >
+              Shop the look
+            </Link>
+          </div>
+          <div data-slide="right" className="relative mx-auto h-[420px] w-full max-w-md sm:h-[480px] lg:max-w-lg">
+            <img
+              src="/hero/maroon-courtyard.avif"
+              alt=""
+              decoding="async"
+              className="absolute top-0 left-[4%] z-[1] h-[46%] w-[38%] rounded-md object-cover object-[78%_center] shadow-md"
+            />
+            <img
+              src="/hero/ivory-gold.avif"
+              alt=""
+              decoding="async"
+              className="absolute top-[8%] right-0 z-[1] h-[48%] w-[36%] rounded-md object-cover object-center shadow-md"
+            />
+            <img
+              src="/hero/gulabi-silk.avif"
+              alt=""
+              decoding="async"
+              className="absolute bottom-[6%] left-0 z-[1] h-[36%] w-[34%] rounded-md object-cover object-center shadow-md"
+            />
+            <div className="absolute top-[18%] left-[28%] z-[2] h-[68%] w-[48%]">
               <img
                 src="/hero/gold-saree.avif"
                 alt="A gold silk saree worn on temple steps"
                 decoding="async"
-                className="mx-auto h-[380px] w-full object-cover object-center shadow-sm sm:h-[460px]"
+                className="h-full w-full rounded-md object-cover object-top shadow-lg"
               />
-              <div className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 bg-[#c48a3a] px-4 py-3 text-left text-white shadow-md">
-                <p className="font-display text-3xl leading-none sm:text-4xl">30+</p>
+              <div className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 bg-[#c48a3a] px-3.5 py-2.5 text-white shadow-md">
+                <p className="font-display text-2xl leading-none sm:text-3xl">30+</p>
               </div>
             </div>
-          </div>
-          <div data-slide="right" className="text-center lg:text-left">
-            <p className="text-sm font-medium text-[#c48a3a]">— Welcome to Karnan Pattu Centre</p>
-            <h2 className="mt-3 font-display text-4xl leading-tight text-[#4a0e17] md:text-5xl">Old Silk Saree Buyers</h2>
-            <p className="mt-5 text-sm font-medium text-ink">Old silk saree buyers in Bengaluru</p>
-            <p className="mt-3 text-sm leading-7 text-ink/75">
-              Karnan Pattu Centre buys old silk sarees at V.V. Puram and Jayanagar. Kanjivaram, Mysore, tissue, and brocade are welcome in any condition. We collect from your door and pay a fair cash price.
-            </p>
-            <p className="mt-4 text-sm leading-7 text-ink/75">
-              A silk saree can leave the cupboard and still hold its value. Unused, worn, or damaged, it is checked for the weave and the zari before a rate is named.
-            </p>
-            <Link
-              to="/old-silk"
-              className="motion-btn motion-fill mt-8 inline-flex items-center gap-2 bg-primary px-6 py-3 text-xs tracking-[0.14em] text-cream uppercase"
-            >
-              Get a price
-              <span aria-hidden="true">→</span>
-            </Link>
           </div>
         </div>
       </section>
@@ -513,11 +446,11 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div data-slide="up">
             <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">The loom</p>
-            <h2 className="mt-2 text-center font-display text-4xl text-primary">Handcrafted Disciplines</h2>
+            <h2 className="mt-2 text-center font-display text-4xl text-primary">Soft Silk Edits</h2>
           </div>
           <ul className="mt-8 grid grid-cols-3 gap-4 sm:grid-cols-6">
             {weaves.map((weave, index) => (
-              <li key={weave.label} data-slide={index < 3 ? "left" : "right"}>
+              <li key={`${weave.note}-${index}`} data-slide={index < 3 ? "left" : "right"}>
                 <Link to={weave.to} className="flex flex-col items-center text-center">
                   {weave.image ? (
                     <img src={weave.image} alt=""  decoding="async" className="motion-circle h-20 w-20 rounded-full object-cover" />
@@ -589,11 +522,11 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden py-14 text-[#f6efe4] md:py-16">
-        <img src={photo(10)} alt=""  decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={photo(4)} alt="" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-[#4a0e17]/88" />
         <ul className="relative mx-auto grid max-w-5xl gap-4 px-4 sm:grid-cols-3 sm:gap-6">
           {[
-            ["house", "1875", "The house opened"],
+            ["house", "1985", "The house opened"],
             ["clock", "Same day", "Cash after a check"],
             ["pin", "Bengaluru", "Doorstep pickup"],
           ].map(([icon, value, label], index) => (

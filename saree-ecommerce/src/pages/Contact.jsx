@@ -56,9 +56,10 @@ export default function Contact() {
           </p>
           <ul className="mt-8 space-y-4">
             {[
-              ["phone", "Call the desk", "tel:+917200016300", "+91 72000 16300", false],
-              ["chat", "WhatsApp", "https://wa.me/917200016300", "Message the showroom", true],
-              ["mail", "Email", "mailto:care@karananpattucentre.com", "care@karananpattucentre.com", false],
+              ["phone", "Call the desk", "tel:+919894441500", "+91 98944 41500", false],
+              ["phone", "Store phone", "tel:+919944055900", "+91 99440 55900", false],
+              ["chat", "WhatsApp", "https://wa.me/919894441500", "Message the showroom", true],
+              ["mail", "Email", "mailto:karnanpattucenter@gmail.com", "karnanpattucenter@gmail.com", false],
               ["pin", "Showrooms", "/locations", "V.V. Puram and Jayanagar", false],
             ].map(([icon, label, href, value, external]) => (
               <li key={label}>
@@ -81,9 +82,8 @@ export default function Contact() {
           </ul>
           <div className="mt-8 flex gap-3">
             {[
-              ["instagram", "Instagram", "https://instagram.com"],
-              ["facebook", "Facebook", "https://facebook.com"],
-              ["youtube", "YouTube", "https://youtube.com"],
+              ["instagram", "Instagram", "https://www.instagram.com/karnan_pattu_centre_karnataka"],
+              ["youtube", "YouTube", "https://youtube.com/@karnanpattucenterkarnataka"],
             ].map(([icon, label, href]) => (
               <a
                 key={label}
@@ -158,22 +158,22 @@ export default function Contact() {
       <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
         <article className="rounded-2xl border border-ink/10 bg-paper p-8">
           <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Buy</p>
-          <h2 className="mt-3 font-display text-3xl text-primary">Buy a new saree</h2>
+          <h2 className="mt-3 font-display text-3xl text-primary">Buy a soft silk</h2>
           <p className="mt-3 text-sm leading-7 text-ink/75">
-            Classic and modern silks for weddings, temples, and the week. Every drape includes a blouse piece.
+            Soft silks for weddings, temples, and the week. Every drape includes a blouse piece.
           </p>
           <Link
             to="/shop"
             className="motion-btn motion-fill mt-6 inline-block bg-primary px-5 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
           >
-            Buy sarees
+            Buy soft silks
           </Link>
         </article>
         <article className="rounded-2xl bg-primary p-8 text-cream">
           <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Sell</p>
-          <h2 className="mt-3 font-display text-3xl">Sell your old silk</h2>
+          <h2 className="mt-3 font-display text-3xl">Sell your old soft silk</h2>
           <p className="mt-3 text-sm leading-7 text-cream/80">
-            We buy old, used, and damaged silk sarees at the best price. Send a photo or visit a showroom and get paid the same day.
+            We buy old, used, and damaged soft silk at the best price. Send a photo or visit a showroom and get paid the same day.
           </p>
           <a
             href="#write"

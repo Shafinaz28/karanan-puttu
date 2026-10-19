@@ -80,27 +80,18 @@ export default function Shop() {
 }
 
 const collectionNames = {
-  traditional: "Traditional Sarees",
-  silk: "Silk Sarees",
-  banarasi: "Banarasi Sarees",
-  cotton: "Cotton Sarees",
-  handloom: "Handloom Sarees",
-  designer: "Designer Sarees",
-  wedding: "Wedding Sarees",
-  party: "Party Wear Sarees",
-  new: "New Arrivals",
+  silk: "Soft Silk Sarees",
+  soft: "Soft Silk Sarees",
+  wedding: "Wedding Soft Silks",
+  party: "Party Soft Silks",
+  new: "New Soft Silks",
 }
 
 function matchesCollection(product, collection) {
-  const text = `${product.name} ${product.category} ${product.fabric} ${product.description}`.toLowerCase()
-  if (collection === "traditional") return /kanchi|kanji|banaras|korvai|handloom|bridal|temple/.test(text)
-  if (collection === "silk") return product.category === "Silk" || text.includes("silk")
-  if (collection === "banarasi") return /banaras/.test(text)
-  if (collection === "cotton") return text.includes("cotton")
-  if (collection === "handloom") return /handloom|kanchi|kanji/.test(text)
-  if (collection === "designer") return Boolean(product.featured) || /tissue|organza/.test(text)
-  if (collection === "wedding") return product.category === "Bridal" || /bridal|wedding/.test(text)
+  if (!collection) return true
+  if (collection === "silk" || collection === "soft") return product.fabric === "Soft silk"
+  if (collection === "wedding") return /wedding|ivory|maroon|crimson/.test(`${product.name} ${product.badge} ${product.color}`.toLowerCase())
   if (collection === "party") return Boolean(product.party)
   if (collection === "new") return /new/.test(product.badge || "") || product.id >= 5
-  return true
+  return product.fabric === "Soft silk"
 }

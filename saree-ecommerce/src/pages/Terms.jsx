@@ -55,8 +55,8 @@ export default function Terms() {
           ))}
           <p className="text-sm leading-7 text-ink/75">
             Questions about these terms can go to{" "}
-            <a href="mailto:care@karananpattucentre.com" className="text-primary underline">
-              care@karananpattucentre.com
+            <a href="mailto:karnanpattucenter@gmail.com" className="text-primary underline">
+              karnanpattucenter@gmail.com
             </a>{" "}
             or the <Link to="/contact" className="text-primary underline">contact page</Link>.
           </p>

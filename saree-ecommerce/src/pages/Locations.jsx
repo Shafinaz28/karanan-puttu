@@ -15,7 +15,7 @@ export default function Locations() {
           </p>
           <h1 className="mt-4 font-display text-5xl md:text-7xl">Our Locations</h1>
           <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85">
-            Four shops in Bengaluru, for new silk and for old sarees sold for cash.
+            Three shops in Bengaluru, for new silk and for old sarees sold for cash.
           </p>
           <span className="mx-auto mt-6 block h-px w-16 bg-[#d7c4a2]" />
         </div>

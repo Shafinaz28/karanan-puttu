@@ -32,7 +32,7 @@ export default function ProductDetails() {
         alt={product.name}
         fetchPriority="high"
         decoding="async"
-        className="w-full rounded-2xl object-cover"
+        className="block w-full rounded-2xl"
       />
       <div>
         <p className="text-xs tracking-[0.22em] text-secondary uppercase">
