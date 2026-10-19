@@ -69,9 +69,9 @@ export default function About() {
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 lg:grid-cols-2 lg:px-8">
           <figure className="relative order-2 lg:order-1">
             <img
-              src={sareeImages[2]}
-              alt="Maroon soft silk with gold buttas"
-              className="h-72 w-full rounded-2xl object-cover md:h-[460px]"
+              src="/sarees/worn/worn-crimson.jpg"
+              alt="A crimson soft silk with a plum gold border"
+              className="h-72 w-full rounded-2xl object-cover object-top md:h-[460px]"
             />
             <figcaption className="absolute bottom-5 left-5 rounded-lg bg-[#c59b27] px-4 py-3 text-[#3a1216] shadow-md">
               <p className="font-display text-3xl leading-none">30+</p>
