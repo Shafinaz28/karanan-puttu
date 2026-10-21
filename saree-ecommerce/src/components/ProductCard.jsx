@@ -20,18 +20,20 @@ export default function ProductCard({ product }) {
   }, [added])
 
   return (
-    <article className="group">
+    <article className="group flex h-full flex-col">
       <Link to={`/product/${product.id}`} className="block">
         <div className="arch-photo">
-          <img src={product.image} alt={product.name} decoding="async" fetchPriority="high" />
+          <img src={product.image} alt={product.name} decoding="async" />
           {off && (
-            <span className="absolute top-3 left-3 bg-[#f7f1e8] px-2 py-1 text-[10px] tracking-wide text-primary">
+            <span className="absolute top-3 left-3 z-10 bg-[#f7f1e8] px-2 py-1 text-[10px] tracking-wide text-primary">
               {off}
             </span>
           )}
           <span className="quick-view">View saree</span>
         </div>
-        <h3 className="mt-3 text-sm leading-5 font-medium text-primary">{product.name}</h3>
+      </Link>
+      <div className="flex flex-1 flex-col pt-3">
+        <h3 className="line-clamp-2 min-h-10 text-sm leading-5 font-medium text-primary">{product.name}</h3>
         <p className="mt-1 truncate text-[11px] text-ink/45">
           {code} | {product.category}
         </p>
@@ -43,17 +45,19 @@ export default function ProductCard({ product }) {
             </span>
           )}
         </p>
-      </Link>
-      <button
-        type="button"
-        onClick={() => {
-          addToCart(product.id)
-          setAdded(true)
-        }}
-        className="motion-btn motion-line mt-3 w-full border border-primary py-2 text-[10px] tracking-[0.12em] text-primary uppercase"
-      >
-        {added ? "Added" : "Add to cart"}
-      </button>
+        <div className="mt-auto pt-3">
+          <button
+            type="button"
+            onClick={() => {
+              addToCart(product.id)
+              setAdded(true)
+            }}
+            className="motion-btn motion-line w-full border border-primary py-2 text-[10px] tracking-[0.12em] text-primary uppercase"
+          >
+            {added ? "Added" : "Add to cart"}
+          </button>
+        </div>
+      </div>
     </article>
   )
 }

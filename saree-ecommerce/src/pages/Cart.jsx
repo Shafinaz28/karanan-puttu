@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
-import { formatPrice, products } from "../data/products"
+import { useProducts } from "../context/ProductsContext"
+import { formatPrice } from "../data/products"
 
 export default function Cart() {
   const { items, updateQty, removeFromCart, addToCart } = useCart()
+  const { products } = useProducts()
 
   const lines = items
     .map((item) => ({
@@ -122,9 +124,9 @@ export default function Cart() {
             </dl>
             <Link
               to="/checkout"
-              className="motion-btn motion-fill mt-6 block bg-primary px-4 py-3 text-center text-sm text-cream"
+              className="motion-btn motion-fill mt-6 block rounded-full bg-primary px-4 py-3 text-center text-sm text-cream"
             >
-              Checkout
+              Complete your order · {formatPrice(total)}
             </Link>
           </aside>
         </div>

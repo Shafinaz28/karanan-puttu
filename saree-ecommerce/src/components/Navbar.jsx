@@ -114,13 +114,14 @@ export default function Navbar() {
             </span>
           </span>
         </Link>
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-4 text-[11px] whitespace-nowrap text-primary xl:gap-6 lg:flex">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 text-base whitespace-nowrap text-primary xl:gap-7 lg:flex">
           <Link to="/" className="transition-colors duration-200 hover:text-secondary">Home</Link>
           <Link to="/about" className="transition-colors duration-200 hover:text-secondary">Our Story</Link>
           <Link to="/shop" className="transition-colors duration-200 hover:text-secondary">Shop</Link>
           <Link to="/old-silk" className="transition-colors duration-200 hover:text-secondary">Old silk</Link>
           <Link to="/blog" className="transition-colors duration-200 hover:text-secondary">Blog</Link>
           <Link to="/contact" className="transition-colors duration-200 hover:text-secondary">Contact</Link>
+          <Link to="/track" className="transition-colors duration-200 hover:text-secondary">Track</Link>
         </nav>
         <div className="z-10 ml-auto flex items-center text-primary lg:gap-3">
           <button type="button" aria-label="Search" className="hidden p-2 lg:block" onClick={() => setSearchOpen((open) => !open)}>
@@ -185,6 +186,7 @@ export default function Navbar() {
           <Link to="/old-silk" className="block border-b border-ink/10 py-3 text-sm">Old silk</Link>
           <Link to="/blog" className="block border-b border-ink/10 py-3 text-sm">Blog</Link>
           <Link to="/contact" className="block border-b border-ink/10 py-3 text-sm">Contact</Link>
+          <Link to="/track" className="block border-b border-ink/10 py-3 text-sm">Track order</Link>
           <Link to="/locations" className="block border-b border-ink/10 py-3 text-sm">Locate Us</Link>
           <Link to="/cart" className="block border-b border-ink/10 py-3 text-sm">Cart ({count})</Link>
           <Link to="/login" className="block border-b border-ink/10 py-3 text-sm">Login</Link>

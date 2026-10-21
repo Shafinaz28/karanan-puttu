@@ -1,9 +1,10 @@
 import { useMemo } from "react"
 import { useSearchParams } from "react-router-dom"
 import ProductCard from "../components/ProductCard"
-import { products } from "../data/products"
+import { useProducts } from "../context/ProductsContext"
 
 export default function Shop() {
+  const { products, loading } = useProducts()
   const [searchParams, setSearchParams] = useSearchParams()
   const requested = searchParams.get("category") || "All"
   const collection = searchParams.get("collection") || ""
@@ -14,7 +15,7 @@ export default function Shop() {
 
   const categories = useMemo(() => {
     return ["All", ...new Set(products.map((product) => product.category))]
-  }, [])
+  }, [products])
 
   function chooseCategory(item) {
     const next = {}
@@ -49,6 +50,7 @@ export default function Shop() {
           Results for “{searchParams.get("search")}”
         </p>
       )}
+      {loading && <p className="mt-3 text-sm text-ink/50">Loading sarees…</p>}
 
       <div className="mt-6 flex flex-wrap gap-2">
         {categories.map((item) => (
@@ -67,7 +69,7 @@ export default function Shop() {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid items-stretch gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
         {visible.length === 0 && (
           <p className="text-sm text-ink/70">No saree matches that search.</p>
         )}

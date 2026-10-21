@@ -111,6 +111,9 @@ export default function Footer() {
             <Link to="/contact" className="hover:text-cream">
               Shipping & payout policy
             </Link>
+            <Link to="/track" className="hover:text-cream">
+              Track order
+            </Link>
           </div>
         </div>
       </div>

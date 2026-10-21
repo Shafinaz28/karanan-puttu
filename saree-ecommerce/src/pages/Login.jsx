@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { supabase, supabaseConfigured } from "../lib/supabase"
 
 const storageKey = "karanan-user"
+const adminKey = "karanan-admin"
 
 export function readUser() {
   try {
@@ -14,6 +16,7 @@ export function readUser() {
 
 export function clearUser() {
   window.localStorage.removeItem(storageKey)
+  window.localStorage.removeItem(adminKey)
 }
 
 export default function Login() {
@@ -21,16 +24,35 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [busy, setBusy] = useState(false)
 
-  function signIn(event) {
+  async function signIn(event) {
     event.preventDefault()
     const address = email.trim()
     if (!address || !password.trim()) {
       setError("Enter your email and password.")
       return
     }
+
+    setBusy(true)
+    setError("")
+
+    if (supabaseConfigured && supabase) {
+      const { error: signError } = await supabase.auth.signInWithPassword({
+        email: address,
+        password,
+      })
+      if (signError) {
+        setBusy(false)
+        setError(signError.message)
+        return
+      }
+    }
+
     window.localStorage.setItem(storageKey, JSON.stringify({ email: address }))
-    navigate("/account")
+    window.localStorage.setItem(adminKey, "1")
+    setBusy(false)
+    navigate("/admin", { replace: true })
   }
 
   return (
@@ -38,7 +60,7 @@ export default function Login() {
       <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">The house</p>
       <h1 className="mt-3 text-center font-display text-5xl text-primary">Login</h1>
       <p className="mt-4 text-center text-sm leading-7 text-ink/70">
-        This preview keeps your sign-in on this device only. It is not sent to the showroom.
+        Sign in to open the admin panel and manage sarees.
       </p>
       <form onSubmit={signIn} className="mt-8 border border-[#ead9bf] bg-white p-6">
         <label className="block text-[11px] tracking-[0.16em] text-ink/50 uppercase" htmlFor="login-email">
@@ -68,16 +90,17 @@ export default function Login() {
         {error && <p className="mt-3 text-sm text-primary">{error}</p>}
         <button
           type="submit"
-          className="motion-btn motion-fill mt-6 w-full bg-primary px-6 py-3 text-[11px] tracking-[0.16em] text-cream uppercase"
+          disabled={busy}
+          className="motion-btn motion-fill mt-6 w-full bg-primary px-6 py-3 text-[11px] tracking-[0.16em] text-cream uppercase disabled:opacity-60"
           style={{ borderRadius: 0 }}
         >
-          Login
+          {busy ? "Signing in…" : "Login"}
         </button>
       </form>
       <p className="mt-6 text-center text-sm text-ink/70">
-        New here?{" "}
-        <Link to="/account" className="text-primary underline">
-          Open your account
+        Admin only?{" "}
+        <Link to="/admin/login" className="text-primary underline">
+          Admin login
         </Link>
       </p>
     </section>

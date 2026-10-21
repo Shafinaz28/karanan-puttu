@@ -2,7 +2,8 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import StyleCoverflow from "../components/StyleCoverflow"
 import { useCart } from "../context/CartContext"
-import { formatPrice, products, sareeImages } from "../data/products"
+import { useProducts } from "../context/ProductsContext"
+import { formatPrice, sareeImages } from "../data/products"
 
 const photo = (index) => sareeImages[index % sareeImages.length]
 
@@ -167,6 +168,7 @@ export default function Home() {
   const [addedId, setAddedId] = useState(null)
   const [saleFilter, setSaleFilter] = useState("all")
   const { addToCart } = useCart()
+  const { products } = useProducts()
   const saleProducts = [3, 1, 4, 2]
     .map((id) => products.find((product) => product.id === id))
     .filter(Boolean)
