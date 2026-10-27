@@ -2,6 +2,10 @@ import { useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { supabase, supabaseConfigured } from "../../lib/supabase"
 
+function isAdmin(user) {
+  return user?.app_metadata?.role === "admin"
+}
+
 export default function AdminLogin() {
   const navigate = useNavigate()
   const [email, setEmail] = useState("")
@@ -16,8 +20,9 @@ export default function AdminLogin() {
       setSessionReady(true)
       return undefined
     }
-    supabase.auth.getSession().then(({ data }) => {
-      setHasSession(Boolean(data.session))
+    supabase.auth.getSession().then(({ data, error: sessionError }) => {
+      if (sessionError) setError(sessionError.message)
+      setHasSession(isAdmin(data.session?.user))
       setSessionReady(true)
     })
     return undefined
@@ -35,16 +40,28 @@ export default function AdminLogin() {
       return
     }
     setBusy(true)
-    const { error: signError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    })
-    setBusy(false)
-    if (signError) {
-      setError(signError.message)
-      return
+    try {
+      const { data, error: signError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      })
+      if (signError) {
+        setError(signError.message)
+        return
+      }
+      if (!isAdmin(data.user)) {
+        const { error: signOutError } = await supabase.auth.signOut()
+        setError(signOutError
+          ? `This account does not have admin access. Sign out failed: ${signOutError.message}`
+          : "This account does not have admin access.")
+        return
+      }
+      navigate("/admin", { replace: true })
+    } catch (signError) {
+      setError(signError instanceof Error ? signError.message : "Unable to sign in. Please try again.")
+    } finally {
+      setBusy(false)
     }
-    navigate("/admin", { replace: true })
   }
 
   return (

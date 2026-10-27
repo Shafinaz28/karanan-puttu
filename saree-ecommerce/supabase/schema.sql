@@ -35,8 +35,8 @@ create policy "Authenticated can manage products"
   on public.products
   for all
   to authenticated
-  using (true)
-  with check (true);
+  using ((select auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
+  with check ((select auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
 -- Seed (safe to re-run: clears then inserts)
 truncate public.products restart identity;

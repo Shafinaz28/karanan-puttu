@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext"
 import { useProducts } from "../context/ProductsContext"
 import { formatPrice } from "../data/products"
 import { saveOrder, updateOrderStatus } from "../lib/orders"
+import { supabase } from "../lib/supabase"
 import OrderConfirmed from "../components/OrderConfirmed"
 
 const states = [
@@ -48,6 +49,9 @@ export default function Checkout() {
   const [order, setOrder] = useState(null)
   const [code, setCode] = useState("")
   const [discount, setDiscount] = useState(0)
+  const [appliedCode, setAppliedCode] = useState("")
+  const [couponMessage, setCouponMessage] = useState("")
+  const [applyingCode, setApplyingCode] = useState(false)
   const [paying, setPaying] = useState(false)
   const [payMode, setPayMode] = useState("upi")
   const [upi, setUpi] = useState("")
@@ -76,15 +80,61 @@ export default function Checkout() {
     }))
   }
 
-  function applyCode(event) {
+  async function applyCode(event) {
     event.preventDefault()
-    if (code.trim().toUpperCase() === "KARNAN10") {
-      setDiscount(Math.round(subtotal * 0.1))
-      setError("")
+    const normalizedCode = code.trim().toUpperCase()
+    if (!normalizedCode) {
+      setDiscount(0)
+      setAppliedCode("")
+      setCouponMessage("Enter a discount code.")
       return
     }
-    setDiscount(0)
-    setError("That code is not active.")
+    if (!supabase) {
+      setDiscount(0)
+      setAppliedCode("")
+      setCouponMessage("Discount codes are unavailable. Please try again later.")
+      return
+    }
+
+    setApplyingCode(true)
+    setCouponMessage("")
+    try {
+      const { data: coupon, error: couponError } = await supabase
+        .from("coupons")
+        .select("code, discount_type, discount_value, minimum_order")
+        .eq("code", normalizedCode)
+        .eq("is_active", true)
+        .maybeSingle()
+      if (couponError) throw couponError
+      if (!coupon) {
+        setDiscount(0)
+        setAppliedCode("")
+        setCouponMessage("That discount code is not active.")
+        return
+      }
+
+      const minimumOrder = Number(coupon.minimum_order || 0)
+      if (subtotal < minimumOrder) {
+        setDiscount(0)
+        setAppliedCode("")
+        setCouponMessage(`This code requires a minimum order of ${formatPrice(minimumOrder)}.`)
+        return
+      }
+
+      const value = Number(coupon.discount_value)
+      const amount = coupon.discount_type === "percent"
+        ? Math.round((subtotal * value) / 100)
+        : Math.round(value)
+      setDiscount(Math.min(subtotal, amount))
+      setAppliedCode(coupon.code)
+      setCouponMessage(`${coupon.code} applied successfully.`)
+    } catch (couponError) {
+      setDiscount(0)
+      setAppliedCode("")
+      setCouponMessage(couponError instanceof Error ? couponError.message : "Unable to validate this discount.")
+    } finally {
+      setApplyingCode(false)
+    }
   }
 
   function placeOrder(event) {
@@ -123,6 +173,7 @@ export default function Checkout() {
     const address = [form.address, form.apartment].map((part) => part.trim()).filter(Boolean).join(", ")
     const saved = saveOrder({
       customer: `${form.firstName.trim()} ${form.lastName.trim()}`,
+      email: form.email.trim(),
       phone: form.phone.trim(),
       address,
       city: form.city.trim(),
@@ -130,6 +181,8 @@ export default function Checkout() {
       pincode: form.pincode.trim(),
       payment: method,
       amount: total,
+      couponCode: appliedCode,
+      discountAmount: discount,
       items: lines.map((line) => ({
         id: line.product.id,
         name: line.product.name,
@@ -383,8 +436,9 @@ export default function Checkout() {
           </ul>
           <form onSubmit={applyCode} className="mt-5 flex gap-2">
             <input value={code} onChange={(event) => setCode(event.target.value)} placeholder="Discount code or gift card" className="min-w-0 flex-1 rounded-md border border-black/15 px-3 py-2 text-sm outline-none" />
-            <button type="submit" className="rounded-md bg-[#3a1216] px-4 text-sm text-[#f6efe4]">Apply</button>
+            <button type="submit" disabled={applyingCode} className="rounded-md bg-[#3a1216] px-4 text-sm text-[#f6efe4] disabled:opacity-60">{applyingCode ? "Checking…" : "Apply"}</button>
           </form>
+          {couponMessage && <p className={`mt-2 text-xs ${appliedCode ? "text-emerald-700" : "text-primary"}`}>{couponMessage}</p>}
           <dl className="mt-5 space-y-2 border-t border-black/10 pt-4 text-sm">
             <div className="flex justify-between"><dt>Subtotal · {count} {count === 1 ? "item" : "items"}</dt><dd>{formatPrice(subtotal)}</dd></div>
             {discount > 0 && <div className="flex justify-between text-emerald-700"><dt>Order discount</dt><dd>−{formatPrice(discount)}</dd></div>}

@@ -15,10 +15,20 @@ drop policy if exists "Signed-in staff can upload product images" on storage.obj
 create policy "Signed-in staff can upload product images"
   on storage.objects for insert
   to authenticated
-  with check (bucket_id = 'product-images');
+  with check (
+    bucket_id = 'product-images'
+    and (select auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'
+  );
 
 drop policy if exists "Signed-in staff can replace product images" on storage.objects;
 create policy "Signed-in staff can replace product images"
   on storage.objects for update
   to authenticated
-  using (bucket_id = 'product-images');
+  using (
+    bucket_id = 'product-images'
+    and (select auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'
+  )
+  with check (
+    bucket_id = 'product-images'
+    and (select auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'
+  );

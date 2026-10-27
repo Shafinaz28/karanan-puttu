@@ -9,8 +9,6 @@ import { loadOrders, readOrders, updateOrderStatus } from "../../lib/orders"
 import { supabase, supabaseConfigured } from "../../lib/supabase"
 import { useProducts } from "../../context/ProductsContext"
 
-const adminKey = "karanan-admin"
-
 const emptyForm = {
   name: "",
   category: "Soft Silk",
@@ -26,6 +24,18 @@ const emptyForm = {
   featured: false,
   party: false,
   active: true,
+}
+
+function customerIdentity(order) {
+  const email = String(order.email || "").trim().toLowerCase()
+  if (email) return `email:${email}`
+  const phone = String(order.phone || "").replace(/\D/g, "")
+  if (phone) return `phone:${phone}`
+  return `name:${String(order.customer || "").trim().toLowerCase()}`
+}
+
+function uniqueCustomerCount(orders) {
+  return new Set(orders.map(customerIdentity).filter((key) => key !== "name:")).size
 }
 
 const statusTone = {
@@ -50,6 +60,10 @@ const footItems = [
   ["settings", "Settings"],
   ["help", "Help"],
 ]
+
+function isAdminSession(session) {
+  return session?.user?.app_metadata?.role === "admin"
+}
 
 function NavGlyph({ id }) {
   const paths = {
@@ -90,19 +104,18 @@ export default function AdminDashboard() {
     : "Admin"
 
   useEffect(() => {
-    const localAdmin = window.localStorage.getItem(adminKey) === "1"
     if (!supabase) {
-      setAuthed(localAdmin)
+      setAuthed(false)
       setReady(true)
       return undefined
     }
-    supabase.auth.getSession().then(({ data }) => {
-      setAuthed(Boolean(data.session) || localAdmin)
+    supabase.auth.getSession().then(({ data, error: sessionError }) => {
+      if (sessionError) setError(sessionError.message)
+      setAuthed(isAdminSession(data.session))
       setReady(true)
     })
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      const stillLocal = window.localStorage.getItem(adminKey) === "1"
-      setAuthed(Boolean(session) || stillLocal)
+      setAuthed(isAdminSession(session))
     })
     return () => sub.subscription.unsubscribe()
   }, [])
@@ -117,7 +130,9 @@ export default function AdminDashboard() {
     if (!authed) return undefined
     const refreshOrders = () => {
       setOrders(readOrders())
-      loadOrders().then(setOrders)
+      loadOrders().then(setOrders).catch((loadError) => {
+        setError(loadError instanceof Error ? loadError.message : "Unable to load saved orders.")
+      })
     }
     refreshOrders()
     window.addEventListener("focus", refreshOrders)
@@ -333,7 +348,6 @@ export default function AdminDashboard() {
             <Overview
               name={/^karnan/i.test(displayName) ? "Karnan" : displayName.split(" ")[0]}
               productCount={rows.length}
-              products={filteredRows}
               orders={orders}
               onOpenProducts={() => setTab("products")}
               onOpenOrders={() => setTab("orders")}
@@ -363,8 +377,8 @@ export default function AdminDashboard() {
             </section>
           )}
           {tab === "customers" && <Customers orders={filteredOrders} />}
-          {tab === "coupons" && <SimplePanel title="Discounts" text="Use the code KARNAN10 at checkout for 10% off. New codes can be added when coupon storage is turned on." />}
-          {tab === "analytics" && <SimplePanel title="Analytics" text="Revenue, orders, and best selling sarees are on the dashboard. They update from the orders placed in this shop." />}
+          {tab === "coupons" && <CouponsPanel />}
+          {tab === "analytics" && <AnalyticsPanel orders={orders} />}
           {tab === "settings" && (
             <SimplePanel
               title="Settings"
@@ -447,7 +461,7 @@ function formatRangeDate(date) {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 }
 
-function Overview({ name, productCount, products, orders, onOpenProducts, onOpenOrders, onStatus }) {
+function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, onStatus }) {
   const [range, setRange] = useState("month")
   const [rangeOpen, setRangeOpen] = useState(false)
   const bounds = boundsFor(range)
@@ -457,14 +471,14 @@ function Overview({ name, productCount, products, orders, onOpenProducts, onOpen
   const compareLabel = range === "week" ? "previous week" : "previous month"
   const live = shown.filter((order) => order.status !== "Cancelled")
   const revenue = live.reduce((sum, order) => sum + Number(order.amount || 0), 0)
-  const customers = new Set(shown.map((order) => order.phone || order.customer)).size
+  const customers = uniqueCustomerCount(shown)
   const average = live.length ? Math.round(revenue / live.length) : 0
-  const prevCustomers = new Set(previous.map((order) => order.phone || order.customer)).size
+  const prevCustomers = uniqueCustomerCount(orders.filter((order) => withinBounds(order, earlier)))
   const prevRevenue = previous.reduce((sum, order) => sum + Number(order.amount || 0), 0)
   const prevAverage = previous.length ? Math.round(prevRevenue / previous.length) : 0
-  const week = lastSevenDays(shown, bounds.end)
+  const week = lastSevenDays(shown, range === "lastMonth" ? bounds.end : new Date())
   const weekTotal = week.reduce((sum, day) => sum + day.amount, 0)
-  const top = topSelling(shown, products)
+  const top = topSelling(shown)
   const statusRows = [
     ["Delivered", "#4a0e17"],
     ["Processing", "#c59b27"],
@@ -477,18 +491,18 @@ function Overview({ name, productCount, products, orders, onOpenProducts, onOpen
     color,
     count: shown.filter((order) => order.status === label).length,
   }))
-  const counted = statusRows.reduce((sum, row) => sum + row.count, 0) || 1
+  const counted = statusRows.reduce((sum, row) => sum + row.count, 0)
   const payments = [
-    ["Cash on delivery", shown.filter((order) => /cash/i.test(order.payment || "Cash on delivery")).length, "bg-primary"],
-    ["Pay online", shown.filter((order) => /online/i.test(order.payment || "")).length, "bg-secondary"],
+    ["Cash on delivery", live.filter((order) => /cash/i.test(order.payment || "Cash on delivery")).length, "bg-primary"],
+    ["Pay online", live.filter((order) => /online/i.test(order.payment || "")).length, "bg-secondary"],
   ]
   const payTotal = payments.reduce((sum, row) => sum + row[1], 0) || 1
   const delivered = statusRows.find((row) => row.label === "Delivered").count
   const funnel = [
-    ["Sarees listed", productCount, "from-primary to-primary-soft"],
-    ["Orders placed", shown.length, "from-primary-soft to-[#8d3a45]"],
-    ["Customers", customers, "from-[#a67c2d] to-secondary"],
-    ["Delivered", delivered, "from-secondary to-[#e4c56a]"],
+    ["Sarees listed", productCount, "#4a0e17"],
+    ["Orders placed", shown.length, "#6b1a26"],
+    ["Customers", customers, "#a67c2d"],
+    ["Delivered", delivered, "#c59b27"],
   ]
   const cards = [
     ["Total revenue", formatPrice(revenue), range === "all" ? { text: "All saved orders", up: true } : monthDelta(revenue, prevRevenue, compareLabel), "bg-primary/10 text-primary"],
@@ -564,16 +578,16 @@ function Overview({ name, productCount, products, orders, onOpenProducts, onOpen
         </section>
         <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
           <div className="mb-2 flex items-center justify-between">
-            <h3 className="font-semibold">Orders overview</h3>
+            <h3 className="font-semibold">Order status mix</h3>
             <button type="button" onClick={onOpenOrders} className="text-xs text-primary">View all</button>
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-4">
-            <Donut total={shown.length} parts={statusRows} />
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-4 sm:justify-between">
+            <PieChart total={shown.length} parts={statusRows} />
             <ul className="min-w-[180px] flex-1 space-y-2 text-sm">
               {statusRows.map((row) => (
                 <li key={row.label} className="grid grid-cols-[1fr_auto_auto] items-center gap-3">
-                  <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: row.color }} />{row.label}</span>
-                  <span className="text-slate-400">{Math.round((row.count / counted) * 100)}%</span>
+                  <span>{row.label}</span>
+                  <span className="text-slate-400">{counted ? Math.round((row.count / counted) * 100) : 0}%</span>
                   <span>{row.count}</span>
                 </li>
               ))}
@@ -604,19 +618,7 @@ function Overview({ name, productCount, products, orders, onOpenProducts, onOpen
             <h3 className="font-semibold">Order funnel</h3>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500">This shop</span>
           </div>
-          <ul className="mt-4 space-y-2">
-            {funnel.map(([label, count, bar], index) => (
-              <li key={label} className="flex justify-center">
-                <div
-                  className={`flex h-12 items-center justify-between bg-gradient-to-r px-4 text-sm text-white ${bar}`}
-                  style={{ width: `${100 - index * 14}%`, clipPath: "polygon(6% 0, 94% 0, 100% 100%, 0 100%)" }}
-                >
-                  <span className="font-semibold">{count}</span>
-                  <span>{label}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <BarChart items={funnel} />
         </section>
       </div>
       <div className="grid gap-3 xl:grid-cols-2">
@@ -745,38 +747,101 @@ function SalesChart({ days }) {
   )
 }
 
-function Donut({ total, parts }) {
-  const circle = 88
-  let offset = 0
-  const arcs = parts.filter((part) => part.count > 0).map((part) => {
-    const length = total ? (part.count / total) * circle : 0
-    const arc = { ...part, length, offset }
-    offset += length
-    return arc
+function PieChart({ total, parts }) {
+  let angle = -90
+  const slices = parts.filter((part) => part.count > 0).map((part) => {
+    const sweep = (part.count / total) * 360
+    const start = angle
+    angle += sweep
+    const end = angle
+    const startRadians = (start * Math.PI) / 180
+    const endRadians = (end * Math.PI) / 180
+    const largeArc = sweep > 180 ? 1 : 0
+    const startPoint = [50 + 44 * Math.cos(startRadians), 50 + 44 * Math.sin(startRadians)]
+    const endPoint = [50 + 44 * Math.cos(endRadians), 50 + 44 * Math.sin(endRadians)]
+    const labelRadians = ((start + sweep / 2) * Math.PI) / 180
+    const labelPoint = [50 + 28 * Math.cos(labelRadians), 50 + 28 * Math.sin(labelRadians)]
+    const path = sweep >= 359.99
+      ? "M 50 6 A 44 44 0 1 1 50 94 A 44 44 0 1 1 50 6 Z"
+      : `M 50 50 L ${startPoint[0]} ${startPoint[1]} A 44 44 0 ${largeArc} 1 ${endPoint[0]} ${endPoint[1]} Z`
+
+    return {
+      ...part,
+      percent: Math.round((part.count / total) * 100),
+      labelPoint,
+      path,
+    }
   })
+
   return (
-    <div className="relative h-36 w-36 shrink-0">
-      <svg viewBox="0 0 36 36" className="h-36 w-36 -rotate-90">
-        <circle cx="18" cy="18" r="14" fill="none" stroke="#e7e5e4" strokeWidth="4" />
-        {arcs.map((arc) => (
-          <circle
-            key={arc.label}
-            cx="18"
-            cy="18"
-            r="14"
-            fill="none"
-            stroke={arc.color}
-            strokeWidth="4"
-            strokeDasharray={`${arc.length} ${circle - arc.length}`}
-            strokeDashoffset={-arc.offset}
-          />
-        ))}
+    <div className="flex h-44 w-44 shrink-0 items-center justify-center">
+      <svg viewBox="0 0 100 100" className="h-full w-full" role="img" aria-label={`Order status pie chart, ${total} orders`}>
+        {total ? slices.map((slice) => (
+          <g key={slice.label}>
+            <path d={slice.path} fill={slice.color} stroke="white" strokeWidth="0.6" />
+            {slice.percent >= 8 && (
+              <text
+                x={slice.labelPoint[0]}
+                y={slice.labelPoint[1]}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="white"
+                fontSize="5"
+                fontWeight="600"
+              >
+                {slice.percent}%
+              </text>
+            )}
+          </g>
+        )) : (
+          <circle cx="50" cy="50" r="44" fill="#e7e5e4" />
+        )}
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-semibold">{total}</span>
-        <span className="text-[10px] text-slate-400">Orders</span>
-      </div>
     </div>
+  )
+}
+
+function BarChart({ items }) {
+  const maxValue = Math.max(...items.map(([, value]) => value), 1)
+  const step = Math.max(1, Math.ceil(maxValue / 5))
+  const axisMax = step * 5
+  const plot = { left: 28, top: 12, width: 280, height: 150 }
+  const barWidth = 38
+  const slotWidth = plot.width / items.length
+
+  return (
+    <svg
+      viewBox="0 0 320 205"
+      className="mt-4 h-52 w-full"
+      role="img"
+      aria-label={`Bar chart: ${items.map(([label, value]) => `${label} ${value}`).join(", ")}`}
+    >
+      {Array.from({ length: 6 }, (_, index) => {
+        const value = axisMax - index * step
+        const y = plot.top + (index / 5) * plot.height
+        return (
+          <g key={value}>
+            <line x1={plot.left} x2={plot.left + plot.width} y1={y} y2={y} stroke="#e5e7eb" strokeWidth="1" />
+            <text x="21" y={y + 3} textAnchor="end" fill="#64748b" fontSize="9">{value}</text>
+          </g>
+        )
+      })}
+      {items.map(([label, value, color], index) => {
+        const height = (value / axisMax) * plot.height
+        const x = plot.left + slotWidth * index + (slotWidth - barWidth) / 2
+        const y = plot.top + plot.height - height
+        const [firstWord, ...rest] = label.split(" ")
+        return (
+          <g key={label}>
+            <rect x={x} y={y} width={barWidth} height={height} fill={color} />
+            <text x={x + barWidth / 2} y={plot.top + plot.height + 16} textAnchor="middle" fill="#334155" fontSize="9">
+              <tspan x={x + barWidth / 2} dy="0">{firstWord}</tspan>
+              {rest.length > 0 && <tspan x={x + barWidth / 2} dy="11">{rest.join(" ")}</tspan>}
+            </text>
+          </g>
+        )
+      })}
+    </svg>
   )
 }
 
@@ -845,7 +910,7 @@ function Customers({ orders }) {
   const people = []
   const seen = new Set()
   for (const order of orders) {
-    const key = order.phone || order.customer
+    const key = customerIdentity(order)
     if (seen.has(key)) continue
     seen.add(key)
     people.push(order)
@@ -856,13 +921,69 @@ function Customers({ orders }) {
       {!people.length && <p className="mt-4 text-sm text-ink/50">Customers appear here after an order is placed.</p>}
       <ul className="mt-4 divide-y divide-black/5">
         {people.map((order) => (
-          <li key={order.phone || order.customer} className="flex items-center justify-between py-3 text-sm">
+          <li key={customerIdentity(order)} className="flex items-center justify-between py-3 text-sm">
             <span>{order.customer}</span>
-            <span className="text-ink/45">{order.phone}</span>
+            <span className="text-right text-ink/45">{order.email || order.phone}</span>
           </li>
         ))}
       </ul>
     </section>
+  )
+}
+
+function AnalyticsPanel({ orders }) {
+  const liveOrders = orders.filter((order) => order.status !== "Cancelled")
+  const revenue = liveOrders.reduce((sum, order) => sum + Number(order.amount || 0), 0)
+  const customers = uniqueCustomerCount(orders)
+  const delivered = liveOrders.filter((order) => order.status === "Delivered").length
+  const average = liveOrders.length ? Math.round(revenue / liveOrders.length) : 0
+  const salesDays = lastSevenDays(orders, new Date())
+  const bestSellers = topSelling(orders)
+  const cards = [
+    ["Net sales", formatPrice(revenue)],
+    ["Orders", String(orders.length)],
+    ["Average order value", formatPrice(average)],
+    ["Customers", String(customers)],
+  ]
+
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-slate-500">Store performance across all saved orders. Cancelled orders are excluded from sales.</p>
+      <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {cards.map(([label, value]) => (
+          <li key={label} className="rounded-3xl border border-white/80 bg-white/75 p-4 shadow-sm">
+            <p className="text-sm text-slate-500">{label}</p>
+            <p className="mt-2 text-2xl font-semibold text-primary">{value}</p>
+          </li>
+        ))}
+      </ul>
+      <div className="grid gap-3 xl:grid-cols-2">
+        <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
+          <h3 className="font-semibold">Sales · last 7 days</h3>
+          <p className="mt-1 text-xs text-slate-400">Based on order totals; cancelled orders excluded.</p>
+          <SalesChart days={salesDays} />
+        </section>
+        <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
+          <h3 className="font-semibold">Order fulfilment</h3>
+          <dl className="mt-4 space-y-3 text-sm">
+            <div className="flex justify-between"><dt>Delivered</dt><dd>{delivered}</dd></div>
+            <div className="flex justify-between"><dt>In progress</dt><dd>{liveOrders.length - delivered}</dd></div>
+            <div className="flex justify-between"><dt>Cancelled</dt><dd>{orders.length - liveOrders.length}</dd></div>
+          </dl>
+          <h4 className="mt-6 font-medium">Top selling products</h4>
+          {bestSellers.length ? (
+            <ol className="mt-2 space-y-2 text-sm">
+              {bestSellers.slice(0, 5).map((product, index) => (
+                <li key={product.id || product.name} className="flex justify-between gap-3">
+                  <span>{index + 1}. {product.name}</span>
+                  <span className="text-slate-500">{product.sold} sold</span>
+                </li>
+              ))}
+            </ol>
+          ) : <p className="mt-2 text-sm text-slate-400">No completed sales yet.</p>}
+        </section>
+      </div>
+    </div>
   )
 }
 
@@ -873,7 +994,7 @@ function lastSevenDays(orders, endDate) {
     date.setDate(date.getDate() - (6 - index))
     const amount = orders
       .filter((order) => order.status !== "Cancelled" && new Date(order.createdAt).toDateString() === date.toDateString())
-      .reduce((sum, order) => sum + order.amount, 0)
+      .reduce((sum, order) => sum + Number(order.amount || 0), 0)
     return {
       label: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
       amount,
@@ -881,7 +1002,7 @@ function lastSevenDays(orders, endDate) {
   })
 }
 
-function topSelling(orders, products) {
+function topSelling(orders) {
   const sold = new Map()
   for (const order of orders) {
     if (order.status === "Cancelled") continue
@@ -892,8 +1013,7 @@ function topSelling(orders, products) {
     }
   }
   const ranked = [...sold.values()].sort((a, b) => b.sold - a.sold)
-  if (ranked.length) return ranked.slice(0, 5)
-  return products.slice(0, 5)
+  return ranked.slice(0, 5)
 }
 
 function SimplePanel({ title, text }) {
@@ -902,6 +1022,171 @@ function SimplePanel({ title, text }) {
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="mt-3 max-w-xl text-sm leading-6 text-ink/65">{text}</p>
     </section>
+  )
+}
+
+function CouponsPanel() {
+  const emptyCoupon = { code: "", discount_type: "percent", discount_value: 10, minimum_order: 0, is_active: true }
+  const [coupons, setCoupons] = useState([])
+  const [form, setForm] = useState(emptyCoupon)
+  const [editingCode, setEditingCode] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    let active = true
+    async function loadCoupons() {
+      if (!supabase) {
+        setError("Connect Supabase to manage discount codes.")
+        setLoading(false)
+        return
+      }
+      try {
+        const { data, error: loadError } = await supabase.from("coupons").select("*").order("created_at", { ascending: false })
+        if (loadError) throw loadError
+        if (active) setCoupons(data || [])
+      } catch (loadError) {
+        if (active) setError(loadError instanceof Error ? loadError.message : "Unable to load discounts.")
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+    loadCoupons()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  async function saveCoupon(event) {
+    event.preventDefault()
+    if (!supabase) {
+      setError("Connect Supabase to save discount codes.")
+      return
+    }
+    const code = form.code.trim().toUpperCase()
+    const value = Number(form.discount_value)
+    const minimum = Number(form.minimum_order)
+    if (!/^[A-Z0-9_-]{3,30}$/.test(code) || !Number.isFinite(value) || value <= 0 ||
+      (form.discount_type === "percent" && value > 100) || !Number.isFinite(minimum) || minimum < 0) {
+      setError("Enter a valid code, discount, and minimum order amount.")
+      return
+    }
+
+    setSaving(true)
+    setError("")
+    const payload = {
+      code,
+      discount_type: form.discount_type,
+      discount_value: value,
+      minimum_order: Math.round(minimum),
+      is_active: Boolean(form.is_active),
+    }
+    try {
+      const result = editingCode
+        ? await supabase.from("coupons").update(payload).eq("code", editingCode)
+        : await supabase.from("coupons").insert(payload)
+      if (result.error) {
+        setError(result.error.message)
+        return
+      }
+      setCoupons((current) => editingCode
+        ? current.map((coupon) => coupon.code === editingCode ? { ...coupon, ...payload } : coupon)
+        : [{ ...payload }, ...current])
+      setForm(emptyCoupon)
+      setEditingCode("")
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Unable to save this discount.")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  function editCoupon(coupon) {
+    setEditingCode(coupon.code)
+    setForm({
+      code: coupon.code,
+      discount_type: coupon.discount_type,
+      discount_value: Number(coupon.discount_value),
+      minimum_order: Number(coupon.minimum_order || 0),
+      is_active: coupon.is_active,
+    })
+    setError("")
+  }
+
+  async function deleteCoupon(code) {
+    if (!supabase || !window.confirm(`Delete the ${code} discount?`)) return
+    setError("")
+    try {
+      const { error: deleteError } = await supabase.from("coupons").delete().eq("code", code)
+      if (deleteError) {
+        setError(deleteError.message)
+        return
+      }
+      setCoupons((current) => current.filter((coupon) => coupon.code !== code))
+      if (editingCode === code) {
+        setEditingCode("")
+        setForm(emptyCoupon)
+      }
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Unable to delete this discount.")
+    }
+  }
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
+      <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
+        <h3 className="text-lg font-semibold">Discount codes</h3>
+        <p className="mt-1 text-sm text-slate-500">Active codes can be applied by customers at checkout.</p>
+        {loading ? <p className="mt-5 text-sm text-slate-500">Loading discounts…</p> : coupons.length ? (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-[480px] text-left text-sm">
+              <thead className="text-xs text-slate-400">
+                <tr><th className="py-2">Code</th><th>Offer</th><th>Minimum</th><th>Status</th><th /></tr>
+              </thead>
+              <tbody>
+                {coupons.map((coupon) => (
+                  <tr key={coupon.code} className="border-t border-slate-100">
+                    <td className="py-3 font-semibold">{coupon.code}</td>
+                    <td>{coupon.discount_type === "percent" ? `${coupon.discount_value}% off` : `${formatPrice(coupon.discount_value)} off`}</td>
+                    <td>{formatPrice(coupon.minimum_order || 0)}</td>
+                    <td>{coupon.is_active ? "Active" : "Inactive"}</td>
+                    <td className="space-x-3 text-right">
+                      <button type="button" onClick={() => editCoupon(coupon)} className="text-primary underline">Edit</button>
+                      <button type="button" onClick={() => deleteCoupon(coupon.code)} className="text-red-700 underline">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : !error && <p className="mt-5 text-sm text-slate-500">No discounts created yet.</p>}
+      </section>
+      <form onSubmit={saveCoupon} className="h-fit space-y-3 rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
+        <h3 className="text-lg font-semibold">{editingCode ? "Edit discount" : "Create discount"}</h3>
+        <label className="block text-xs text-slate-500">Code
+          <input required minLength={3} maxLength={30} value={form.code} onChange={(event) => setForm((current) => ({ ...current, code: event.target.value.toUpperCase() }))} className="mt-1 w-full rounded border border-black/10 px-3 py-2 text-sm text-ink outline-none" placeholder="KARNAN10" />
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <label className="block text-xs text-slate-500">Discount type
+            <select value={form.discount_type} onChange={(event) => setForm((current) => ({ ...current, discount_type: event.target.value }))} className="mt-1 w-full rounded border border-black/10 bg-white px-3 py-2 text-sm text-ink">
+              <option value="percent">Percent</option>
+              <option value="fixed">Fixed amount</option>
+            </select>
+          </label>
+          <label className="block text-xs text-slate-500">{form.discount_type === "percent" ? "Percent off" : "Amount off"}
+            <input required type="number" min="0.01" max={form.discount_type === "percent" ? 100 : undefined} step="0.01" value={form.discount_value} onChange={(event) => setForm((current) => ({ ...current, discount_value: event.target.value }))} className="mt-1 w-full rounded border border-black/10 px-3 py-2 text-sm text-ink" />
+          </label>
+        </div>
+        <label className="block text-xs text-slate-500">Minimum order (₹)
+          <input type="number" min="0" step="1" value={form.minimum_order} onChange={(event) => setForm((current) => ({ ...current, minimum_order: event.target.value }))} className="mt-1 w-full rounded border border-black/10 px-3 py-2 text-sm text-ink" />
+        </label>
+        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))} />Active at checkout</label>
+        {error && <p className="text-sm text-red-700">{error}</p>}
+        <button type="submit" disabled={saving} className="w-full rounded bg-primary py-2.5 text-sm text-cream disabled:opacity-60">{saving ? "Saving…" : editingCode ? "Update discount" : "Create discount"}</button>
+        {editingCode && <button type="button" onClick={() => { setEditingCode(""); setForm(emptyCoupon) }} className="w-full border border-black/10 py-2 text-sm">Cancel</button>}
+      </form>
+    </div>
   )
 }
 

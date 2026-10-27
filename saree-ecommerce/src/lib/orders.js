@@ -48,6 +48,7 @@ export function saveOrder(input) {
   const saved = {
     id: nextOrderId(current),
     customer: input.customer,
+    email: input.email || "",
     phone: input.phone,
     address: input.address,
     city: input.city,
@@ -55,6 +56,8 @@ export function saveOrder(input) {
     pincode: input.pincode,
     payment: input.payment || "Cash on delivery",
     amount: input.amount,
+    couponCode: input.couponCode || "",
+    discountAmount: Number(input.discountAmount || 0),
     items: input.items,
     status: "Pending",
     createdAt: new Date().toISOString(),
@@ -70,6 +73,7 @@ export function saveOrder(input) {
     supabase.from("orders").insert({
       id: saved.id,
       customer: saved.customer,
+      email: saved.email,
       phone: saved.phone,
       address: saved.address,
       city: saved.city,
@@ -77,6 +81,8 @@ export function saveOrder(input) {
       pincode: saved.pincode,
       payment: saved.payment,
       amount: saved.amount,
+      coupon_code: saved.couponCode || null,
+      discount_amount: saved.discountAmount,
       status: saved.status,
       items: saved.items,
       created_at: saved.createdAt,
@@ -101,6 +107,7 @@ function mapDbOrder(row) {
   return {
     id: row.id,
     customer: row.customer,
+    email: row.email || "",
     phone: row.phone || "",
     address: row.address || "",
     city: row.city || "",
@@ -108,6 +115,8 @@ function mapDbOrder(row) {
     pincode: row.pincode || "",
     payment: row.payment || "Cash on delivery",
     amount: row.amount,
+    couponCode: row.coupon_code || "",
+    discountAmount: Number(row.discount_amount || 0),
     items: row.items || [],
     status: row.status || "Pending",
     createdAt,
@@ -128,7 +137,8 @@ export async function loadOrders() {
     .from("orders")
     .select("*")
     .order("created_at", { ascending: false })
-  if (error || !data?.length) return local
+  if (error) throw error
+  if (!data?.length) return local
   const merged = new Map()
   for (const order of [...data.map(mapDbOrder), ...local]) merged.set(order.id, order)
   return [...merged.values()].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
