@@ -1,6 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import StyleCoverflow from "../components/StyleCoverflow"
 import { useCart } from "../context/CartContext"
 import { useProducts } from "../context/ProductsContext"
 import { formatPrice, sareeImages } from "../data/products"
@@ -15,6 +14,39 @@ const heroImage = {
 const saleFilters = [
   { id: "all", label: "All soft silks" },
   { id: "soft", label: "Soft silk" },
+]
+
+const testimonials = [
+  {
+    quote: "I found a beautiful silk saree, and the team helped me choose just the right one.",
+    name: "Ananya R.",
+    initials: "AR",
+  },
+  {
+    quote: "The store visit was lovely. I appreciated the warm welcome and thoughtful service.",
+    name: "Meera S.",
+    initials: "MS",
+  },
+  {
+    quote: "Selling my old soft silk was simple. The process and price were clearly explained.",
+    name: "Lakshmi K.",
+    initials: "LK",
+  },
+  {
+    quote: "The saree is even more beautiful in person. I loved the soft fabric and fine details.",
+    name: "Divya M.",
+    initials: "DM",
+  },
+  {
+    quote: "The team was kind and patient while helping me find a saree for a family occasion.",
+    name: "Kavitha P.",
+    initials: "KP",
+  },
+  {
+    quote: "A smooth experience from choosing my saree to taking it home. I would visit again.",
+    name: "Priya S.",
+    initials: "PS",
+  },
 ]
 
 const assurances = [
@@ -52,29 +84,6 @@ const kinds = [
     to: "/shop",
     image: "/hero/gulabi-silk.avif",
     frame: "object-[center_12%]",
-  },
-]
-
-const charter = [
-  {
-    title: "Hand-drawn gold",
-    text: "Zari is drawn and set by hand. No machine-made substitute enters the border.",
-    icon: "hand",
-  },
-  {
-    title: "Silk that breathes",
-    text: "Mulberry silk is chosen for lustre and for the way it sits on the body.",
-    icon: "silk",
-  },
-  {
-    title: "No synthetic twist",
-    text: "The warp stays pure. Tested yarn is refused before it reaches the loom.",
-    icon: "pure",
-  },
-  {
-    title: "Heirloom retention",
-    text: "A Karanan Puttu saree is woven to be worn, stored, and passed on.",
-    icon: "heirloom",
   },
 ]
 
@@ -130,33 +139,6 @@ const oldSilks = [
   },
 ]
 
-const steps = [
-  {
-    step: "Step 01",
-    title: "Share Your Saree Details",
-    text: "Share images of your sarees via WhatsApp or call us for an evaluation.",
-    image: photo(0),
-  },
-  {
-    step: "Step 02",
-    title: "Get An Instant Price Quote",
-    text: "Our experts will assess the silk and offer you the best price.",
-    image: photo(1),
-  },
-  {
-    step: "Step 03",
-    title: "Schedule Pickup\nOr Visit Our Store",
-    text: "Book a doorstep pickup, or visit a showroom for an instant deal.",
-    image: photo(2),
-  },
-  {
-    step: "Step 04",
-    title: "Get Instant Payment",
-    text: "Accept the offer and receive the payment the same day.",
-    image: photo(3),
-  },
-]
-
 const promises = [
   ["check", "A careful check", "Silk and zari are looked at in daylight before a rate is offered."],
   ["price", "A clear price", "You hear the amount first. Nothing is settled until you accept."],
@@ -167,6 +149,8 @@ const promises = [
 export default function Home() {
   const [addedId, setAddedId] = useState(null)
   const [saleFilter, setSaleFilter] = useState("all")
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [isTestimonialPaused, setIsTestimonialPaused] = useState(false)
   const { addToCart } = useCart()
   const { products } = useProducts()
   const saleProducts = [3, 1, 4, 2]
@@ -174,6 +158,20 @@ export default function Home() {
     .filter(Boolean)
   const shownSales =
     saleFilter === "all" ? saleProducts : saleProducts.filter((product) => product.saleGroup === saleFilter)
+
+  useEffect(() => {
+    if (isTestimonialPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
+
+    const timer = window.setInterval(() => {
+      setActiveTestimonial((current) => (current + 1) % testimonials.length)
+    }, 5000)
+
+    return () => window.clearInterval(timer)
+  }, [activeTestimonial, isTestimonialPaused])
+
+  function showTestimonial(index) {
+    setActiveTestimonial((index + testimonials.length) % testimonials.length)
+  }
 
   function addPiece(id) {
     addToCart(id)
@@ -288,8 +286,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
-      <StyleCoverflow />
 
       <section className="bg-[#f7f1e8] px-4 py-16 md:py-20">
         <div className="mx-auto max-w-6xl">
@@ -502,132 +498,116 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-shell px-4 py-16">
+      <section className="bg-[#f6efe4] px-4 py-16 md:py-20">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up" className="text-center">
-            <p className="text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">How it works</p>
-            <h2 className="mt-2 font-display text-4xl text-primary">Working Process</h2>
+            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Client Testimonials</h2>
+            <p className="mt-3 text-xs text-ink/55">Sample layout — replace with verified customer reviews before publishing.</p>
           </div>
-          <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((item, index) => (
-              <li key={item.step} data-slide={index % 2 === 0 ? "left" : "right"} className="flex flex-col items-center px-2 text-center">
-                <img src={item.image} alt=""  decoding="async" className="h-28 w-28 rounded-full object-cover" />
-                <p className="mt-4 text-[11px] tracking-[0.16em] text-[#c48a3a] uppercase">{item.step}</p>
-                <h3 className="mt-2 flex min-h-14 max-w-[15rem] items-center font-display text-xl leading-snug whitespace-pre-line text-primary">
-                  {item.title}
-                </h3>
-                <p className="max-w-[16rem] text-sm leading-6 text-ink/70">{item.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+          <div
+            className="mx-auto mt-10 max-w-6xl"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Client testimonials"
+            onMouseEnter={() => setIsTestimonialPaused(true)}
+            onMouseLeave={(event) => {
+              if (!event.currentTarget.contains(document.activeElement)) setIsTestimonialPaused(false)
+            }}
+            onFocus={() => setIsTestimonialPaused(true)}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setIsTestimonialPaused(false)
+            }}
+          >
+            <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {[0, 1, 2].map((offset) => {
+                const testimonialIndex = (activeTestimonial + offset) % testimonials.length
+                const testimonial = testimonials[testimonialIndex]
 
-      <section className="relative overflow-hidden py-14 text-[#f6efe4] md:py-16">
-        <img src={photo(4)} alt="" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-[#4a0e17]/88" />
-        <ul className="relative mx-auto grid max-w-5xl gap-4 px-4 sm:grid-cols-3 sm:gap-6">
-          {[
-            ["house", "1985", "The house opened"],
-            ["clock", "Same day", "Cash after a check"],
-            ["pin", "Bengaluru", "Doorstep pickup"],
-          ].map(([icon, value, label], index) => (
-            <li
-              key={label}
-              data-slide={index === 0 ? "left" : index === 2 ? "right" : "up"}
-              className="flex items-center gap-4 border border-[#c59b27]/35 bg-[#2a080e]/35 px-5 py-5 sm:flex-col sm:px-4 sm:py-8 sm:text-center"
-            >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#c59b27] text-[#f3e3b8]">
-                <StatIcon name={icon} />
-              </span>
-              <span>
-                <p className="font-display text-3xl leading-none text-[#f3e3b8] sm:text-4xl">{value}</p>
-                <p className="mt-2 text-sm text-[#f6efe4]/85">{label}</p>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section id="charter" className="bg-[#f7f1e8] py-16">
-        <div className="mx-auto max-w-7xl px-4 lg:px-6">
-          <div data-slide="up">
-            <p className="text-center text-[11px] tracking-[0.24em] text-[#c59b27] uppercase">The standard</p>
-            <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">Purity Charter</h2>
-          </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {charter.map((item, index) => (
-              <article
-                key={item.title}
-                data-slide={index % 2 === 0 ? "left" : "right"}
-                className="border border-[#c59b27]/40 bg-white p-6 text-center"
+                return (
+                  <li
+                    key={testimonial.name}
+                    className={`${offset === 1 ? "hidden md:flex" : offset === 2 ? "hidden lg:flex" : "flex"} min-h-56 flex-col border border-[#c59b27]/35 bg-[#f7f1e8] p-6 sm:p-8`}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`${testimonialIndex + 1} of ${testimonials.length}`}
+                  >
+                    <span aria-hidden="true" className="font-display text-5xl leading-none text-[#c59b27]">“</span>
+                    <blockquote className="mt-2 flex-1 font-display text-xl leading-relaxed text-primary">
+                      {testimonial.quote}
+                    </blockquote>
+                    <footer className="mt-5 flex items-center gap-3 border-t border-[#c59b27]/25 pt-4">
+                      <span
+                        aria-hidden="true"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#c59b27]/50 bg-[#f6efe4] font-display text-base text-primary"
+                      >
+                        {testimonial.initials}
+                      </span>
+                      <span>
+                        <span className="block font-display text-lg text-primary">{testimonial.name}</span>
+                        <span className="mt-1 block text-[10px] tracking-[0.16em] text-[#8a6230] uppercase">
+                          Sample customer review
+                        </span>
+                      </span>
+                    </footer>
+                  </li>
+                )
+              })}
+            </ul>
+            <div className="mt-5 flex items-center justify-center gap-5">
+              <button
+                type="button"
+                onClick={() => showTestimonial(activeTestimonial - 1)}
+                aria-label="Previous testimonial"
+                className="motion-arrow flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 text-primary"
               >
-                <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-[#c59b27] text-[#c59b27]">
-                  <CharterIcon name={item.icon} />
-                </span>
-                <h3 className="mt-4 font-display text-xl text-primary">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-ink/75">{item.text}</p>
-              </article>
-            ))}
+                <span aria-hidden="true">←</span>
+              </button>
+              <div className="flex items-center gap-2" aria-label="Choose a testimonial">
+                {testimonials.map((testimonial, index) => (
+                  <button
+                    key={testimonial.name}
+                    type="button"
+                    onClick={() => showTestimonial(index)}
+                    aria-label={`Show testimonial ${index + 1}`}
+                    aria-current={activeTestimonial === index ? "true" : undefined}
+                    className={`h-2.5 rounded-full transition-all ${
+                      activeTestimonial === index ? "w-7 bg-primary" : "w-2.5 bg-primary/25"
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => showTestimonial(activeTestimonial + 1)}
+                aria-label="Next testimonial"
+                className="motion-arrow flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 text-primary"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+          <div className="mt-8 text-center">
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Karnan+Pattu+Centre+Bengaluru"
+              target="_blank"
+              rel="noreferrer"
+              className="motion-btn motion-fill inline-flex items-center justify-center gap-3 bg-primary px-6 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
+            >
+              Read or leave a review
+              <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] px-4 py-20 text-center">
-        <blockquote data-slide="up" className="mx-auto max-w-3xl">
-          <p className="font-display text-3xl leading-snug text-primary italic md:text-5xl">
-            “A silk saree can leave the cupboard and still hold its value.”
-          </p>
-          <footer className="mt-6 text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">
-            Karnan Pattu Centre
-          </footer>
-        </blockquote>
-      </section>
     </>
-  )
-}
-
-function StatIcon({ name }) {
-  const common = {
-    viewBox: "0 0 24 24",
-    className: "h-5 w-5",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.5,
-    "aria-hidden": true,
-  }
-
-  if (name === "house") {
-    return (
-      <svg {...common}>
-        <path d="M4 11.5 12 5l8 6.5" />
-        <path d="M6.5 10.5V19h11v-8.5" />
-        <path d="M10 19v-4h4v4" />
-      </svg>
-    )
-  }
-
-  if (name === "clock") {
-    return (
-      <svg {...common}>
-        <circle cx="12" cy="12" r="7.5" />
-        <path d="M12 8.5V12l2.5 2" />
-      </svg>
-    )
-  }
-
-  return (
-    <svg {...common}>
-      <path d="M12 20s5.5-4.6 5.5-9a5.5 5.5 0 1 0-11 0c0 4.4 5.5 9 5.5 9z" />
-      <circle cx="12" cy="11" r="1.7" />
-    </svg>
   )
 }
 
 function AssuranceIcon({ name }) {
   const common = {
     viewBox: "0 0 24 24",
-    className: "h-5 w-5 shrink-0",
+    className: "h-8 w-8 shrink-0",
     fill: "none",
     stroke: "currentColor",
     strokeWidth: 1.4,
@@ -709,48 +689,6 @@ function PromiseIcon({ name }) {
     <svg {...common}>
       <circle cx="12" cy="12" r="8" />
       <path d="m8.5 12 2.2 2.2 4.8-5" />
-    </svg>
-  )
-}
-
-function CharterIcon({ name }) {
-  const common = {
-    viewBox: "0 0 24 24",
-    className: "h-5 w-5",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    "aria-hidden": true,
-  }
-  if (name === "silk") {
-    return (
-      <svg {...common}>
-        <path d="M4 8c2 2 4 2 6 0s4-2 6 0 4 2 4 0" />
-        <path d="M4 12c2 2 4 2 6 0s4-2 6 0 4 2 4 0" />
-        <path d="M4 16c2 2 4 2 6 0s4-2 6 0 4 2 4 0" />
-      </svg>
-    )
-  }
-  if (name === "pure") {
-    return (
-      <svg {...common}>
-        <path d="M12 3 5 7v5c0 4.2 2.8 7.2 7 9 4.2-1.8 7-4.8 7-9V7z" />
-      </svg>
-    )
-  }
-  if (name === "heirloom") {
-    return (
-      <svg {...common}>
-        <path d="M12 3v18" />
-        <path d="M7 8h10" />
-        <path d="M8 8c0 6 8 6 8 0" />
-      </svg>
-    )
-  }
-  return (
-    <svg {...common}>
-      <path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11" />
-      <path d="M11 10.5V5.5a1.5 1.5 0 0 1 3 0V14c0 3-2 5-5 5" />
     </svg>
   )
 }

@@ -47,8 +47,15 @@ export default function About() {
   const [open, setOpen] = useState(0)
   return (
     <>
-      <section className="flex min-h-[320px] flex-col bg-[linear-gradient(160deg,#4a0e17_0%,#6b1a26_48%,#c59b27_100%)] sm:min-h-[380px]">
-        <div className="mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
+      <section className="relative flex min-h-[320px] flex-col overflow-hidden bg-primary sm:min-h-[380px]">
+        <img
+          src="/hero/image.avif"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-primary/35" aria-hidden="true" />
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
           <div className="w-full">
           <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
             <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">

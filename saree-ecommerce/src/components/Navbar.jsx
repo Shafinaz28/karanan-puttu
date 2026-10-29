@@ -82,19 +82,33 @@ export default function Navbar() {
             <MailIcon />
             karnanpattucenter@gmail.com
           </a>
-          <a href="https://www.instagram.com/karnan_pattu_centre_karnataka" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
-            <InstagramIcon />
-            Follow us
-          </a>
-          <a href="https://youtube.com/@karnanpattucenterkarnataka" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-secondary">
-            <YouTubeIcon />
-            Watch
-          </a>
         </div>
-        <Link to="/locations" className="inline-flex items-center gap-1.5 hover:text-secondary">
-          <PinIcon />
-          Locate Us
-        </Link>
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
+            <a
+              href="https://www.instagram.com/karnan_pattu_centre_karnataka"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+              className="inline-flex items-center hover:text-secondary"
+            >
+              <InstagramIcon />
+            </a>
+            <a
+              href="https://youtube.com/@karnanpattucenterkarnataka"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="YouTube"
+              className="inline-flex items-center hover:text-secondary"
+            >
+              <YouTubeIcon />
+            </a>
+          </div>
+          <Link to="/locations" className="inline-flex items-center gap-1.5 hover:text-secondary">
+            <PinIcon />
+            Locate Us
+          </Link>
+        </div>
       </div>
       <div className="relative flex h-[72px] items-center justify-between bg-shell px-3 text-primary lg:h-[100px] lg:px-12">
         <Link
@@ -124,13 +138,13 @@ export default function Navbar() {
           <Link to="/track" className="transition-colors duration-200 hover:text-secondary">Track</Link>
         </nav>
         <div className="z-10 ml-auto flex items-center text-primary lg:gap-3">
-          <button type="button" aria-label="Search" className="hidden p-2 lg:block" onClick={() => setSearchOpen((open) => !open)}>
+          <button type="button" aria-label="Search" className="hidden p-2.5 lg:block" onClick={() => setSearchOpen((open) => !open)}>
             <SearchIcon />
           </button>
-          <Link to="/login" aria-label="Login" className="p-1.5 lg:p-2">
+          <Link to="/login" aria-label="Login" className="p-2.5">
             <UserIcon />
           </Link>
-          <Link to="/cart" aria-label={`Cart, ${count} items`} className="relative p-1.5 lg:p-2">
+          <Link to="/cart" aria-label={`Cart, ${count} items`} className="relative p-2.5">
             <CartIcon />
             <span className="absolute top-0 right-0 flex h-[15px] w-[15px] items-center justify-center rounded-full bg-primary text-[9px] text-[#f6efe4]">
               {count}
@@ -252,7 +266,7 @@ function PinIcon() {
 
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-[19px] w-[19px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
       <circle cx="11" cy="11" r="6" />
       <path d="M16 16 20 20" />
     </svg>
@@ -261,7 +275,7 @@ function SearchIcon() {
 
 function UserIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-[19px] w-[19px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
       <circle cx="12" cy="8" r="3.2" />
       <path d="M5.5 19.2c1.8-3.2 4-4.8 6.5-4.8s4.7 1.6 6.5 4.8" />
     </svg>
@@ -270,7 +284,7 @@ function UserIcon() {
 
 function CartIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-[19px] w-[19px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
       <path d="M6 8h14l-1.2 8H8z" />
       <path d="M6 8 5 5H3" />
       <path d="M9 8a3 3 0 0 1 6 0" />

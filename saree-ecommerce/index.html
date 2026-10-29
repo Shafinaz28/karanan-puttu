@@ -23,8 +23,111 @@
     <link rel="preload" as="image" type="image/avif" href="/hero/maroon-courtyard.avif" fetchpriority="high" />
     <link rel="preload" as="image" type="image/avif" href="/hero/family-hall.avif" />
     <title>Karanan Puttu | Heritage Weaves</title>
+    <style>
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: #4a0e17;
+        color: #f7f1e8;
+        transition: opacity 300ms ease, visibility 300ms ease;
+      }
+
+      #initial-loader.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .initial-loader-content {
+        display: grid;
+        justify-items: center;
+        gap: 18px;
+        text-align: center;
+      }
+
+      .initial-loader-logo-wrap {
+        position: relative;
+        display: grid;
+        width: 100px;
+        height: 100px;
+        place-items: center;
+      }
+
+      .initial-loader-logo-wrap::before {
+        position: absolute;
+        inset: 0;
+        border: 2px solid rgb(197 155 39 / 25%);
+        border-top-color: #c59b27;
+        border-radius: 50%;
+        animation: initial-loader-spin 1.2s linear infinite;
+        content: "";
+      }
+
+      .initial-loader-logo {
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
+      }
+
+      .initial-loader-name {
+        margin: 0;
+        font: 500 22px Georgia, serif;
+        letter-spacing: 0.06em;
+      }
+
+      .initial-loader-message {
+        margin: 0;
+        color: #f3e3b8;
+        font: 10px Arial, sans-serif;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .initial-loader-track {
+        width: 132px;
+        height: 2px;
+        overflow: hidden;
+        background: rgb(243 227 184 / 25%);
+      }
+
+      .initial-loader-track::after {
+        display: block;
+        width: 45%;
+        height: 100%;
+        background: #c59b27;
+        animation: initial-loader-progress 1.2s ease-in-out infinite;
+        content: "";
+      }
+
+      @keyframes initial-loader-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes initial-loader-progress {
+        from { transform: translateX(-110%); }
+        to { transform: translateX(245%); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .initial-loader-logo-wrap::before,
+        .initial-loader-track::after { animation: none; }
+        #initial-loader { transition: none; }
+      }
+    </style>
   </head>
   <body>
+    <div id="initial-loader" role="status" aria-live="polite">
+      <div class="initial-loader-content">
+        <span class="initial-loader-logo-wrap">
+          <img class="initial-loader-logo" alt="" />
+        </span>
+        <p class="initial-loader-name">Karnan Pattu Centre</p>
+        <p class="initial-loader-message">Preparing your visit</p>
+        <span class="initial-loader-track" aria-hidden="true"></span>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
