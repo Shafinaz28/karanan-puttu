@@ -125,12 +125,11 @@ export default function Login() {
 
   return (
     <section className="mx-auto max-w-md px-4 py-16">
-      <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">The house</p>
       <h1 className="mt-3 text-center font-display text-5xl text-primary">
-        {isSignUp ? "Create account" : "Customer login"}
+        {isSignUp ? "Create account" : "Login"}
       </h1>
       <p className="mt-4 text-center text-sm leading-7 text-ink/70">
-        {isSignUp ? "Create an account to keep a drape aside." : "Sign in to your customer account."}
+        {isSignUp ? "Create an account to keep a drape aside." : "Sign in to your account."}
       </p>
       <form onSubmit={submit} className="mt-8 border border-[#ead9bf] bg-white p-6">
         {isSignUp && (

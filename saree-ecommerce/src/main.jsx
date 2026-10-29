@@ -23,6 +23,6 @@ if (loader) {
 
   Promise.all([pageLoaded, minimumDisplayTime]).then(() => {
     loader.classList.add("is-hidden")
-    window.setTimeout(() => loader.remove(), 300)
+    window.setTimeout(() => loader.remove(), 850)
   })
 }

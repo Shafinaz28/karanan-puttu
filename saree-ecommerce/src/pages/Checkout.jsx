@@ -308,7 +308,14 @@ export default function Checkout() {
                     <p className="truncate text-sm">{line.product.name}</p>
                     <p className="text-xs text-ink/45">Qty {line.qty}</p>
                   </div>
-                  <p className="text-sm">{formatPrice(line.product.price * line.qty)}</p>
+                  <div className="text-right">
+                    {line.product.compareAt && line.product.compareAt !== line.product.price && (
+                      <p className="text-xs text-ink/40 line-through">
+                        {formatPrice(line.product.compareAt * line.qty)}
+                      </p>
+                    )}
+                    <p className="text-sm">{formatPrice(line.product.price * line.qty)}</p>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -430,7 +437,14 @@ export default function Checkout() {
                   <p className="truncate text-sm">{line.product.name}</p>
                   <p className="text-xs text-ink/45">Qty {line.qty}</p>
                 </div>
-                <p className="text-sm">{formatPrice(line.product.price * line.qty)}</p>
+                <div className="text-right">
+                  {line.product.compareAt && line.product.compareAt !== line.product.price && (
+                    <p className="text-xs text-ink/40 line-through">
+                      {formatPrice(line.product.compareAt * line.qty)}
+                    </p>
+                  )}
+                  <p className="text-sm">{formatPrice(line.product.price * line.qty)}</p>
+                </div>
               </li>
             ))}
           </ul>

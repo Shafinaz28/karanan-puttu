@@ -22,6 +22,7 @@
     </noscript>
     <link rel="preload" as="image" type="image/avif" href="/hero/maroon-courtyard.avif" fetchpriority="high" />
     <link rel="preload" as="image" type="image/avif" href="/hero/family-hall.avif" />
+    <link rel="preload" as="image" type="image/png" href="/loader-curtain.png" />
     <title>Karanan Puttu | Heritage Weaves</title>
     <style>
       #initial-loader {
@@ -30,21 +31,60 @@
         z-index: 9999;
         display: grid;
         place-items: center;
-        background: #4a0e17;
         color: #f7f1e8;
-        transition: opacity 300ms ease, visibility 300ms ease;
+        transition: visibility 800ms linear;
+      }
+
+      #initial-loader::before,
+      #initial-loader::after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        background-color: #4a0e17;
+        background-image:
+          linear-gradient(rgb(35 6 12 / 25%), rgb(35 6 12 / 25%)),
+          url("/loader-curtain.png");
+        background-size: 100vw 100vh;
+        content: "";
+        transition: transform 800ms cubic-bezier(0.76, 0, 0.24, 1);
+      }
+
+      #initial-loader::before {
+        left: 0;
+        background-position: left center;
+      }
+
+      #initial-loader::after {
+        right: 0;
+        background-position: right center;
       }
 
       #initial-loader.is-hidden {
-        opacity: 0;
         visibility: hidden;
+        transition-delay: 800ms;
+      }
+
+      #initial-loader.is-hidden::before {
+        transform: translateX(-100%);
+      }
+
+      #initial-loader.is-hidden::after {
+        transform: translateX(100%);
       }
 
       .initial-loader-content {
+        position: relative;
+        z-index: 1;
         display: grid;
         justify-items: center;
         gap: 18px;
         text-align: center;
+        transition: opacity 200ms ease;
+      }
+
+      #initial-loader.is-hidden .initial-loader-content {
+        opacity: 0;
       }
 
       .initial-loader-logo-wrap {
@@ -66,9 +106,12 @@
       }
 
       .initial-loader-logo {
+        position: relative;
+        z-index: 1;
         width: 68px;
         height: 68px;
         object-fit: contain;
+        mix-blend-mode: multiply;
       }
 
       .initial-loader-name {
@@ -113,7 +156,10 @@
       @media (prefers-reduced-motion: reduce) {
         .initial-loader-logo-wrap::before,
         .initial-loader-track::after { animation: none; }
-        #initial-loader { transition: none; }
+        #initial-loader,
+        #initial-loader::before,
+        #initial-loader::after,
+        .initial-loader-content { transition: none; }
       }
     </style>
   </head>

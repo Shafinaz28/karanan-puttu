@@ -58,7 +58,15 @@ export default function ProductDetails() {
         <div>
           <p className="text-xs tracking-[0.22em] text-secondary uppercase">{product.category}</p>
           <h1 className="mt-2 font-display text-5xl text-primary">{product.name}</h1>
-          <p className="mt-4 text-xl">{formatPrice(product.price)}</p>
+          <p className="mt-4 flex flex-wrap items-baseline gap-3 text-xl">
+            {product.compareAt && product.compareAt !== product.price && (
+              <>
+                <span className="text-base text-ink/40 line-through">{formatPrice(product.compareAt)}</span>
+                <span className="text-xs font-medium text-emerald-700">50% off</span>
+              </>
+            )}
+            <span>{formatPrice(product.price)}</span>
+          </p>
           <p className="mt-4 max-w-md text-ink/80">{product.description}</p>
 
           <h2 className="mt-8 text-sm tracking-[0.16em] text-primary uppercase">Product highlights</h2>

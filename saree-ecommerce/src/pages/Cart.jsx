@@ -68,7 +68,14 @@ export default function Cart() {
                         </span>
                       </Link>
                     </td>
-                    <td className="px-4 py-4">{formatPrice(line.product.price)}</td>
+                    <td className="px-4 py-4">
+                      {line.product.compareAt && line.product.compareAt !== line.product.price && (
+                        <span className="mr-2 text-xs text-ink/40 line-through">
+                          {formatPrice(line.product.compareAt)}
+                        </span>
+                      )}
+                      <span>{formatPrice(line.product.price)}</span>
+                    </td>
                     <td className="px-4 py-4">
                       <div className="inline-flex items-center overflow-hidden rounded-lg border border-primary/30">
                         <button
@@ -147,7 +154,12 @@ export default function Cart() {
                 </Link>
                 <div className="p-3">
                   <p className="text-sm text-ink">{product.name}</p>
-                  <p className="mt-1 text-sm text-primary">{formatPrice(product.price)}</p>
+                  <p className="mt-1 flex flex-wrap items-baseline gap-2 text-sm text-primary">
+                    {product.compareAt && product.compareAt !== product.price && (
+                      <span className="text-xs text-ink/40 line-through">{formatPrice(product.compareAt)}</span>
+                    )}
+                    <span>{formatPrice(product.price)}</span>
+                  </p>
                   <button
                     type="button"
                     onClick={() => addToCart(product.id)}

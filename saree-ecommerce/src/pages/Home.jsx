@@ -324,6 +324,11 @@ export default function Home() {
                       />
                       <span className="quick-view">View saree</span>
                     </Link>
+                    {product.compareAt && product.compareAt !== product.price && (
+                      <span className="absolute top-3 left-3 z-10 bg-primary px-2.5 py-1 text-[10px] font-medium tracking-wide text-cream shadow-sm">
+                        50% OFF
+                      </span>
+                    )}
                     {product.badge && (
                       <span className="absolute bottom-12 left-3 z-10 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
                         {product.badge}
@@ -334,7 +339,12 @@ export default function Home() {
                   <Link to={`/product/${product.id}`} className="mt-1 block truncate font-display text-[22px] leading-tight text-primary">
                     {product.name}
                   </Link>
-                  <p className="mt-1 text-sm text-ink/80">{formatPrice(product.price)}</p>
+                  <p className="mt-1 flex flex-wrap items-baseline gap-2 text-sm text-ink/80">
+                    {product.compareAt && product.compareAt !== product.price && (
+                      <span className="text-xs text-ink/40 line-through">{formatPrice(product.compareAt)}</span>
+                    )}
+                    <span>{formatPrice(product.price)}</span>
+                  </p>
                   <div className="mt-auto pt-3">
                     <button
                       type="button"

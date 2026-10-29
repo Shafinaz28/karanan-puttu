@@ -132,8 +132,8 @@ export default function About() {
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
             <img
-              src="/hero/green-palace.avif"
-              alt="A green soft silk with gold buttas"
+              src="/hero/about-purple-teal.png"
+              alt="A purple and teal silk saree displayed in the showroom"
               data-slide="left"
               className="h-[520px] w-full object-cover object-[center_12%] md:h-[640px]"
             />

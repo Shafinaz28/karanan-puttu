@@ -6,13 +6,17 @@ import { formatPrice } from "../../data/products"
 import { mapDbProduct, toDbPayload } from "../../lib/productMap"
 import { uploadProductImage } from "../../lib/uploadProductImage"
 import { loadOrders, readOrders, updateOrderStatus } from "../../lib/orders"
+import {
+  loadContactMessages,
+  updateContactMessageStatus,
+} from "../../lib/contactMessages"
 import { supabase, supabaseConfigured } from "../../lib/supabase"
 import { useProducts } from "../../context/ProductsContext"
 
 const emptyForm = {
   name: "",
   category: "Soft Silk",
-  price: 2800,
+  price: 2799,
   badge: "",
   saleGroup: "soft",
   line: "",
@@ -50,6 +54,7 @@ const statusTone = {
 const navItems = [
   ["overview", "Dashboard"],
   ["orders", "Orders"],
+  ["messages", "Messages"],
   ["products", "Products"],
   ["customers", "Customers"],
   ["analytics", "Analytics"],
@@ -69,6 +74,7 @@ function NavGlyph({ id }) {
   const paths = {
     overview: "M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z",
     orders: "M6 4h12v16H6zM9 8h6M9 12h6M9 16h4",
+    messages: "M4 5h16v12H8l-4 3zM8 9h8M8 13h5",
     products: "M4 7h7v7H4zM13 7h7v7h-7zM4 16h7v4H4zM13 16h7v4h-7z",
     customers: "M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 19c.5-2.5 2.4-4 5-4s4.5 1.5 5 4M16 11a2.5 2.5 0 1 0 0-5M16 15c1.8 0 3.3.9 4 2.5",
     analytics: "M4 19V5M4 19h16M8 15l3-4 3 2 4-6",
@@ -93,6 +99,8 @@ export default function AdminDashboard() {
   const [query, setQuery] = useState("")
   const [rows, setRows] = useState([])
   const [orders, setOrders] = useState(() => readOrders())
+  const [contactMessages, setContactMessages] = useState([])
+  const [messagesLoading, setMessagesLoading] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [form, setForm] = useState(emptyForm)
@@ -145,6 +153,38 @@ export default function AdminDashboard() {
     }
   }, [authed])
 
+  useEffect(() => {
+    if (!authed || tab !== "messages") return undefined
+    let active = true
+    loadContactMessages()
+      .then((data) => {
+        if (active) setContactMessages(data)
+      })
+      .catch((loadError) => {
+        if (active) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load contact messages.")
+        }
+      })
+      .finally(() => {
+        if (active) setMessagesLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [authed, tab])
+
+  async function changeContactMessageStatus(id, status) {
+    setError("")
+    try {
+      await updateContactMessageStatus(id, status)
+      setContactMessages((current) => current.map((message) => (
+        message.id === id ? { ...message, status } : message
+      )))
+    } catch (updateError) {
+      setError(updateError instanceof Error ? updateError.message : "Unable to update this message.")
+    }
+  }
+
   function changeStatus(id, status) {
     setOrders(updateOrderStatus(id, status))
   }
@@ -164,6 +204,14 @@ export default function AdminDashboard() {
       `${order.id} ${order.customer} ${order.phone} ${(order.items || []).map((item) => item.name).join(" ")}`.toLowerCase().includes(text),
     )
   }, [orders, query])
+
+  const filteredContactMessages = useMemo(() => {
+    const text = query.trim().toLowerCase()
+    if (!text) return contactMessages
+    return contactMessages.filter((message) =>
+      `${message.name} ${message.mobile} ${message.email} ${message.message}`.toLowerCase().includes(text),
+    )
+  }, [contactMessages, query])
 
   async function loadRows() {
     setLoading(true)
@@ -284,6 +332,10 @@ export default function AdminDashboard() {
               type="button"
               onClick={() => {
                 setTab(id)
+                if (id === "messages" && tab !== id) {
+                  setMessagesLoading(true)
+                  setError("")
+                }
                 if (id === "orders" || id === "overview" || id === "customers") setOrders(readOrders())
               }}
               className={`flex min-w-fit items-center justify-between rounded-2xl px-3 py-2.5 text-left text-sm lg:w-full ${
@@ -294,6 +346,11 @@ export default function AdminDashboard() {
               {id === "orders" && orders.length > 0 && (
                 <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
                   {orders.length}
+                </span>
+              )}
+              {id === "messages" && contactMessages.some((message) => message.status === "New") && (
+                <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
+                  {contactMessages.filter((message) => message.status === "New").length}
                 </span>
               )}
             </button>
@@ -327,7 +384,7 @@ export default function AdminDashboard() {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search products, orders, customers..."
+              placeholder="Search products, orders, messages..."
               className="w-full bg-transparent text-sm outline-none"
             />
           </label>
@@ -375,6 +432,13 @@ export default function AdminDashboard() {
               <h3 className="text-lg font-semibold">Orders</h3>
               <OrdersTable orders={filteredOrders} onStatus={changeStatus} />
             </section>
+          )}
+          {tab === "messages" && (
+            <ContactMessagesPanel
+              messages={filteredContactMessages}
+              loading={messagesLoading}
+              onStatus={changeContactMessageStatus}
+            />
           )}
           {tab === "customers" && <Customers orders={filteredOrders} />}
           {tab === "coupons" && <CouponsPanel />}
@@ -904,6 +968,69 @@ function OrdersTable({ orders, onStatus }) {
       </table>
     </div>
   )
+}
+
+function ContactMessagesPanel({ messages, loading, onStatus }) {
+  const newCount = messages.filter((message) => message.status === "New").length
+
+  return (
+    <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 className="text-lg font-semibold">Contact messages</h3>
+          <p className="mt-1 text-sm text-slate-500">
+            {newCount} new {newCount === 1 ? "message" : "messages"}
+          </p>
+        </div>
+      </div>
+      {loading ? (
+        <p className="py-6 text-sm text-ink/50">Loading contact messages…</p>
+      ) : messages.length === 0 ? (
+        <p className="py-6 text-sm text-ink/50">No contact messages found.</p>
+      ) : (
+        <ul className="mt-4 space-y-3">
+          {messages.map((message) => (
+            <li key={message.id} className="rounded-2xl border border-black/5 bg-white/80 p-4">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h4 className="font-medium text-primary">{message.name}</h4>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {formatContactTimestamp(message.created_at)}
+                  </p>
+                </div>
+                <select
+                  aria-label={`Status for message from ${message.name}`}
+                  value={message.status}
+                  onChange={(event) => onStatus(message.id, event.target.value)}
+                  className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs text-primary outline-none focus:border-secondary"
+                >
+                  {["New", "Contacted", "Closed"].map((status) => (
+                    <option key={status}>{status}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                <a className="text-primary underline-offset-2 hover:underline" href={`tel:${message.mobile}`}>
+                  {message.mobile}
+                </a>
+                <a className="break-all text-primary underline-offset-2 hover:underline" href={`mailto:${message.email}`}>
+                  {message.email}
+                </a>
+              </div>
+              <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6 text-ink/75">
+                {message.message}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
+function formatContactTimestamp(timestamp) {
+  const [date, time = ""] = String(timestamp || "").split("T")
+  return date ? `${date} ${time.slice(0, 5)} UTC` : "Date unavailable"
 }
 
 function Customers({ orders }) {

@@ -38,12 +38,12 @@ export default function ProductCard({ product }) {
           {code} | {product.category}
         </p>
         <p className="mt-1 text-sm">
-          <span className="font-semibold text-primary">{formatPrice(product.price)}</span>
-          {product.compareAt && (
-            <span className="ml-2 text-xs text-ink/35 line-through">
+          {product.compareAt && product.compareAt !== product.price && (
+            <span className="mr-2 text-xs text-ink/35 line-through">
               {formatPrice(product.compareAt)}
             </span>
           )}
+          <span className="font-semibold text-primary">{formatPrice(product.price)}</span>
         </p>
         <div className="mt-auto pt-3">
           <button

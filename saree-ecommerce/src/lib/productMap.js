@@ -4,7 +4,8 @@ export function mapDbProduct(row) {
     id: row.id,
     name: row.name,
     category: row.category,
-    price: row.price,
+    price: [2800, 5599].includes(Number(row.price)) ? 2799 : Number(row.price),
+    compareAt: 5599,
     badge: row.badge || null,
     saleGroup: row.sale_group || "soft",
     line: row.line || "",
@@ -23,7 +24,7 @@ export function toDbPayload(product) {
   return {
     name: product.name,
     category: product.category || "Soft Silk",
-    price: Number(product.price) || 2800,
+    price: Number(product.price) || 2799,
     badge: product.badge || null,
     sale_group: product.saleGroup || "soft",
     line: product.line || null,

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { submitContactMessage } from "../lib/contactMessages"
 
 const emptyForm = { name: "", mobile: "", email: "", message: "" }
 
@@ -7,6 +8,7 @@ export default function Contact() {
   const [form, setForm] = useState(emptyForm)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState("")
+  const [submitting, setSubmitting] = useState(false)
 
   function updateField(event) {
     setForm((current) => ({
@@ -15,7 +17,7 @@ export default function Contact() {
     }))
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
     const missing = Object.values(form).some((value) => value.trim() === "")
     if (missing) {
@@ -23,7 +25,24 @@ export default function Contact() {
       return
     }
     setError("")
-    setSent(true)
+    if (form.name.trim().length > 120 || form.mobile.trim().length > 32 ||
+      form.email.trim().length > 254 || form.message.trim().length > 5000) {
+      setError("Please shorten your details. Messages can be up to 5,000 characters.")
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      await submitContactMessage({
+        ...form,
+        mobile: `+91 ${form.mobile.trim()}`,
+      })
+      setSent(true)
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Unable to send your message. Please try again.")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -108,6 +127,8 @@ export default function Contact() {
             <Field icon="user" label="Name">
               <input
                 name="name"
+                required
+                maxLength={120}
                 value={form.name}
                 onChange={updateField}
                 placeholder="Your name"
@@ -119,6 +140,8 @@ export default function Contact() {
               <input
                 name="mobile"
                 type="tel"
+                required
+                maxLength={24}
                 inputMode="tel"
                 value={form.mobile}
                 onChange={updateField}
@@ -130,6 +153,8 @@ export default function Contact() {
               <input
                 name="email"
                 type="email"
+                required
+                maxLength={254}
                 value={form.email}
                 onChange={updateField}
                 placeholder="you@email.com"
@@ -140,6 +165,8 @@ export default function Contact() {
               <textarea
                 name="message"
                 rows="5"
+                required
+                maxLength={5000}
                 value={form.message}
                 onChange={updateField}
                 placeholder="The saree, its condition, and how we can help"
@@ -147,8 +174,8 @@ export default function Contact() {
               />
             </Field>
             {error && <p className="mt-3 text-sm text-primary">{error}</p>}
-            <button type="submit" className="motion-btn motion-fill mt-5 w-full bg-primary px-6 py-3 text-sm text-cream">
-              Send message
+            <button type="submit" disabled={submitting} className="motion-btn motion-fill mt-5 w-full bg-primary px-6 py-3 text-sm text-cream disabled:cursor-not-allowed disabled:opacity-60">
+              {submitting ? "Sending…" : "Send message"}
             </button>
           </form>
         )}
