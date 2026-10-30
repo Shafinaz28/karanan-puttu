@@ -135,7 +135,6 @@ export default function Navbar() {
           <Link to="/old-silk" className="transition-colors duration-200 hover:text-secondary">Old silk</Link>
           <Link to="/blog" className="transition-colors duration-200 hover:text-secondary">Blog</Link>
           <Link to="/contact" className="transition-colors duration-200 hover:text-secondary">Contact</Link>
-          <Link to="/track" className="transition-colors duration-200 hover:text-secondary">Track</Link>
         </nav>
         <div className="z-10 ml-auto flex items-center text-primary lg:gap-3">
           <button type="button" aria-label="Search" className="hidden p-2.5 lg:block" onClick={() => setSearchOpen((open) => !open)}>
@@ -200,7 +199,6 @@ export default function Navbar() {
           <Link to="/old-silk" className="block border-b border-ink/10 py-3 text-sm">Old silk</Link>
           <Link to="/blog" className="block border-b border-ink/10 py-3 text-sm">Blog</Link>
           <Link to="/contact" className="block border-b border-ink/10 py-3 text-sm">Contact</Link>
-          <Link to="/track" className="block border-b border-ink/10 py-3 text-sm">Track order</Link>
           <Link to="/locations" className="block border-b border-ink/10 py-3 text-sm">Locate Us</Link>
           <Link to="/cart" className="block border-b border-ink/10 py-3 text-sm">Cart ({count})</Link>
           <Link to="/login" className="block border-b border-ink/10 py-3 text-sm">Login</Link>

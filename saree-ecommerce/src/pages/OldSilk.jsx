@@ -2,68 +2,95 @@ import { Link } from "react-router-dom"
 
 const bought = [
   {
-    name: "Old Soft Silk",
-    text: "Worn soft silk is welcome. The body and the border are checked before a price is named.",
-    image: "/sarees/soft/soft-02.jpg",
+    name: "kanjipuram",
+    text: "Worn silk is welcome. The body and the border are checked before a price is named.",
+    image: "/sarees/worn/old-kanchipuram-silk.png",
   },
   {
-    name: "Faded Soft Silk",
-    text: "Faded or still bright soft silk. The border is part of the rate.",
-    image: "/sarees/soft/soft-01.jpg",
+    name: "mysore silk",
+    text: "Faded or still bright worn silk. The border is part of the rate.",
+    image: "/sarees/worn/old-mysore-silk.png",
   },
   {
-    name: "Torn Soft Silk",
+    name: "Nalli",
     text: "Torn borders and split pallus are taken in. The weave is looked at in daylight.",
-    image: "/sarees/soft/soft-08.jpg",
+    image: "/sarees/worn/old-nalli-silk.png",
   },
   {
-    name: "Unused Soft Silk",
-    text: "Soft silk folded away or never worn, including pieces with tired zari.",
-    image: "/sarees/soft/soft-04.jpg",
+    name: "tissue",
+    text: "Worn silk folded away or never worn, including pieces with tired zari.",
+    image: "/sarees/worn/old-tissue-silk.png",
   },
   {
-    name: "Antique Soft Silk",
-    text: "Older soft silk drapes are checked for the handwork that is still on the cloth.",
-    image: "/sarees/soft/soft-10.jpg",
+    name: "Banarsee",
+    text: "Older worn silk drapes are checked for the handwork that is still on the cloth.",
+    image: "/sarees/worn/old-banarasi-silk.png",
   },
   {
-    name: "Plain Soft Silk",
-    text: "Plain soft silk, light or heavy, folded away or already worn.",
-    image: "/sarees/soft/soft-06.jpg",
+    name: "Soft Silk",
+    text: "Plain worn silk, light or heavy, folded away or already worn.",
+    image: "/sarees/worn/old-soft-silk.png",
+  },
+];
+
+const youtubeShorts = [
+  {
+    title: "Bangalore's Trusted Old Silk Saree Buyers",
+    embedUrl: "https://www.youtube.com/embed/G13acqhWgC8",
   },
   {
-    name: "Gold Soft Silk",
-    text: "Soft silk with a gold border. Stains and small tears do not rule it out.",
-    image: "/sarees/soft/soft-07.jpg",
+    title: "Spot Cash for Old Silk Sarees at V.V. Puram",
+    embedUrl: "https://www.youtube.com/embed/JvovXMw0GgU",
   },
   {
-    name: "Butta Soft Silk",
-    text: "Soft silk with buttas, even when a panel has caught or the edge has frayed.",
-    image: "/sarees/soft/soft-11.jpg",
+    title: "Visit Karnan Pattu Center for Best Rates",
+    embedUrl: "https://www.youtube.com/embed/fojwLiRTW8U",
   },
-]
+];
 
 export default function OldSilk() {
   return (
     <>
-      <section className="flex min-h-[320px] flex-col bg-[linear-gradient(160deg,#4a0e17_0%,#6b1a26_48%,#c59b27_100%)] sm:min-h-[380px]">
-        <div className="mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
-          <div className="w-full">
-            <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
-              <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
-                Home
-              </Link>
-              <span className="mx-2 text-[#d7c4a2]">/</span>
-              Old silk
-            </p>
-            <h1 className="mt-4 font-display text-5xl md:text-7xl">Soft silks we buy</h1>
-            <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85">
-              Old, used, torn, and faded soft silk. The weave and the border are checked, then a cash price is named the same day.
-            </p>
-          </div>
-        </div>
-      </section>
+ <section className="relative flex min-h-[320px] flex-col overflow-hidden sm:min-h-[480px]">
+  {/* Full Background Image */}
+  <img 
+    src="/hero/image.avif" 
+    alt="Faded antique silk saree texture" 
+    className="absolute inset-0 h-full w-full object-cover object-center"
+  />
 
+  {/* Soft Deep Red Overlay to ensure text readability */}
+  <div className="absolute inset-0 bg-[#3a1216]/85" />
+
+  {/* Content Block */}
+  <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-20 text-center text-[#f7f1e8] sm:py-24 lg:px-8">
+    <div className="w-full">
+      {/* Breadcrumbs */}
+      <p className="text-xs tracking-[0.16em] text-[#d7c4a2]/80 uppercase">
+        <Link to="/" className="transition-colors duration-300 hover:text-[#f7f1e8]">
+          Home
+        </Link>
+        <span className="mx-2 text-[#d7c4a2]/50">/</span>
+        <span className="text-[#f7f1e8]">Old silk</span>
+      </p>
+
+      {/* Main Heading */}
+      <h1 className="mt-4 font-display text-5xl font-bold leading-tight text-[#faf6f0] md:text-7xl">
+        Soft silks we buy
+      </h1>
+
+      {/* Divider Accent */}
+      <div className="mx-auto mt-6 h-[1px] w-16 bg-[#c59b27]/70" />
+
+      {/* Body Text */}
+      <p className="mx-auto mt-6 max-w-lg text-sm leading-7 text-[#f7f1e8]/90 drop-shadow-sm md:text-base">
+        Old, used, torn, and faded soft silk. The weave and the border are checked in daylight, then a cash price is named and paid the same day.
+      </p>
+    </div>
+  </div>
+</section>
+
+      {/* Sarees Grid Section */}
       <section className="bg-[#f6efe4] px-4 py-16">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up" className="mx-auto max-w-2xl text-center">
@@ -73,7 +100,8 @@ export default function OldSilk() {
               Soft silk only. A blouse piece is not required. Small tears and tired borders are still priced.
             </p>
           </div>
-          <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+
+          <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
             {bought.map((item, index) => (
               <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"}>
                 <article className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216]">
@@ -82,7 +110,7 @@ export default function OldSilk() {
                     alt={item.name}
                     decoding="async"
                     fetchPriority="high"
-                    className="aspect-[3/4] w-full object-cover object-center"
+                    className="aspect-[5/4] w-full object-cover object-center"
                   />
                   <div className="px-3 py-3 text-center text-[#f7f1e8] md:px-4 md:py-4">
                     <h3 className="font-display text-sm leading-tight md:text-lg">{item.name}</h3>
@@ -95,6 +123,39 @@ export default function OldSilk() {
         </div>
       </section>
 
+      {/* YouTube Shorts Section */}
+      <section className="bg-[#efe7db] px-4 py-16 border-t border-[#c59b27]/20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Watch & Learn</p>
+            <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">See How We Value Your Sarees</h2>
+            <p className="mt-3 text-sm text-ink/70">
+              Watch our customer visits and on-the-spot evaluation process in Bengaluru.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {youtubeShorts.map((video, idx) => (
+              <div key={idx} className="flex flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216] shadow-md">
+                <div className="relative aspect-[9/16] w-full bg-black">
+                  <iframe
+                    src={video.embedUrl}
+                    title={video.title}
+                    className="absolute inset-0 h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <div className="p-3 text-center text-[#f7f1e8]">
+                  <h3 className="font-display text-xs md:text-sm line-clamp-2">{video.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Steps & Call Action Section */}
       <section className="bg-shell px-4 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
           {[

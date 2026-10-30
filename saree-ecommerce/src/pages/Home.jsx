@@ -11,10 +11,6 @@ const heroImage = {
   alt: "A soft silk saree with a coral gold border",
 }
 
-const saleFilters = [
-  { id: "all", label: "All soft silks" },
-  { id: "soft", label: "Soft silk" },
-]
 
 const testimonials = [
   {
@@ -98,46 +94,38 @@ const weaves = [
 
 const oldSilks = [
   {
-    name: "Old Soft Silk",
-    text: "Worn soft silk is welcome.",
+    text: "Fine woven soft silk drapes.",
     image: "/sarees/soft/soft-02.jpg",
   },
   {
-    name: "Faded Soft Silk",
-    text: "Faded or still bright.",
+    text: "Vibrant and elegant silk drapes.",
     image: "/sarees/soft/soft-01.jpg",
   },
   {
-    name: "Torn Soft Silk",
-    text: "Torn borders are welcome.",
+    text: "Intricate borders and detailed pallus.",
     image: "/sarees/soft/soft-08.jpg",
   },
   {
-    name: "Unused Soft Silk",
-    text: "Folded away or never worn.",
+    text: "Freshly curated pure soft silk.",
     image: "/sarees/soft/soft-04.jpg",
   },
   {
-    name: "Antique Soft Silk",
-    text: "Heirloom soft silk drapes.",
+    text: "Heirloom handcrafted soft silk drapes.",
     image: "/sarees/soft/soft-10.jpg",
   },
   {
-    name: "Plain Soft Silk",
-    text: "Plain body, worn or folded.",
+    text: "Classic plain body with rich borders.",
     image: "/sarees/soft/soft-06.jpg",
   },
   {
-    name: "Gold Soft Silk",
-    text: "Soft silk with a gold border.",
+    text: "Soft silk with pure gold zari borders.",
     image: "/sarees/soft/soft-07.jpg",
   },
   {
-    name: "Butta Soft Silk",
-    text: "Buttas and a woven pallu.",
+    text: "Woven buttas and traditional pallu work.",
     image: "/sarees/soft/soft-11.jpg",
   },
-]
+];
 
 const promises = [
   ["check", "A careful check", "Silk and zari are looked at in daylight before a rate is offered."],
@@ -287,29 +275,72 @@ export default function Home() {
         </div>
       </section>
 
+<section className="relative flex w-full items-center justify-center overflow-hidden bg-[#faf6f0] px-4 py-6 text-center sm:min-h-[440px] sm:py-12 md:py-16">
+  {/* Full-width Background Image - Anchored to Top with Custom 143% Height on Desktop */}
+  <img 
+    src="/hero/bgbannar.png" 
+    alt="Silk Sarees Banner" 
+    className="absolute inset-x-0 top-0 w-full object-cover object-top sm:h-[140%] sm:object-center"
+  />
+
+  {/* Centered Content Block */}
+  <div data-slide="up" className="relative z-10 mx-auto flex max-w-xl flex-col items-center px-2 text-center text-[#210a0c]">
+    
+    <p className="mt-0.5 font-display text-xs italic text-[#b8860b] xs:text-sm sm:mt-1 sm:text-2xl">
+      Silk for every occasion
+    </p>
+
+    {/* Ornamental Divider */}
+    <div className="my-1.5 flex w-24 items-center justify-center gap-2 xs:w-28 sm:my-3 sm:w-40">
+      <div className="h-[1px] w-full bg-[#b8860b]/60" />
+      <span className="text-[8px] text-[#b8860b] sm:text-[10px]">❖</span>
+      <div className="h-[1px] w-full bg-[#b8860b]/60" />
+    </div>
+
+    {/* Subtext (2 lines on mobile, 1 line on desktop) */}
+    <p className="max-w-[240px] text-[10px] leading-snug text-[#3d1a1d]/90 xs:text-[11px] sm:max-w-none sm:text-sm sm:leading-relaxed">
+      Pure silk elegance,<br className="sm:hidden" /> ready for every occasion.
+    </p>
+
+    {/* Discount Callout */}
+    <div className="group relative mt-2 flex items-center justify-center gap-1.5 tracking-widest text-[#210a0c] sm:mt-5 sm:gap-3">
+      {/* Soft Ambient Glow */}
+      <div className="absolute -inset-x-4 -inset-y-1 -z-10 rounded-full bg-[#daa520]/25 blur-lg transition-all duration-500 group-hover:bg-[#daa520]/40" />
+      
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3d1a1d] sm:text-sm">
+        Flat
+      </span>
+
+      {/* 50% Text */}
+      <span className="animate-pulse font-display text-3xl font-black text-[#b8860b] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] sm:text-6xl md:text-7xl">
+        50%
+      </span>
+
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3d1a1d] sm:text-sm">
+        Off
+      </span>
+    </div>
+
+    {/* Action Button */}
+    <div className="mt-3 sm:mt-6">
+      <Link
+        to="/shop"
+        className="motion-btn motion-fill inline-flex transform items-center justify-center bg-[#b8860b] px-5 py-2 text-[9px] font-bold tracking-[0.18em] text-white uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#d4af37] hover:shadow-lg active:scale-95 sm:px-8 sm:py-3.5 sm:text-[11px]"
+        style={{ borderRadius: 0 }}
+      >
+        Shop the look
+      </Link>
+    </div>
+  </div>
+</section>
+
       <section className="bg-[#f7f1e8] px-4 py-16 md:py-20">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up" className="mx-auto max-w-xl text-center">
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">On the counter</p>
             <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Soft silk ready to leave.</h2>
-            <p className="mt-3 text-sm text-ink/70">Soft silks only, photographed as they are.</p>
           </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-ink/55">
-            {saleFilters.map((filter) => (
-              <button
-                key={filter.id}
-                type="button"
-                onClick={() => setSaleFilter(filter.id)}
-                className={
-                  saleFilter === filter.id
-                    ? "border-b border-primary pb-1 text-primary"
-                    : "pb-1 hover:text-primary"
-                }
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
+          
           <ul className="mt-8 grid grid-cols-2 items-stretch gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-6">
             {shownSales.map((product, index) => (
               <li key={product.id} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full">
@@ -325,10 +356,10 @@ export default function Home() {
                       <span className="quick-view">View saree</span>
                     </Link>
                     {product.compareAt && product.compareAt !== product.price && (
-                      <span className="absolute top-3 left-3 z-10 bg-primary px-2.5 py-1 text-[10px] font-medium tracking-wide text-cream shadow-sm">
-                        50% OFF
-                      </span>
-                    )}
+  <span className="absolute top-3 right-3 z-10 bg-primary px-2.5 py-1 text-[10px] font-medium tracking-wide text-cream shadow-sm">
+    50% OFF
+  </span>
+)}
                     {product.badge && (
                       <span className="absolute bottom-12 left-3 z-10 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
                         {product.badge}
@@ -370,111 +401,142 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-shell px-4 py-16">
-        <div className="mx-auto max-w-6xl">
-          <h2 data-slide="up" className="text-center font-display text-4xl text-primary md:text-5xl">
-            Sarees We Buy
-          </h2>
-          <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
-            {oldSilks.map((item, index) => (
-              <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full">
-                <Link
-                  to="/old-silk"
-                  className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216]"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    decoding="async"
-                    className="aspect-[3/4] w-full object-cover object-center"
-                  />
-                  <div className="px-3 py-3 text-center text-[#f7f1e8]">
-                    <h3 className="font-display text-base leading-tight md:text-lg">{item.name}</h3>
-                    <p className="mt-1 text-[11px] leading-4 text-[#f7f1e8]/75">{item.text}</p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+<section className="bg-shell px-4 py-16">
+  <div className="mx-auto max-w-6xl">
+    {/* Section Header */}
+    <div data-slide="up" className="mx-auto max-w-2xl text-center">
+      <h2 className="mt-2 font-display text-4xl text-[#2a0c0f] md:text-5xl">
+        Shop By Look
+      </h2>
+      <p className="mt-3 text-sm leading-6 text-[#3a1216]/80">
+        Explore our curated selection of authentic silk drapes, crafted with timeless traditional weaves and fine zari craftsmanship.
+      </p>
+    </div>
 
-      <section className="bg-[#f6efe4] px-4 py-16 md:py-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div data-slide="left" className="text-center lg:max-w-md lg:text-left">
-            <h2 className="font-display text-4xl leading-tight text-[#2c1814] md:text-5xl">
-              Silk for every occasion.
-            </h2>
-            <p className="mt-5 text-sm leading-7 text-ink/70 md:text-base">
-              From a temple morning to a wedding evening, each soft silk leaves the counter ready to drape. Chosen in daylight and ready to wear.
-            </p>
-            <Link
-              to="/shop"
-              className="motion-btn motion-fill mt-8 inline-flex items-center justify-center bg-primary px-7 py-3.5 text-[11px] tracking-[0.16em] text-cream uppercase"
-              style={{ borderRadius: 0 }}
-            >
-              Shop the look
-            </Link>
-          </div>
-          <div data-slide="right" className="relative mx-auto h-[420px] w-full max-w-md sm:h-[480px] lg:max-w-lg">
-            <img
-              src="/hero/maroon-courtyard.avif"
-              alt=""
-              decoding="async"
-              className="absolute top-0 left-[4%] z-[1] h-[46%] w-[38%] rounded-md object-cover object-[78%_center] shadow-md"
-            />
-            <img
-              src="/hero/ivory-gold.avif"
-              alt=""
-              decoding="async"
-              className="absolute top-[8%] right-0 z-[1] h-[48%] w-[36%] rounded-md object-cover object-center shadow-md"
-            />
-            <img
-              src="/hero/gulabi-silk.avif"
-              alt=""
-              decoding="async"
-              className="absolute bottom-[6%] left-0 z-[1] h-[36%] w-[34%] rounded-md object-cover object-center shadow-md"
-            />
-            <div className="absolute top-[18%] left-[28%] z-[2] h-[68%] w-[48%]">
+    {/* Saree Grid */}
+    <ul className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+      {oldSilks.map((item, index) => (
+        <li 
+          key={item.name || index} 
+          data-slide={index % 2 === 0 ? "left" : "right"} 
+          className="h-full"
+        >
+          {/* Card Box Container */}
+          <Link
+            to="/Shop"
+            className="group flex h-full flex-col overflow-hidden rounded-xl bg-[#f5ebd9]/70 p-3 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:bg-[#f5ebd9] hover:shadow-md"
+          >
+            {/* Image Container (Border-free) */}
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#2a0c0f]">
               <img
-                src="/hero/gold-saree.avif"
-                alt="A gold silk saree worn on temple steps"
+                src={item.image}
+                alt={item.name || "Silk Saree"}
                 decoding="async"
-                className="h-full w-full rounded-md object-cover object-top shadow-lg"
+                className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
-              <div className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 bg-[#c48a3a] px-3.5 py-2.5 text-white shadow-md">
-                <p className="font-display text-2xl leading-none sm:text-3xl">30+</p>
+
+              {/* Dark Overlay on Hover */}
+              <div className="absolute inset-0 bg-[#2a0c0f]/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+              {/* "Shop Now" Button Appears on Hover */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
+                <span className="transform bg-[#c59b27] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#2a0c0f] shadow-md transition-all duration-300 group-hover:scale-105 hover:bg-[#e6bc42]">
+                  Shop Now
+                </span>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="bg-shell px-4 py-16">
-        <div className="mx-auto max-w-6xl">
-          <div data-slide="up">
-            <p className="text-center text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">The loom</p>
-            <h2 className="mt-2 text-center font-display text-4xl text-primary">Soft Silk Edits</h2>
-          </div>
-          <ul className="mt-8 grid grid-cols-3 gap-4 sm:grid-cols-6">
-            {weaves.map((weave, index) => (
-              <li key={`${weave.note}-${index}`} data-slide={index < 3 ? "left" : "right"}>
-                <Link to={weave.to} className="flex flex-col items-center text-center">
-                  {weave.image ? (
-                    <img src={weave.image} alt=""  decoding="async" className="motion-circle h-20 w-20 rounded-full object-cover" />
-                  ) : (
-                    <span className="motion-circle flex h-20 w-20 items-center justify-center rounded-full border border-secondary text-2xl text-secondary">
-                      ₹
-                    </span>
-                  )}
-                  <span className="mt-3 text-sm text-ink">{weave.label}</span>
-                  <span className="text-[11px] text-ink/50">{weave.note}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+            {/* Dark Text Content Box */}
+            <div className="flex flex-1 flex-col justify-between pt-3 text-center">
+              <div>
+                <h3 className="font-display text-sm font-bold tracking-wide text-[#2a0c0f] transition-colors duration-300 group-hover:text-[#b8860b] md:text-base capitalize">
+                  {item.name}
+                </h3>
+                
+                {item.price && (
+                  <p className="mt-1 text-xs font-semibold text-[#3a1216] md:text-sm">
+                    {item.price}
+                  </p>
+                )}
+
+                {item.text && !item.price && (
+                  <p className="mt-1 text-xs font-medium text-[#3a1216]/80 line-clamp-2">
+                    {item.text}
+                  </p>
+                )}
+              </div>
+            </div>
+          </Link>
+        </li>
+      ))}
+    </ul>
+
+    {/* Single Bottom Explore Collection Button */}
+    <div className="mt-12 text-center">
+      <Link
+        to="/Shop"
+        className="inline-flex items-center justify-center bg-[#c59b27] px-8 py-3.5 text-xs font-bold tracking-[0.18em] text-[#2a0c0f] uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#e6bc42] hover:shadow-lg active:scale-95"
+      >
+        Explore Full Collection &rarr;
+      </Link>
+    </div>
+  </div>
+</section>
+
+
+     <section className="bg-shell px-4 py-16 md:py-20">
+  <div className="mx-auto max-w-6xl">
+    {/* Section Header */}
+    <div data-slide="up" className="text-center">
+      <p className="text-[12px] font-semibold tracking-[0.25em] text-[#b8860b] uppercase">
+        The Loom
+      </p>
+      <h2 className="mt-2 font-display text-4xl font-bold tracking-wide text-[#2a0c0f] md:text-5xl">
+        Soft Silk Edits
+      </h2>
+      <div className="mx-auto mt-3 h-[2px] w-12 bg-[#b8860b]/60" />
+    </div>
+
+    {/* Circle Grid */}
+    <ul className="mt-12 grid grid-cols-3 gap-6 sm:grid-cols-6 md:gap-8">
+      {weaves.map((weave, index) => (
+        <li 
+          key={`${weave.note}-${index}`} 
+          data-slide={index < 3 ? "left" : "right"}
+        >
+          <Link 
+            to={weave.to} 
+            className="group flex flex-col items-center text-center transition-all duration-300"
+          >
+            {/* Circle Container with Golden Ring Accent */}
+            <div className="relative p-1">
+              {weave.image ? (
+                <img 
+                  src={weave.image} 
+                  alt={weave.label || "Silk Edit"}  
+                  decoding="async" 
+                  className="motion-circle h-24 w-24 rounded-full object-cover shadow-md ring-2 ring-[#c59b27]/40 transition-all duration-300 group-hover:scale-105 group-hover:ring-[#c59b27] group-hover:shadow-lg sm:h-28 sm:w-28" 
+                />
+              ) : (
+                <span className="motion-circle flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#b8860b] bg-[#f5ebd9]/50 text-3xl font-bold text-[#b8860b] shadow-md ring-2 ring-[#c59b27]/30 transition-all duration-300 group-hover:scale-105 group-hover:bg-[#f5ebd9] group-hover:shadow-lg sm:h-28 sm:w-28">
+                  ₹
+                </span>
+              )}
+            </div>
+
+            {/* Labels */}
+            <span className="mt-3.5 text-sm font-bold tracking-wide text-[#2a0c0f] transition-colors duration-300 group-hover:text-[#b8860b] sm:text-base capitalize">
+              {weave.label}
+            </span>
+            <span className="mt-0.5 text-[11px] font-medium text-[#3a1216]/70 sm:text-xs">
+              {weave.note}
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
 
       <section className="bg-[#f6efe4] px-4 py-16">
         <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">

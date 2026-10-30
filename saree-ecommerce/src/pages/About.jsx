@@ -47,31 +47,47 @@ export default function About() {
   const [open, setOpen] = useState(0)
   return (
     <>
-      <section className="relative flex min-h-[320px] flex-col overflow-hidden bg-primary sm:min-h-[380px]">
-        <img
-          src="/hero/image.avif"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-primary/35" aria-hidden="true" />
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
-          <div className="w-full">
-          <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
-            <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
-              Home
-            </Link>
-            <span className="mx-2 text-[#d7c4a2]">/</span>
-            About Us
-          </p>
-          <h1 className="mt-4 font-display text-5xl md:text-7xl">About Us</h1>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85">
-            A house that sells soft silk, and buys old soft silk, with the same care.
-          </p>
-          <span className="mx-auto mt-6 block h-0.5 w-16 bg-[linear-gradient(to_right,#4a0e17,#c59b27)]" aria-hidden="true" />
-          </div>
-        </div>
-      </section>
+      <section className="relative flex min-h-[320px] flex-col overflow-hidden bg-[#210a0c] sm:min-h-[440px]">
+  {/* Full Background Image */}
+  <img 
+     src="/hero/image.avif" 
+    alt="Silk Sarees Background" 
+    className="absolute inset-0 h-full w-full object-cover object-center"
+  />
+
+  {/* Soft Dark Overlay for Crisp Text Readability */}
+  <div className="absolute inset-0 bg-[#210a0c]/85" />
+
+  {/* Content Block */}
+  <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
+    <div className="w-full">
+      {/* Breadcrumb Navigation */}
+      <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
+        <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
+          Home
+        </Link>
+        <span className="mx-2 text-[#d7c4a2]">/</span>
+        About Us
+      </p>
+
+      {/* Page Title */}
+      <h1 className="mt-4 font-display text-5xl font-bold tracking-wide text-[#faf6f0] md:text-7xl">
+        About Us
+      </h1>
+
+      {/* Subtitle */}
+      <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85 md:text-base">
+        A house that sells soft silk, and buys old soft silk, with the same care.
+      </p>
+
+      {/* Gradient Divider Line */}
+      <span 
+        className="mx-auto mt-6 block h-0.5 w-16 bg-[linear-gradient(to_right,#4a0e17,#c59b27)]" 
+        aria-hidden="true" 
+      />
+    </div>
+  </div>
+</section>
       <section className="bg-[#f6efe4] py-8 md:py-10">
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 lg:grid-cols-2 lg:px-8">
           <figure className="relative order-2 lg:order-1">
@@ -219,45 +235,50 @@ export default function About() {
           </ul>
         </div>
       </section>
-      <section className="relative min-h-[360px]">
-        <img
-          src={sareeImages[6]}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[#3a1216]/72" />
-        <div className="relative mx-auto flex min-h-[360px] max-w-3xl flex-col items-center justify-center px-6 py-12 text-center text-cream">
-          <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
-            Sell and buy
-          </p>
-          <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-            New soft silks to wear. Old soft silk we buy.
-          </h2>
-          <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
-            New soft silks leave the counter with a blouse piece. Old, used, and torn soft silk is checked in daylight, and the money is paid the same day.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              to="/shop"
-              className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
-            >
-              Shop new silk
-            </Link>
-            <Link
-              to="/old-silk"
-              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
-            >
-              Sell old silk
-            </Link>
-            <a
-              href="tel:+919894441500"
-              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
-            >
-              Call the desk
-            </a>
-          </div>
-        </div>
-      </section>
+     <section className="relative min-h-[360px] overflow-hidden bg-[#3a1216]">
+  {/* Background Image - 140% Height on Desktop */}
+  <img
+    src="/hero/family-hall.avif"
+    alt="New & Pre-loved Silk Sarees"
+    className="absolute inset-x-0 top-0 w-full object-cover object-top sm:h-[140%]"
+  />
+
+  {/* Dark Overlay */}
+  <div className="absolute inset-0 bg-[#3a1216]/75" />
+
+  {/* Content Block */}
+  <div className="relative mx-auto flex min-h-[360px] max-w-3xl flex-col items-center justify-center px-6 py-12 text-center text-cream">
+    <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
+      New & pre-loved
+    </p>
+    <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
+      New silks to wear. Old silks to treasure.
+    </h2>
+    <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
+      Explore new soft silks and a curated collection of pre-loved sarees. Contact us for current styles, condition, and pricing.
+    </p>
+    <div className="mt-8 flex flex-wrap justify-center gap-3">
+      <Link
+        to="/shop"
+        className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
+      >
+        Shop new silk
+      </Link>
+      <Link
+        to="/old-silk"
+        className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
+      >
+        Discover pre-loved silk
+      </Link>
+      <a
+        href="tel:+919894441500"
+        className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
+      >
+        Call the desk
+      </a>
+    </div>
+  </div>
+</section>
     </>
   )
 }
