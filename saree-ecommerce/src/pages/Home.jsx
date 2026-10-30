@@ -570,107 +570,171 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f6efe4] px-4 py-16 md:py-20">
-        <div className="mx-auto max-w-6xl">
-          <div data-slide="up" className="text-center">
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Client Testimonials</h2>
-            <p className="mt-3 text-xs text-ink/55">Sample layout — replace with verified customer reviews before publishing.</p>
-          </div>
-          <div
-            className="mx-auto mt-10 max-w-6xl"
-            role="region"
-            aria-roledescription="carousel"
-            aria-label="Client testimonials"
-            onMouseEnter={() => setIsTestimonialPaused(true)}
-            onMouseLeave={(event) => {
-              if (!event.currentTarget.contains(document.activeElement)) setIsTestimonialPaused(false)
-            }}
-            onFocus={() => setIsTestimonialPaused(true)}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) setIsTestimonialPaused(false)
-            }}
-          >
-            <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {[0, 1, 2].map((offset) => {
-                const testimonialIndex = (activeTestimonial + offset) % testimonials.length
-                const testimonial = testimonials[testimonialIndex]
+     <section className="px-4 py-16 md:py-20 text-[#4a0e17]">
+  <div className="mx-auto max-w-6xl">
+    {/* Header */}
+    <div data-slide="up" className="text-center">
+      <p className="text-[11px] font-semibold tracking-[0.24em] text-[#4a0e17]/80 uppercase">
+        Verified Customer Feedback
+      </p>
+      <h2 className="mt-2 font-display text-4xl font-bold text-[#4a0e17] md:text-5xl">
+        Client Testimonials
+      </h2>
+      <p className="mx-auto mt-3 max-w-lg text-sm text-[#4a0e17]/80">
+        Read what our patrons have to say about our soft silk collections and old saree valuations in Bengaluru.
+      </p>
+      <div className="mx-auto mt-4 h-[1px] w-12 bg-[#4a0e17]/40" />
+    </div>
 
-                return (
-                  <li
-                    key={testimonial.name}
-                    className={`${offset === 1 ? "hidden md:flex" : offset === 2 ? "hidden lg:flex" : "flex"} min-h-56 flex-col border border-[#c59b27]/35 bg-[#f7f1e8] p-6 sm:p-8`}
-                    role="group"
-                    aria-roledescription="slide"
-                    aria-label={`${testimonialIndex + 1} of ${testimonials.length}`}
-                  >
-                    <span aria-hidden="true" className="font-display text-5xl leading-none text-[#c59b27]">“</span>
-                    <blockquote className="mt-2 flex-1 font-display text-xl leading-relaxed text-primary">
-                      {testimonial.quote}
-                    </blockquote>
-                    <footer className="mt-5 flex items-center gap-3 border-t border-[#c59b27]/25 pt-4">
-                      <span
-                        aria-hidden="true"
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#c59b27]/50 bg-[#f6efe4] font-display text-base text-primary"
-                      >
-                        {testimonial.initials}
-                      </span>
-                      <span>
-                        <span className="block font-display text-lg text-primary">{testimonial.name}</span>
-                        <span className="mt-1 block text-[10px] tracking-[0.16em] text-[#8a6230] uppercase">
-                          Sample customer review
-                        </span>
-                      </span>
-                    </footer>
-                  </li>
-                )
-              })}
-            </ul>
-            <div className="mt-5 flex items-center justify-center gap-5">
-              <button
-                type="button"
-                onClick={() => showTestimonial(activeTestimonial - 1)}
-                aria-label="Previous testimonial"
-                className="motion-arrow flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 text-primary"
-              >
-                <span aria-hidden="true">←</span>
-              </button>
-              <div className="flex items-center gap-2" aria-label="Choose a testimonial">
-                {testimonials.map((testimonial, index) => (
-                  <button
-                    key={testimonial.name}
-                    type="button"
-                    onClick={() => showTestimonial(index)}
-                    aria-label={`Show testimonial ${index + 1}`}
-                    aria-current={activeTestimonial === index ? "true" : undefined}
-                    className={`h-2.5 rounded-full transition-all ${
-                      activeTestimonial === index ? "w-7 bg-primary" : "w-2.5 bg-primary/25"
-                    }`}
-                  />
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => showTestimonial(activeTestimonial + 1)}
-                aria-label="Next testimonial"
-                className="motion-arrow flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 text-primary"
-              >
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
-          </div>
-          <div className="mt-8 text-center">
-            <a
-              href="https://www.google.com/maps/search/?api=1&query=Karnan+Pattu+Centre+Bengaluru"
-              target="_blank"
-              rel="noreferrer"
-              className="motion-btn motion-fill inline-flex items-center justify-center gap-3 bg-primary px-6 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
+    {/* Testimonials Carousel / Grid Container */}
+    <div
+      className="mx-auto mt-12 max-w-6xl"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Client testimonials"
+      onMouseEnter={() => setIsTestimonialPaused(true)}
+      onMouseLeave={(event) => {
+        if (!event.currentTarget.contains(document.activeElement)) setIsTestimonialPaused(false)
+      }}
+      onFocus={() => setIsTestimonialPaused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsTestimonialPaused(false)
+      }}
+    >
+      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {[0, 1, 2].map((offset) => {
+          const testimonialIndex = (activeTestimonial + offset) % testimonials.length
+          const testimonial = testimonials[testimonialIndex]
+
+          return (
+            <li
+              key={testimonial.name}
+              className={`${offset === 1 ? "hidden md:flex" : offset === 2 ? "hidden lg:flex" : "flex"} min-h-[320px] flex-col justify-between border border-[#4a0e17]/20 bg-[#4a0e17]/[0.03] p-6 shadow-sm transition-all duration-300 hover:border-[#4a0e17]/40 sm:p-8`}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${testimonialIndex + 1} of ${testimonials.length}`}
             >
-              Read or leave a review
-              <span aria-hidden="true">↗</span>
-            </a>
-          </div>
+              <div>
+                {/* Top Row: Avatar, Name/Time, and Google Icon */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#4a0e17] font-display text-base font-semibold text-[#faf6f0]"
+                    >
+                      {testimonial.initials}
+                    </span>
+                    <div>
+                      <span className="block font-display text-lg font-bold text-[#4a0e17]">
+                        {testimonial.name}
+                      </span>
+                      <span className="block text-[11px] text-[#4a0e17]/60">
+                        {testimonial.timeAgo || "A month ago"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Google G Logo SVG */}
+                  <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      fill="#4285F4"
+                      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.95H1.2v3.14C3.17 21.36 7.24 24 12 24z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.28 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.61H1.2C.43 8.15 0 9.89 0 12s.43 3.85 1.2 5.39l4.08-3.14z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.24 0 3.17 2.64 1.2 6.61l4.08 3.14c.95-2.84 3.6-4.95 6.72-4.95z"
+                    />
+                  </svg>
+                </div>
+
+                {/* 5 Star Rating */}
+                <div className="mt-4 flex items-center gap-1 text-[#d4af37]" aria-label="5 out of 5 stars">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-lg">★</span>
+                  ))}
+                </div>
+
+                {/* Review Quote / Text */}
+                <blockquote className="mt-3 text-sm leading-relaxed text-[#4a0e17]/90">
+                  "{testimonial.quote}"
+                </blockquote>
+              </div>
+
+              {/* Bottom Action / See More Link */}
+              <div className="mt-6 pt-4 border-t border-[#4a0e17]/10">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Karnan+Pattu+Centre+Bengaluru"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-semibold tracking-wider text-[#4a0e17] uppercase transition-colors hover:text-[#8a6230]"
+                >
+                  See more on Google ↗
+                </a>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+
+      {/* Carousel Navigation Arrows & Indicators */}
+      <div className="mt-8 flex items-center justify-center gap-5">
+        <button
+          type="button"
+          onClick={() => showTestimonial(activeTestimonial - 1)}
+          aria-label="Previous testimonial"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4a0e17]/25 text-[#4a0e17] transition-colors hover:bg-[#4a0e17] hover:text-[#faf6f0]"
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+
+        <div className="flex items-center gap-2" aria-label="Choose a testimonial">
+          {testimonials.map((testimonial, index) => (
+            <button
+              key={testimonial.name}
+              type="button"
+              onClick={() => showTestimonial(index)}
+              aria-label={`Show testimonial ${index + 1}`}
+              aria-current={activeTestimonial === index ? "true" : undefined}
+              className={`h-2.5 rounded-full transition-all ${
+                activeTestimonial === index ? "w-7 bg-[#4a0e17]" : "w-2.5 bg-[#4a0e17]/25"
+              }`}
+            />
+          ))}
         </div>
-      </section>
+
+        <button
+          type="button"
+          onClick={() => showTestimonial(activeTestimonial + 1)}
+          aria-label="Next testimonial"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4a0e17]/25 text-[#4a0e17] transition-colors hover:bg-[#4a0e17] hover:text-[#faf6f0]"
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+
+    {/* Read or Leave Review CTA */}
+    <div className="mt-10 text-center">
+      <a
+        href="https://www.google.com/maps/search/?api=1&query=Karnan+Pattu+Centre+Bengaluru"
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-3 bg-[#4a0e17] px-6 py-3 text-[11px] font-semibold tracking-[0.14em] text-[#faf6f0] uppercase transition-colors hover:bg-[#6b1a26]"
+      >
+        Read or leave a review
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
 
     </>
   )

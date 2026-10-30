@@ -28,95 +28,102 @@ export default function Footer() {
   }
 
   return (
-    <footer>
-      <div className="bg-[#3a0c14] text-cream">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
-        <div>
-          <img
-            src={logo}
-            alt="Karnan Pattu Centre"
-            className="h-24 w-24 object-contain"
-          />
-          <p className="mt-4 max-w-xs text-sm leading-6 text-cream/75">
-            We buy old, used and damaged soft silk at the best price, and
-            we sell new soft silks for the next occasion.
-          </p>
-          <div className="mt-5 flex gap-3">
-            <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
-            <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
+    <footer className="bg-[#3a0c14] text-cream">
+      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
+        {/* Main Footer Grid with Tighter Spacing */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 items-start">
+          
+          {/* Column 1: Brand & Bio */}
+          <div className="flex flex-col items-start">
+            <img
+              src={logo}
+              alt="Karnan Pattu Centre"
+              className="h-24 w-24 object-contain"
+            />
+            <p className="mt-4 max-w-xs text-sm leading-6 text-cream/75">
+              We buy old, used and damaged soft silk at the best price, and we sell new soft silks for the next occasion.
+            </p>
+            <div className="mt-5 flex gap-3">
+              <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
+              <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
+            </div>
+          </div>
+
+          {/* Column 2: Collections */}
+          <FooterColumn title="Collections">
+            {collections.map((item) => (
+              <Link key={item.label} to={item.to} className="transition-colors duration-300 hover:text-secondary">
+                {item.label}
+              </Link>
+            ))}
+          </FooterColumn>
+
+          {/* Column 3: Old Saree Services */}
+          <FooterColumn title="Old saree services">
+            {services.map((item) => (
+              <Link key={item} to="/old-silk" className="transition-colors duration-300 hover:text-secondary">
+                {item}
+              </Link>
+            ))}
+          </FooterColumn>
+
+          {/* Column 4: Newsletter Signup */}
+          <div className="flex flex-col items-start">
+            <p className="text-xs font-semibold tracking-[0.18em] text-secondary uppercase">
+              VIP newsletter
+            </p>
+            <p className="mt-3 text-sm leading-6 text-cream/75">
+              Subscribe to get privileged previews of soft silk launches and seasonal handloom drops.
+            </p>
+            {joined ? (
+              <p className="mt-4 text-sm font-medium text-secondary">You are on the list.</p>
+            ) : (
+              <form onSubmit={joinList} className="mt-4 flex w-full max-w-sm gap-2">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Enter email address"
+                  aria-label="Email address"
+                  className="min-w-0 flex-1 rounded-lg bg-white px-3 py-2.5 text-sm text-ink outline-none"
+                />
+                <button
+                  type="submit"
+                  className="motion-btn motion-gold bg-secondary px-4 text-xs tracking-[0.14em] text-ink uppercase transition-colors hover:bg-[#e6c55c]"
+                >
+                  Join
+                </button>
+              </form>
+            )}
+            <p className="mt-3 text-xs text-cream/55">
+              Strictly no spam. We cherish your privacy.
+            </p>
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-16 border-t border-cream/10 pt-6">
+          <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-cream/70 lg:flex-row lg:text-left">
+            <p>© 2026 Karnan Pattu Centre. All rights reserved. Handcrafted in India.</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-end">
+              <Link to="/terms" className="transition-colors hover:text-cream">
+                Terms & conditions
+              </Link>
+              <Link to="/privacy" className="transition-colors hover:text-cream">
+                Privacy policy
+              </Link>
+              <Link to="/contact" className="transition-colors hover:text-cream">
+                Shipping & payout policy
+              </Link>
+              <Link to="/track" className="transition-colors hover:text-cream">
+                Track order
+              </Link>
+            </div>
           </div>
         </div>
 
-        <FooterColumn title="Collections">
-          {collections.map((item) => (
-            <Link key={item.label} to={item.to} className="hover:text-secondary">
-              {item.label}
-            </Link>
-          ))}
-        </FooterColumn>
-
-        <FooterColumn title="Old saree services">
-          {services.map((item) => (
-            <Link key={item} to="/old-silk" className="hover:text-secondary">
-              {item}
-            </Link>
-          ))}
-        </FooterColumn>
-
-        <div>
-          <p className="text-xs tracking-[0.18em] text-secondary uppercase">
-            VIP newsletter
-          </p>
-          <p className="mt-3 text-sm leading-6 text-cream/75">
-            Subscribe to get privileged previews of soft silk launches and seasonal
-            handloom drops.
-          </p>
-          {joined ? (
-            <p className="mt-4 text-sm text-secondary">You are on the list.</p>
-          ) : (
-            <form onSubmit={joinList} className="mt-4 flex gap-2">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="Enter email address"
-                aria-label="Email address"
-                className="min-w-0 flex-1 rounded-lg bg-white px-3 py-2.5 text-sm text-ink outline-none"
-              />
-              <button
-                type="submit"
-                className="motion-btn motion-gold bg-secondary px-4 text-xs tracking-[0.14em] text-ink uppercase"
-              >
-                Join
-              </button>
-            </form>
-          )}
-          <p className="mt-3 text-xs text-cream/55">
-            Strictly no spam. We cherish your privacy.
-          </p>
-        </div>
-      </div>
-
-      <div className="border-t border-cream/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 text-center text-xs text-cream/70 lg:flex-row lg:px-8 lg:text-left">
-          <p>© 2026 Karnan Pattu Centre. All rights reserved. Handcrafted in India.</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-end">
-            <Link to="/terms" className="hover:text-cream">
-              Terms & conditions
-            </Link>
-            <Link to="/privacy" className="hover:text-cream">
-              Privacy policy
-            </Link>
-            <Link to="/contact" className="hover:text-cream">
-              Shipping & payout policy
-            </Link>
-            <Link to="/track" className="hover:text-cream">
-              Track order
-            </Link>
-          </div>
-        </div>
-      </div>
       </div>
     </footer>
   )
@@ -124,9 +131,11 @@ export default function Footer() {
 
 function FooterColumn({ title, children }) {
   return (
-    <div className="flex flex-col gap-2 text-sm text-cream/80">
-      <p className="mb-1 text-xs tracking-[0.18em] text-secondary uppercase">{title}</p>
-      {children}
+    <div className="flex flex-col items-start">
+      <p className="text-xs font-semibold tracking-[0.18em] text-secondary uppercase">{title}</p>
+      <div className="mt-3 flex flex-col space-y-2.5 text-sm text-cream/80">
+        {children}
+      </div>
     </div>
   )
 }
@@ -153,13 +162,6 @@ function SocialGlyph({ name }) {
         <rect x="4" y="4" width="16" height="16" rx="4" />
         <circle cx="12" cy="12" r="3.5" />
         <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
-      </svg>
-    )
-  }
-  if (name === "facebook") {
-    return (
-      <svg {...common} fill="currentColor">
-        <path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-2c0-.6.4-1 1-1z" />
       </svg>
     )
   }
