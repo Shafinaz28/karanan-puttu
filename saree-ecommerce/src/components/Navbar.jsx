@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import MobileNavDrawer from "./MobileNavDrawer"
+import { mainNavLinks } from "./navLinks"
 import logo from "../assets/images/kpc-logo.avif"
 
 export default function Navbar() {
@@ -134,12 +135,11 @@ export default function Navbar() {
           </span>
         </Link>
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 text-base whitespace-nowrap text-primary xl:gap-7 lg:flex">
-          <Link to="/" className="transition-colors duration-200 hover:text-secondary">Home</Link>
-          <Link to="/about" className="transition-colors duration-200 hover:text-secondary">Our Story</Link>
-          <Link to="/shop" className="transition-colors duration-200 hover:text-secondary">Shop</Link>
-          <Link to="/old-silk" className="transition-colors duration-200 hover:text-secondary">Old silk</Link>
-          <Link to="/blog" className="transition-colors duration-200 hover:text-secondary">Blog</Link>
-          <Link to="/contact" className="transition-colors duration-200 hover:text-secondary">Contact</Link>
+          {mainNavLinks.map(({ to, label }) => (
+            <Link key={to} to={to} className="transition-colors duration-200 hover:text-secondary">
+              {label}
+            </Link>
+          ))}
         </nav>
         <div className="z-10 ml-auto flex items-center text-primary lg:gap-3">
           <button type="button" aria-label="Search" className="hidden p-2.5 lg:block" onClick={() => setSearchOpen((open) => !open)}>

@@ -1,10 +1,6 @@
-import { useState } from "react"
 import { Link } from "react-router-dom"
-import { shopCategoryCards } from "../data/shopCategories"
+import { mainNavLinks } from "./navLinks"
 import logo from "../assets/images/kpc-logo.avif"
-
-const shopByWeave = shopCategoryCards.filter((item) => item.id === "soft" || item.id === "traditional")
-const shopByFabric = shopCategoryCards.filter((item) => item.id === "tissue" || item.id === "party")
 
 export default function MobileNavDrawer({
   open,
@@ -16,16 +12,9 @@ export default function MobileNavDrawer({
   drawerSearchOpen,
   setDrawerSearchOpen,
 }) {
-  const [expanded, setExpanded] = useState(null)
-
   if (!open) return null
 
-  function toggleSection(id) {
-    setExpanded((current) => (current === id ? null : id))
-  }
-
   function closeAndReset() {
-    setExpanded(null)
     setDrawerSearchOpen(false)
     onClose()
   }
@@ -91,55 +80,11 @@ export default function MobileNavDrawer({
         )}
 
         <nav className="min-h-0 flex-1 overflow-y-auto px-5 py-2">
-          <MobileNavLink to="/" onNavigate={closeAndReset}>
-            Home
-          </MobileNavLink>
-
-          <ExpandableNavRow
-            label="Shop by Weave"
-            open={expanded === "weave"}
-            onToggle={() => toggleSection("weave")}
-          >
-            {shopByWeave.map((item) => (
-              <MobileSubLink key={item.id} to={`/shop?collection=${item.id}`} onNavigate={closeAndReset}>
-                {item.label}
-              </MobileSubLink>
-            ))}
-          </ExpandableNavRow>
-
-          <ExpandableNavRow
-            label="Shop by Fabric"
-            open={expanded === "fabric"}
-            onToggle={() => toggleSection("fabric")}
-          >
-            {shopByFabric.map((item) => (
-              <MobileSubLink key={item.id} to={`/shop?collection=${item.id}`} onNavigate={closeAndReset}>
-                {item.label}
-              </MobileSubLink>
-            ))}
-          </ExpandableNavRow>
-
-          <MobileNavLink to="/shop?collection=new" onNavigate={closeAndReset}>
-            New Arrivals
-          </MobileNavLink>
-          <MobileNavLink to="/shop" onNavigate={closeAndReset}>
-            All Sarees
-          </MobileNavLink>
-          <MobileNavLink to="/about" onNavigate={closeAndReset}>
-            Our Story
-          </MobileNavLink>
-          <MobileNavLink to="/old-silk" onNavigate={closeAndReset}>
-            Old silk
-          </MobileNavLink>
-          <MobileNavLink to="/blog" onNavigate={closeAndReset}>
-            Blog
-          </MobileNavLink>
-          <MobileNavLink to="/contact" onNavigate={closeAndReset}>
-            Contact
-          </MobileNavLink>
-          <MobileNavLink to="/locations" onNavigate={closeAndReset}>
-            Locate Us
-          </MobileNavLink>
+          {mainNavLinks.map(({ to, label }) => (
+            <MobileNavLink key={to} to={to} onNavigate={closeAndReset}>
+              {label}
+            </MobileNavLink>
+          ))}
         </nav>
 
         <div className="shrink-0 border-t border-black/10 px-5 py-6">
@@ -174,46 +119,6 @@ function MobileNavLink({ to, onNavigate, children }) {
     >
       {children}
     </Link>
-  )
-}
-
-function MobileSubLink({ to, onNavigate, children }) {
-  return (
-    <Link to={to} onClick={onNavigate} className="block py-2.5 pl-1 text-sm text-ink/75 hover:text-primary">
-      {children}
-    </Link>
-  )
-}
-
-function ExpandableNavRow({ label, open, onToggle, children }) {
-  return (
-    <div className="border-b border-black/8">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        className="flex w-full items-center justify-between py-4 text-left text-[15px] text-ink"
-      >
-        {label}
-        <ChevronIcon open={open} />
-      </button>
-      {open && <div className="pb-3 pl-2">{children}</div>}
-    </div>
-  )
-}
-
-function ChevronIcon({ open }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={`h-4 w-4 text-ink/45 transition-transform ${open ? "rotate-90" : ""}`}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
-      <path d="M9 6l6 6-6 6" />
-    </svg>
   )
 }
 

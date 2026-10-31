@@ -11,7 +11,7 @@ import { formatPrice, sareeImages } from "../data/products"
 const photo = (index) => sareeImages[index % sareeImages.length]
 
 const mainHero = {
-  src: "/hero/hero-mustard1.avif",
+  src: "/hero/hero-mustard1.png",
   alt: "Mustard silk saree in a heritage courtyard",
   position: "object-[68%_top] sm:object-[62%_top] md:object-[58%_12%]",
   eyebrow: "Karnan Pattu Centre",
@@ -188,17 +188,17 @@ export default function Home() {
               <p className="mt-5 max-w-md text-sm font-medium leading-7 text-[#f6efe4] md:text-base">
                 {mainHero.body}
               </p>
-              <div className="mt-8 flex w-full max-w-md flex-col gap-3 md:flex-row md:flex-wrap">
+              <div className="mt-6 flex w-full max-w-md flex-col gap-2 md:mt-8 md:gap-3 md:flex-row md:flex-wrap">
                 <Link
                   to={mainHero.primaryCta.to}
-                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-3 bg-secondary px-5 py-3 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase md:w-auto"
+                  className="motion-btn motion-gold inline-flex w-full max-w-[15.5rem] items-center justify-center gap-2 bg-secondary px-4 py-2 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase md:w-auto md:max-w-none md:gap-3 md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
                 >
                   {mainHero.primaryCta.label}
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link
                   to={mainHero.secondaryCta.to}
-                  className="motion-btn inline-flex w-full items-center justify-center gap-3 border border-[#f6efe4] bg-[#210a0c]/25 px-5 py-3 text-[11px] font-semibold tracking-[0.16em] text-[#faf6f0] uppercase backdrop-blur-[2px] hover:bg-[#f6efe4] hover:text-primary md:w-auto"
+                  className="motion-btn inline-flex w-full max-w-[15.5rem] items-center justify-center gap-2 border border-[#f6efe4] bg-[#210a0c]/25 px-4 py-2 text-[10px] font-semibold tracking-[0.14em] text-[#faf6f0] uppercase backdrop-blur-[2px] hover:bg-[#f6efe4] hover:text-primary md:w-auto md:max-w-none md:gap-3 md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
                 >
                   {mainHero.secondaryCta.label}
                   <span aria-hidden="true">→</span>

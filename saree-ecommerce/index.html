@@ -20,8 +20,8 @@
         rel="stylesheet"
       />
     </noscript>
-    <link rel="preload" as="image" type="image/avif" href="/hero/hero-mustard1.avif" fetchpriority="high" />
-    <link rel="preload" as="image" type="image/avif" href="/hero/loadingimg.avif" />
+    <link rel="preload" as="image" type="image/avif" href="/kpc-logo.avif" fetchpriority="high" />
+    <link rel="preload" as="image" href="/hero/hero-mustard1.png" fetchpriority="high" />
     <title>Karanan Puttu | Heritage Weaves</title>
     <style>
       #initial-loader {
@@ -30,8 +30,9 @@
         z-index: 9999;
         display: grid;
         place-items: center;
+        overflow: hidden;
         color: #f7f1e8;
-        transition: visibility 900ms linear;
+        transition: visibility 0ms linear 1650ms;
       }
 
       #initial-loader::before,
@@ -39,14 +40,16 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        width: 50%;
-        background-color: #6b1530;
+        width: calc(50% + 1px);
+        background-color: #4a0e17;
         background-image:
-          linear-gradient(rgb(58 8 24 / 18%), rgb(58 8 24 / 18%)),
+          linear-gradient(rgb(28 8 12 / 55%), rgb(28 8 12 / 55%)),
           url("/hero/loadingimg.avif");
         background-size: 200% 100%;
+        background-repeat: no-repeat;
         content: "";
-        transition: transform 900ms cubic-bezier(0.76, 0, 0.24, 1);
+        transition: transform 1600ms cubic-bezier(0.65, 0, 0.35, 1);
+        will-change: transform;
       }
 
       #initial-loader::before {
@@ -61,7 +64,7 @@
 
       #initial-loader.is-hidden {
         visibility: hidden;
-        transition-delay: 900ms;
+        pointer-events: none;
       }
 
       #initial-loader.is-hidden::before {
@@ -77,9 +80,9 @@
         z-index: 1;
         display: grid;
         justify-items: center;
-        gap: 18px;
+        gap: 22px;
         text-align: center;
-        transition: opacity 200ms ease;
+        transition: opacity 450ms ease 120ms;
       }
 
       #initial-loader.is-hidden .initial-loader-content {
@@ -87,48 +90,29 @@
       }
 
       .initial-loader-logo-wrap {
-        position: relative;
         display: grid;
-        width: 88px;
-        height: 88px;
         place-items: center;
-        overflow: hidden;
+        padding: 18px;
         border-radius: 50%;
-        background: radial-gradient(circle at 50% 45%, #c9286a 0%, #8f1a45 100%);
-      }
-
-      .initial-loader-logo-wrap::before {
-        position: absolute;
-        inset: 0;
-        border: 2px solid rgb(197 155 39 / 25%);
-        border-top-color: #c59b27;
-        border-radius: 50%;
-        animation: initial-loader-spin 1.2s linear infinite;
-        content: "";
-        z-index: 2;
-        pointer-events: none;
-        background: transparent;
+        background: #f6efe4;
+        box-shadow: 0 10px 32px rgb(0 0 0 / 35%);
       }
 
       .initial-loader-logo {
-        position: relative;
-        z-index: 1;
-        width: 62px;
-        height: 62px;
+        width: 88px;
+        height: 88px;
         object-fit: contain;
-        mix-blend-mode: darken;
-        background: transparent;
       }
 
       .initial-loader-name {
         margin: 0;
-        font: 500 22px Georgia, serif;
+        font: 500 26px Georgia, serif;
         letter-spacing: 0.06em;
       }
 
       .initial-loader-track {
-        width: 132px;
-        height: 2px;
+        width: 160px;
+        height: 3px;
         overflow: hidden;
         background: rgb(243 227 184 / 25%);
       }
@@ -142,30 +126,33 @@
         content: "";
       }
 
-      @keyframes initial-loader-spin {
-        to { transform: rotate(360deg); }
-      }
-
       @keyframes initial-loader-progress {
         from { transform: translateX(-110%); }
         to { transform: translateX(245%); }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .initial-loader-logo-wrap::before,
         .initial-loader-track::after { animation: none; }
-        #initial-loader,
         #initial-loader::before,
         #initial-loader::after,
         .initial-loader-content { transition: none; }
+        #initial-loader.is-hidden::before,
+        #initial-loader.is-hidden::after { transform: none; }
       }
     </style>
   </head>
   <body>
-    <div id="initial-loader" role="status" aria-live="polite">
+    <div id="initial-loader" role="status" aria-live="polite" aria-label="Loading">
       <div class="initial-loader-content">
         <span class="initial-loader-logo-wrap">
-          <img class="initial-loader-logo" alt="" />
+          <img
+            class="initial-loader-logo"
+            src="/kpc-logo.avif"
+            width="88"
+            height="88"
+            alt="Karnan Pattu Centre"
+            decoding="async"
+          />
         </span>
         <p class="initial-loader-name">Karnan Pattu Centre</p>
         <span class="initial-loader-track" aria-hidden="true"></span>

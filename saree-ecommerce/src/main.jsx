@@ -2,12 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import logo from "./assets/images/kpc-logo.avif"
 
-const HERO_IMAGE = "/hero/hero-mustard1.avif"
-
-const loaderLogo = document.querySelector(".initial-loader-logo")
-if (loaderLogo) loaderLogo.src = logo
+const HERO_IMAGE = "/hero/hero-mustard1.png"
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -31,10 +27,14 @@ if (loader) {
     document.readyState !== "loading"
       ? Promise.resolve()
       : new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }))
-  const minimumDisplayTime = new Promise((resolve) => window.setTimeout(resolve, 400))
+  const minimumDisplayTime = new Promise((resolve) => window.setTimeout(resolve, 500))
 
-  Promise.all([domReady, preloadImage(HERO_IMAGE), minimumDisplayTime]).then(() => {
+  Promise.all([
+    domReady,
+    preloadImage(HERO_IMAGE),
+    minimumDisplayTime,
+  ]).then(() => {
     loader.classList.add("is-hidden")
-    window.setTimeout(() => loader.remove(), 650)
+    window.setTimeout(() => loader.remove(), 1720)
   })
 }
