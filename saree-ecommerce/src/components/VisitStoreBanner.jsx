@@ -17,14 +17,14 @@ export default function VisitStoreBanner() {
           Visit our store
         </Link>
       </div>
-      <div className="w-full overflow-hidden">
+      <div className="w-full">
         <img
-          src="/hero/visit-store-showroom.avif"
+          src="/hero/visit-store-showroom.png"
           alt="Karnan Pattu Centre showroom with folded silks and hanging sarees"
           decoding="async"
           width={1024}
           height={205}
-          className="h-[120px] w-full object-cover object-center sm:h-[145px] md:h-[165px] lg:h-[185px]"
+          className="block h-auto w-full max-w-none"
         />
       </div>
     </section>

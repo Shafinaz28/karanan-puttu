@@ -149,6 +149,14 @@ export default function Home() {
     }, 1200)
   }
 
+  function slideShopLookPrev() {
+    setShopLookIndex((current) => (current <= 0 ? shopLookMaxIndex : current - 1))
+  }
+
+  function slideShopLookNext() {
+    setShopLookIndex((current) => (current >= shopLookMaxIndex ? 0 : current + 1))
+  }
+
   return (
     <>
       <section className="relative h-[92vh] w-full max-w-full overflow-hidden md:h-screen">
@@ -373,15 +381,36 @@ export default function Home() {
 
       <section className="bg-[#faf6f0] px-4 py-12 md:py-20">
         <div className="mx-auto max-w-6xl">
-          <div data-slide="left" className="max-w-xl">
-            <h2 className="font-display text-3xl text-primary sm:text-4xl md:text-5xl">Shop by look</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-ink/65">
-              Explore our curated selection of authentic silk drapes, crafted with timeless traditional weaves and
-              fine zari craftsmanship.
-            </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div data-slide="left" className="max-w-xl">
+              <h2 className="font-display text-3xl text-primary sm:text-4xl md:text-5xl">Shop by look</h2>
+              <p className="mt-3 max-w-md text-sm leading-6 text-ink/65">
+                Explore our curated selection of authentic silk drapes, crafted with timeless traditional weaves and
+                fine zari craftsmanship.
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2 self-end sm:mb-1">
+              <button
+                type="button"
+                onClick={slideShopLookPrev}
+                aria-label="Previous looks"
+                className="motion-btn flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 bg-white text-primary transition hover:border-primary hover:bg-primary hover:text-cream"
+              >
+                <ShopLookArrow direction="prev" />
+              </button>
+              <button
+                type="button"
+                onClick={slideShopLookNext}
+                aria-label="Next looks"
+                className="motion-btn flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 bg-white text-primary transition hover:border-primary hover:bg-primary hover:text-cream"
+              >
+                <ShopLookArrow direction="next" />
+              </button>
+            </div>
           </div>
 
-          <div className="mt-6 overflow-hidden md:mt-10">
+          <div className="relative mt-6 md:mt-10">
+            <div className="overflow-hidden">
             <ul
               className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${shopLookIndex * shopLookSlideWidth}%)` }}
@@ -409,6 +438,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -418,5 +448,13 @@ export default function Home() {
       <GoogleReviewsSection />
 
     </>
+  )
+}
+
+function ShopLookArrow({ direction }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      {direction === "prev" ? <path d="M15 6l-6 6 6 6" /> : <path d="M9 6l6 6-6 6" />}
+    </svg>
   )
 }

@@ -442,6 +442,25 @@ h4 {
   animation: shop-filter-slide-out 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+.mobile-nav-backdrop {
+  opacity: 0;
+  animation: shop-filter-fade-in 0.28s ease-out forwards;
+}
+
+.mobile-nav-panel {
+  transform: translateX(-100%);
+  animation: shop-filter-slide-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-backdrop,
+  .mobile-nav-panel {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes shop-filter-fade-in {
   from {
     opacity: 0;

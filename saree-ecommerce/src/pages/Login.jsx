@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { supabase, supabaseConfigured } from "../lib/supabase"
 
 const storageKey = "karanan-user"
@@ -33,6 +33,7 @@ export function clearUser() {
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [isSignUp, setIsSignUp] = useState(false)
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
@@ -40,6 +41,10 @@ export default function Login() {
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
   const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    if (location.state?.signUp) setIsSignUp(true)
+  }, [location.state?.signUp])
 
   async function submit(event) {
     event.preventDefault()

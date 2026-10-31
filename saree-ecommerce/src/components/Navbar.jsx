@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
+import MobileNavDrawer from "./MobileNavDrawer"
 import logo from "../assets/images/kpc-logo.avif"
 
 export default function Navbar() {
@@ -8,6 +9,7 @@ export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [drawerSearchOpen, setDrawerSearchOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [searchOpen, setSearchOpen] = useState(false)
   const [pinned, setPinned] = useState(false)
@@ -29,7 +31,8 @@ export default function Navbar() {
       const scrollingUp = y < lastScrollY.current
       lastScrollY.current = y
       setBarHeight(height)
-      setPinned(y > height && scrollingUp)
+      const desktop = window.matchMedia("(min-width: 1024px)").matches
+      setPinned(desktop && y > height && scrollingUp)
     }
 
     measure()
@@ -44,6 +47,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setMenuOpen(false)
+    setDrawerSearchOpen(false)
     setQuery("")
   }, [location.pathname, location.search])
 
@@ -59,6 +63,7 @@ export default function Navbar() {
     const text = query.trim()
     navigate(text ? `/shop?search=${encodeURIComponent(text)}` : "/shop")
     setMenuOpen(false)
+    setDrawerSearchOpen(false)
   }
 
   return (
@@ -66,7 +71,7 @@ export default function Navbar() {
       {pinned && <div style={{ height: barHeight }} aria-hidden="true" />}
       <header
         ref={headerRef}
-        className={pinned ? "fixed inset-x-0 top-0 z-50 w-full overflow-x-clip text-ink shadow-md" : "relative z-50 w-full overflow-x-clip text-ink"}
+        className={`${pinned ? "fixed inset-x-0 top-0 shadow-md" : "relative"} z-[80] w-full text-ink ${menuOpen ? "overflow-visible" : "overflow-x-clip"}`}
       >
       <div className="hidden items-center justify-between gap-4 bg-primary px-4 py-2 text-[11px] whitespace-nowrap text-[#f6efe4] lg:flex lg:px-12 lg:text-[12px]">
         <div className="flex items-center gap-5 lg:gap-7">
@@ -149,15 +154,12 @@ export default function Navbar() {
               {count}
             </span>
           </Link>
-          <Link to="/login" aria-label="Login" className="p-2.5 lg:hidden">
-            <UserIcon />
-          </Link>
           <button
             type="button"
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 lg:hidden"
             aria-expanded={menuOpen}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((open) => !open)}
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
           >
             <span className="block h-px w-4 bg-primary" />
             <span className="block h-px w-4 bg-primary" />
@@ -182,33 +184,17 @@ export default function Navbar() {
         </form>
       )}
 
-      {menuOpen && (
-        <div className="max-h-[75vh] overflow-y-auto border-t border-ink/10 bg-white px-4 py-3 lg:hidden">
-          <form onSubmit={searchSarees} className="mb-3 flex items-center rounded-full border border-ink/15 bg-[#f7f4ef] px-4">
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search sarees"
-              aria-label="Search sarees"
-              className="w-full bg-transparent py-2.5 text-sm outline-none"
-            />
-            <button type="submit" aria-label="Search">
-              <SearchIcon />
-            </button>
-          </form>
-          <Link to="/" className="block border-b border-ink/10 py-3 text-sm">Home</Link>
-          <Link to="/about" className="block border-b border-ink/10 py-3 text-sm">Our Story</Link>
-          <Link to="/shop" className="block border-b border-ink/10 py-3 text-sm">Shop</Link>
-          <Link to="/old-silk" className="block border-b border-ink/10 py-3 text-sm">Old silk</Link>
-          <Link to="/blog" className="block border-b border-ink/10 py-3 text-sm">Blog</Link>
-          <Link to="/contact" className="block border-b border-ink/10 py-3 text-sm">Contact</Link>
-          <Link to="/locations" className="block border-b border-ink/10 py-3 text-sm">Locate Us</Link>
-          <Link to="/cart" className="block border-b border-ink/10 py-3 text-sm">Cart ({count})</Link>
-          <Link to="/login" className="block border-b border-ink/10 py-3 text-sm">Login</Link>
-          <Link to="/account" className="block py-3 text-sm">Account</Link>
-        </div>
-      )}
     </header>
+      <MobileNavDrawer
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        count={count}
+        query={query}
+        setQuery={setQuery}
+        onSearch={searchSarees}
+        drawerSearchOpen={drawerSearchOpen}
+        setDrawerSearchOpen={setDrawerSearchOpen}
+      />
     </>
   )
 }
