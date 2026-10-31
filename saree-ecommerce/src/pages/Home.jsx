@@ -184,7 +184,7 @@ export default function Home() {
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.55)_40%,rgba(28,8,12,0.2)_65%,transparent_88%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.88)_0%,rgba(28,8,12,0.62)_38%,rgba(28,8,12,0.25)_52%,transparent_70%)]"
           aria-hidden
         />
-        <div className="absolute inset-0 z-10 flex items-end px-4 pb-28 md:items-center md:pb-0 lg:px-8">
+        <div className="absolute inset-0 z-10 flex items-end px-4 pb-36 md:items-center md:pb-0 lg:px-8">
           <div className="mx-auto w-full min-w-0 max-w-7xl">
             <div
               data-slide="left"
@@ -198,10 +198,10 @@ export default function Home() {
                   </span>
                 ))}
               </h1>
-              <p className="mt-5 max-w-md text-sm font-medium leading-7 text-[#f6efe4] md:text-base">
+              <p className="mt-5 mb-1 max-w-md text-sm font-medium leading-7 text-[#f6efe4] md:mb-0 md:text-base">
                 {mainHero.body}
               </p>
-              <div className="mt-6 flex w-full max-w-md flex-col gap-2 md:mt-8 md:gap-3 md:flex-row md:flex-wrap">
+              <div className="mt-8 flex w-full max-w-md flex-col gap-2 md:mt-8 md:gap-3 md:flex-row md:flex-wrap">
                 <Link
                   to={mainHero.primaryCta.to}
                   className="motion-btn motion-gold inline-flex w-full max-w-[15.5rem] items-center justify-center gap-2 bg-secondary px-4 py-2 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase md:w-auto md:max-w-none md:gap-3 md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
@@ -288,37 +288,37 @@ export default function Home() {
             className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-3 pt-1 text-center text-[#210a0c] sm:px-6 sm:pt-0"
           >
             <div className="pointer-events-auto mx-auto flex w-full max-w-sm flex-col items-center sm:max-w-md md:max-w-lg md:-translate-y-0.5">
-              <p className="font-display text-[10px] italic text-[#b8860b] xs:text-xs sm:text-lg md:text-xl">
+              <p className="font-display text-sm italic text-[#b8860b] sm:text-xl md:text-2xl">
                 Silk for every occasion
               </p>
 
-              <div className="my-0.5 flex w-16 items-center justify-center gap-1 xs:w-20 sm:my-1 sm:w-28">
+              <div className="my-1 flex w-20 items-center justify-center gap-1 sm:my-1.5 sm:w-28">
                 <div className="h-px w-full bg-[#b8860b]/60" />
-                <span className="text-[7px] text-[#b8860b] sm:text-[9px]">❖</span>
+                <span className="text-[8px] text-[#b8860b] sm:text-[10px]">❖</span>
                 <div className="h-px w-full bg-[#b8860b]/60" />
               </div>
 
-              <p className="max-w-[220px] text-[9px] leading-snug text-[#3d1a1d]/90 xs:text-[10px] sm:max-w-none sm:text-xs sm:leading-relaxed">
+              <p className="max-w-[260px] text-[11px] leading-snug text-[#3d1a1d]/90 sm:max-w-none sm:text-sm sm:leading-relaxed md:text-base">
                 Pure silk elegance,<br className="sm:hidden" /> ready for every occasion.
               </p>
 
-              <div className="group relative mt-1 flex items-center justify-center gap-1 tracking-widest text-[#210a0c] sm:mt-2 sm:gap-2">
+              <div className="group relative mt-1.5 flex items-center justify-center gap-1.5 tracking-widest text-[#210a0c] sm:mt-2.5 sm:gap-2">
                 <div className="absolute -inset-x-3 -inset-y-0.5 -z-10 rounded-full bg-[#daa520]/25 blur-md transition-all duration-500 group-hover:bg-[#daa520]/40" />
-                <span className="text-[8px] font-bold uppercase tracking-[0.16em] text-[#3d1a1d] sm:text-xs">
+                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#3d1a1d] sm:text-sm">
                   Flat
                 </span>
-                <span className="animate-pulse font-display text-xl font-black text-[#b8860b] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] sm:text-4xl md:text-[2.75rem]">
+                <span className="animate-pulse font-display text-2xl font-black text-[#b8860b] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] sm:text-4xl md:text-5xl">
                   50%
                 </span>
-                <span className="text-[8px] font-bold uppercase tracking-[0.16em] text-[#3d1a1d] sm:text-xs">
+                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#3d1a1d] sm:text-sm">
                   Off
                 </span>
               </div>
 
-              <div className="mt-1.5 sm:mt-2.5">
+              <div className="mt-2 sm:mt-3">
                 <Link
                   to="/shop"
-                  className="motion-btn motion-fill inline-flex transform items-center justify-center bg-[#b8860b] px-3.5 py-1 text-[8px] font-bold tracking-[0.14em] text-white uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#d4af37] hover:shadow-lg active:scale-95 sm:px-6 sm:py-2 sm:text-[10px]"
+                  className="motion-btn motion-fill inline-flex transform items-center justify-center bg-[#b8860b] px-4 py-1.5 text-[10px] font-bold tracking-[0.14em] text-white uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#d4af37] hover:shadow-lg active:scale-95 sm:px-6 sm:py-2 sm:text-xs md:text-sm"
                   style={{ borderRadius: 0 }}
                 >
                   Shop the look
