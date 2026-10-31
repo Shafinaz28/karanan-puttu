@@ -1,13 +1,24 @@
 /** Map a Supabase row to the shape used across the shop UI. */
 export function mapDbProduct(row) {
+  const price = Number(row.price) || 2799
+  const shopCategory =
+    row.shop_category ||
+    (/tissue/i.test(`${row.fabric || ""} ${row.category || ""}`) ? "tissue" : null) ||
+    (row.party ? "party" : null) ||
+    (row.sale_group === "traditional" ? "traditional" : "soft")
+  const compareAt =
+    Number(row.compare_at) ||
+    (shopCategory === "tissue" || price >= 7000 ? 15999 : 5599)
+
   return {
     id: row.id,
     name: row.name,
     category: row.category,
-    price: [2800, 5599].includes(Number(row.price)) ? 2799 : Number(row.price),
-    compareAt: 5599,
+    shopCategory,
+    price: [2800, 5599].includes(price) ? 2799 : price,
+    compareAt,
     badge: row.badge || null,
-    saleGroup: row.sale_group || "soft",
+    saleGroup: row.sale_group || shopCategory,
     line: row.line || "",
     featured: Boolean(row.featured),
     party: Boolean(row.party),

@@ -140,14 +140,17 @@ export default function Navbar() {
           <button type="button" aria-label="Search" className="hidden p-2.5 lg:block" onClick={() => setSearchOpen((open) => !open)}>
             <SearchIcon />
           </button>
-          <Link to="/login" aria-label="Login" className="p-2.5">
+          <Link to="/login" aria-label="Login" className="hidden p-2.5 lg:block">
             <UserIcon />
           </Link>
-          <Link to="/cart" aria-label={`Cart, ${count} items`} className="relative p-2.5">
+          <Link to="/cart" aria-label={`Cart, ${count} items`} className="relative hidden p-2.5 lg:block">
             <CartIcon />
             <span className="absolute top-0 right-0 flex h-[15px] w-[15px] items-center justify-center rounded-full bg-primary text-[9px] text-[#f6efe4]">
               {count}
             </span>
+          </Link>
+          <Link to="/login" aria-label="Login" className="p-2.5 lg:hidden">
+            <UserIcon />
           </Link>
           <button
             type="button"

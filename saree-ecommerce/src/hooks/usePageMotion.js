@@ -144,13 +144,13 @@ export default function usePageMotion(pathname) {
       const footer = document.querySelector("footer")
       if (footer) {
         gsap.from(footer, {
-          y: 24,
-          autoAlpha: 0,
+          y: 20,
           duration: 0.7,
           ease: "power2.out",
+          clearProps: "transform",
           scrollTrigger: {
             trigger: footer,
-            start: "top 94%",
+            start: "top bottom",
             once: true,
           },
         })

@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom"
 import Layout from "./components/Layout"
 import { CartProvider } from "./context/CartContext"
+import { MobileShopDrawerProvider } from "./context/MobileShopDrawerContext"
 import { ProductsProvider } from "./context/ProductsContext"
 import About from "./pages/About"
 import Account from "./pages/Account"
@@ -34,26 +35,28 @@ function AppRoutes() {
             <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         ) : (
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/locations" element={<Locations />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/track" element={<Track />} />
-              <Route path="/old-silk" element={<OldSilk />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/account" element={<Account />} />
-            </Routes>
-          </Layout>
+          <MobileShopDrawerProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/locations" element={<Locations />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/track" element={<Track />} />
+                <Route path="/old-silk" element={<OldSilk />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/account" element={<Account />} />
+              </Routes>
+            </Layout>
+          </MobileShopDrawerProvider>
         )}
       </CartProvider>
     </ProductsProvider>

@@ -2,16 +2,16 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const slides = [
-  { image: "/sarees/worn/worn-mustard-rose.jpg", to: "/product/8" },
-  { image: "/sarees/worn/worn-fuchsia.jpg", to: "/product/3" },
-  { image: "/sarees/worn/worn-purple.jpg", to: "/product/1" },
-  { image: "/sarees/worn/worn-magenta-check.jpg", to: "/product/4" },
-  { image: "/sarees/worn/worn-crimson.jpg", to: "/product/2" },
-  { image: "/sarees/worn/worn-green-plum.jpg", to: "/product/10" },
-  { image: "/sarees/worn/worn-lime-pink.jpg", to: "/product/7" },
-  { image: "/sarees/worn/worn-mustard-coral.jpg", to: "/product/5" },
-  { image: "/sarees/worn/worn-mustard-teal.jpg", to: "/product/11" },
-  { image: "/sarees/worn/worn-plum-leaf.jpg", to: "/product/9" },
+  { image: "/sarees/worn/worn-mustard-rose.avif", to: "/product/8" },
+  { image: "/sarees/worn/worn-fuchsia.avif", to: "/product/3" },
+  { image: "/sarees/worn/worn-purple.avif", to: "/product/1" },
+  { image: "/sarees/worn/worn-magenta-check.avif", to: "/product/4" },
+  { image: "/sarees/worn/worn-crimson.avif", to: "/product/2" },
+  { image: "/sarees/worn/worn-green-plum.avif", to: "/product/10" },
+  { image: "/sarees/worn/worn-lime-pink.avif", to: "/product/7" },
+  { image: "/sarees/worn/worn-mustard-coral.avif", to: "/product/5" },
+  { image: "/sarees/worn/worn-mustard-teal.avif", to: "/product/11" },
+  { image: "/sarees/worn/worn-plum-leaf.avif", to: "/product/9" },
 ]
 
 function wrapOffset(index, active, length) {

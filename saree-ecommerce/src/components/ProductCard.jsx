@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import ProductImagePanel from "./ProductImagePanel"
 import { useCart } from "../context/CartContext"
 import { formatPrice } from "../data/products"
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart()
   const [added, setAdded] = useState(false)
-  const off =
-    product.offer ||
-    (product.compareAt > product.price
-      ? `${Math.round((1 - product.price / product.compareAt) * 100)}% off`
-      : null)
   const code = `KN${String(product.id).padStart(4, "0")}`
 
   useEffect(() => {
@@ -20,21 +16,20 @@ export default function ProductCard({ product }) {
   }, [added])
 
   return (
-    <article className="group flex h-full flex-col">
-      <Link to={`/product/${product.id}`} className="block">
-        <div className="arch-photo">
-          <img src={product.image} alt={product.name} decoding="async" />
-          {off && (
-            <span className="absolute top-3 left-3 z-10 bg-[#f7f1e8] px-2 py-1 text-[10px] tracking-wide text-primary">
-              {off}
-            </span>
-          )}
-          <span className="quick-view">View saree</span>
-        </div>
-      </Link>
+    <article className="group flex h-full min-w-0 flex-col">
+      <ProductImagePanel
+        product={product}
+        onQuickAdd={() => {
+          addToCart(product.id)
+          setAdded(true)
+        }}
+        onAddedToCart={() => setAdded(true)}
+      />
       <div className="flex flex-1 flex-col pt-3">
-        <h3 className="line-clamp-2 min-h-10 text-sm leading-5 font-medium text-primary">{product.name}</h3>
-        <p className="mt-1 truncate text-[11px] text-ink/45">
+        <h3 className="line-clamp-2 min-h-[2.5rem] text-xs leading-snug font-medium text-primary sm:min-h-10 sm:text-sm sm:leading-5">
+          {product.name}
+        </h3>
+        <p className="mt-1 truncate text-[10px] text-ink/45 sm:text-[11px]">
           {code} | {product.category}
         </p>
         <p className="mt-1 text-sm">
@@ -52,7 +47,7 @@ export default function ProductCard({ product }) {
               addToCart(product.id)
               setAdded(true)
             }}
-            className="motion-btn motion-line w-full border border-primary py-2 text-[10px] tracking-[0.12em] text-primary uppercase"
+            className="motion-btn motion-line w-full max-w-full border border-primary px-1 py-2 text-[9px] tracking-[0.08em] text-primary uppercase sm:px-2 sm:text-[10px] sm:tracking-[0.12em]"
           >
             {added ? "Added" : "Add to cart"}
           </button>

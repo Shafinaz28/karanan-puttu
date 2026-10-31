@@ -78,64 +78,65 @@ export default function Locations() {
             <div className="mx-auto mt-4 h-[1px] w-12 bg-[#4a0e17]/40" />
           </div>
 
-          {/* 4 Stores Grid */}
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
-            {stores.map((store, index) => (
-              <div 
-                key={store.name}
-                className="flex flex-col justify-between border border-[#4a0e17]/20 bg-[#4a0e17]/[0.03] p-6 shadow-sm transition-all duration-300 hover:border-[#4a0e17]/40"
-                data-slide={index % 2 === 0 ? "left" : "right"}
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-display text-xl font-bold text-[#4a0e17]">
-                      {store.name}
-                    </h3>
-                    <span className="text-xs tracking-widest text-[#4a0e17]/70 uppercase">
-                      Location 0{index + 1}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-[#4a0e17]/90">
-                    {store.address}
-                  </p>
-                  <p className="mt-1 text-xs font-medium text-[#4a0e17]">
-                    Phone: {store.phone}
-                  </p>
-                </div>
+         {/* 4 Stores Grid */}
+<div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
+  {stores.map((store, index) => (
+    <div 
+      key={store.name}
+      /* CHANGED: Switched background to light cream/pink and softened the border. Re-styled hover and added a subtle shadow. */
+      className="flex flex-col justify-between border border-[#4a0e17]/10 bg-[#fdf8f4] p-6 shadow-md transition-all duration-300 hover:border-[#4a0e17]/30 hover:shadow-lg"
+      data-slide={index % 2 === 0 ? "left" : "right"}
+    >
+      <div>
+        <div className="flex items-center justify-between">
+          <h3 className="font-display text-xl font-bold text-[#4a0e17]">
+            {store.name}
+          </h3>
+          <span className="text-xs tracking-widest text-[#4a0e17]/70 uppercase">
+            Location 0{index + 1}
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-[#4a0e17]/90">
+          {store.address}
+        </p>
+        <p className="mt-1 text-xs font-medium text-[#4a0e17]">
+          Phone: {store.phone}
+        </p>
+      </div>
 
-                {/* Map Container with Open in Maps Button */}
-                <div className="mt-6 flex flex-col gap-3">
-                  {/* Open in Maps Action Button */}
-                  <div>
-                    <a 
-                      href="https://maps.google.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-[#4a0e17] px-3 py-1.5 text-[11px] font-semibold tracking-wider text-[#faf6f0] uppercase shadow-sm transition-colors duration-300 hover:bg-[#6b1a26]"
-                    >
-                      Open in Maps 
-                      <span aria-hidden="true" className="text-xs">↗</span>
-                    </a>
-                  </div>
+      {/* Map Container with Open in Maps Button */}
+      <div className="mt-6 flex flex-col gap-3">
+        {/* Open in Maps Action Button */}
+        <div>
+          <a 
+            href="https://maps.google.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 bg-[#4a0e17] px-3 py-1.5 text-[11px] font-semibold tracking-wider text-[#faf6f0] uppercase shadow-sm transition-colors duration-300 hover:bg-[#6b1a26]"
+          >
+            Open in Maps 
+            <span aria-hidden="true" className="text-xs">↗</span>
+          </a>
+        </div>
 
-                  {/* Embedded Map / Street View per Store */}
-                  <div className="overflow-hidden border border-[#4a0e17]/20">
-                    <div className="relative aspect-video w-full h-[220px]">
-                      <iframe 
-                        src={store.mapSrc} 
-                        className="absolute inset-0 h-full w-full border-0" 
-                        style={{ border: 0 }}
-                        allowFullScreen="" 
-                        loading="lazy" 
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        title={`Karnan Pattu Centre - ${store.name}`}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Embedded Map / Street View per Store */}
+        <div className="overflow-hidden border border-[#4a0e17]/20">
+          <div className="relative aspect-video w-full h-[220px]">
+            <iframe 
+              src={store.mapSrc} 
+              className="absolute inset-0 h-full w-full border-0" 
+              style={{ border: 0 }}
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="strict-origin-when-cross-origin"
+              title={`Karnan Pattu Centre - ${store.name}`}
+            />
           </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
         </div>
       </section>
     </>

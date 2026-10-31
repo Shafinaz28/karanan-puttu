@@ -24,7 +24,7 @@ const emptyForm = {
   length: "6.3 metres",
   color: "",
   description: "",
-  image: "/sarees/worn/worn-purple.jpg",
+  image: "/sarees/worn/worn-purple.avif",
   featured: false,
   party: false,
   active: true,

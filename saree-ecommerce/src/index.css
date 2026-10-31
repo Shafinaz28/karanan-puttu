@@ -135,8 +135,116 @@ h4 {
   transition: transform 0.7s;
 }
 
-.group:hover .arch-photo img {
-  transform: scale(1.04);
+@media (hover: hover) {
+  .group:hover .arch-photo img,
+  .product-media.group:hover .arch-photo img,
+  .group:hover .product-media .arch-photo img {
+    transform: scale(1.08);
+  }
+}
+
+.product-media-actions {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+@media (hover: none), (max-width: 767px) {
+  .product-media-actions {
+    opacity: 1;
+  }
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  .group:hover .product-media-actions,
+  .group:focus-within .product-media-actions,
+  .product-media:focus-within .product-media-actions {
+    opacity: 1;
+  }
+}
+
+.product-media-icons {
+  pointer-events: auto;
+  position: absolute;
+  top: 3.25rem;
+  right: 0.65rem;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.product-media-icon-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.product-media-tooltip {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.5rem);
+  z-index: 5;
+  transform: translateY(-50%);
+  border-radius: 0.35rem;
+  background: #2c1814;
+  padding: 0.35rem 0.55rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #f7f1e8;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 12px rgb(44 24 20 / 20%);
+}
+
+.product-media-icon-wrap:hover .product-media-tooltip,
+.product-media-icon-wrap:focus-within .product-media-tooltip {
+  opacity: 1;
+}
+
+.product-media-quick-add {
+  pointer-events: auto;
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  z-index: 5;
+  width: calc(100% - 1.5rem);
+  max-width: 13.5rem;
+  transform: translateX(-50%);
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.55rem 0.85rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #2c1814;
+  box-shadow: 0 8px 24px rgb(44 24 20 / 12%);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (max-width: 767px) {
+  .product-media-quick-add {
+    bottom: 0.4rem;
+    width: calc(100% - 1rem);
+    max-width: none;
+    font-size: 10px;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+.product-media-quick-add:hover {
+  transform: translateX(-50%) scale(1.02);
+  box-shadow: 0 10px 28px rgb(44 24 20 / 18%);
+}
+
+.product-media .arch-photo img {
+  transition: transform 0.55s ease;
 }
 
 .quick-view {
@@ -316,7 +424,76 @@ h4 {
   }
 }
 
+.shop-filter-backdrop {
+  opacity: 0;
+  animation: shop-filter-fade-in 0.28s ease-out forwards;
+}
+
+.shop-filter-backdrop.is-closing {
+  animation: shop-filter-fade-out 0.22s ease-in forwards;
+}
+
+.shop-filter-panel {
+  transform: translateX(-100%);
+  animation: shop-filter-slide-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.shop-filter-panel.is-closing {
+  animation: shop-filter-slide-out 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes shop-filter-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shop-filter-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes shop-filter-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes shop-filter-slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .shop-filter-backdrop,
+  .shop-filter-panel {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .shop-filter-backdrop.is-closing {
+    opacity: 0;
+  }
+
+  .shop-filter-panel.is-closing {
+    transform: translateX(-100%);
+  }
+
   .coverflow-card {
     transition: none;
   }
@@ -337,8 +514,8 @@ h4 {
   .motion-card:hover .motion-zoom,
   .motion-circle:hover,
   .group:hover .arch-photo img,
-  .group:hover .quick-view,
-  .collection-tile:hover img {
+  .group:hover .product-media .arch-photo img,
+  .product-media-quick-add:hover {
     transform: none;
   }
 

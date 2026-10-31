@@ -4,32 +4,32 @@ const bought = [
   {
     name: "kanjipuram",
     text: "Worn silk is welcome. The body and the border are checked before a price is named.",
-    image: "/sarees/worn/old-kanchipuram-silk.png",
+    image: "/sarees/worn/old-kanchipuram-silk.avif",
   },
   {
     name: "mysore silk",
     text: "Faded or still bright worn silk. The border is part of the rate.",
-    image: "/sarees/worn/old-mysore-silk.png",
+    image: "/sarees/worn/old-mysore-silk.avif",
   },
   {
     name: "Nalli",
     text: "Torn borders and split pallus are taken in. The weave is looked at in daylight.",
-    image: "/sarees/worn/old-nalli-silk.png",
+    image: "/sarees/worn/old-nalli-silk.avif",
   },
   {
     name: "tissue",
     text: "Worn silk folded away or never worn, including pieces with tired zari.",
-    image: "/sarees/worn/old-tissue-silk.png",
+    image: "/sarees/worn/old-tissue-silk.avif",
   },
   {
     name: "Banarsee",
     text: "Older worn silk drapes are checked for the handwork that is still on the cloth.",
-    image: "/sarees/worn/old-banarasi-silk.png",
+    image: "/sarees/worn/old-banarasi-silk.avif",
   },
   {
     name: "Soft Silk",
     text: "Plain worn silk, light or heavy, folded away or already worn.",
-    image: "/sarees/worn/old-soft-silk.png",
+    image: "/sarees/worn/old-soft-silk.avif",
   },
 ];
 
@@ -76,7 +76,7 @@ export default function OldSilk() {
 
       {/* Main Heading */}
       <h1 className="mt-4 font-display text-5xl font-bold leading-tight text-[#faf6f0] md:text-7xl">
-        Soft silks we buy
+         We Buy All Kind Of Zari & Soft Silk Sarees In Any Condition
       </h1>
 
       {/* Divider Accent */}

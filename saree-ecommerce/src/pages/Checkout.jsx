@@ -1,11 +1,13 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { useProducts } from "../context/ProductsContext"
-import { formatPrice } from "../data/products"
+import { formatPrice, productDisplayTitle } from "../data/products"
 import { saveOrder, updateOrderStatus } from "../lib/orders"
 import { supabase } from "../lib/supabase"
 import OrderConfirmed from "../components/OrderConfirmed"
+
+const SHIPPING_FEE = 199
 
 const states = [
   "Karnataka",
@@ -22,6 +24,7 @@ const states = [
 
 const emptyForm = {
   email: "",
+  marketing: true,
   firstName: "",
   lastName: "",
   address: "",
@@ -30,11 +33,28 @@ const emptyForm = {
   state: "Karnataka",
   pincode: "",
   phone: "",
+  saveInfo: false,
   billingSame: true,
   billAddress: "",
   billCity: "",
   billState: "Karnataka",
   billPincode: "",
+}
+
+const inputClass =
+  "w-full rounded-lg border border-black/15 bg-white px-3 py-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20"
+
+function formatDetailed(amount) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
+}
+
+function lineTitle(product) {
+  return productDisplayTitle(product, { short: true })
 }
 
 export default function Checkout() {
@@ -43,7 +63,6 @@ export default function Checkout() {
   const { items, clearCart } = useCart()
   const { products } = useProducts()
   const [buyQty] = useState(location.state?.qty || 1)
-  const [payment, setPayment] = useState("Cash on delivery")
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState("")
   const [order, setOrder] = useState(null)
@@ -52,25 +71,32 @@ export default function Checkout() {
   const [appliedCode, setAppliedCode] = useState("")
   const [couponMessage, setCouponMessage] = useState("")
   const [applyingCode, setApplyingCode] = useState(false)
-  const [paying, setPaying] = useState(false)
-  const [payMode, setPayMode] = useState("upi")
-  const [upi, setUpi] = useState("")
-  const [card, setCard] = useState({ name: "", number: "", expiry: "", cvv: "" })
-  const [payError, setPayError] = useState("")
 
   const lines = buyNowId
-    ? [{ id: buyNowId, qty: buyQty, product: products.find((product) => product.id === Number(buyNowId)) }].filter((line) => line.product)
+    ? [{ id: buyNowId, qty: buyQty, product: products.find((product) => product.id === Number(buyNowId)) }].filter(
+        (line) => line.product,
+      )
     : items
-      .map((item) => ({
-        ...item,
-        product: products.find((product) => product.id === item.id),
-      }))
-      .filter((line) => line.product)
+        .map((item) => ({
+          ...item,
+          product: products.find((product) => product.id === item.id),
+        }))
+        .filter((line) => line.product)
 
   const subtotal = lines.reduce((sum, line) => sum + line.product.price * line.qty, 0)
-  const shipping = 0
+  const addressComplete = useMemo(() => {
+    return (
+      form.address.trim().length > 0 &&
+      form.city.trim().length > 0 &&
+      form.state.trim().length > 0 &&
+      /^\d{6}$/.test(form.pincode.trim())
+    )
+  }, [form.address, form.city, form.state, form.pincode])
+
+  const shipping = lines.length && addressComplete ? SHIPPING_FEE : 0
   const total = Math.max(0, subtotal - discount + shipping)
   const count = lines.reduce((sum, line) => sum + line.qty, 0)
+  const taxIncluded = total > 0 ? Math.round(((total * 18) / 118) * 100) / 100 : 0
 
   function updateField(event) {
     const { name, value, type, checked } = event.target
@@ -122,9 +148,8 @@ export default function Checkout() {
       }
 
       const value = Number(coupon.discount_value)
-      const amount = coupon.discount_type === "percent"
-        ? Math.round((subtotal * value) / 100)
-        : Math.round(value)
+      const amount =
+        coupon.discount_type === "percent" ? Math.round((subtotal * value) / 100) : Math.round(value)
       setDiscount(Math.min(subtotal, amount))
       setAppliedCode(coupon.code)
       setCouponMessage(`${coupon.code} applied successfully.`)
@@ -137,49 +162,58 @@ export default function Checkout() {
     }
   }
 
-  function placeOrder(event) {
-    event.preventDefault()
-    const required = ["email", "firstName", "lastName", "address", "city", "state", "pincode", "phone"]
-    if (required.some((key) => String(form[key]).trim() === "")) {
-      setError("Fill in the contact and delivery fields.")
-      return
+  function validateContactAndDelivery() {
+    const contact = form.email.trim()
+    if (!contact) {
+      setError("Enter your email or mobile phone number.")
+      return false
     }
-    if (!form.email.includes("@")) {
-      setError("Enter a valid email.")
-      return
+    const isEmail = contact.includes("@")
+    if (isEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) {
+      setError("Enter a valid email address.")
+      return false
+    }
+    if (!isEmail && contact.replace(/\D/g, "").length < 10) {
+      setError("Enter a valid 10-digit mobile number.")
+      return false
+    }
+    if (!form.lastName.trim()) {
+      setError("Enter your last name.")
+      return false
+    }
+    if (!form.address.trim() || !form.city.trim() || !/^\d{6}$/.test(form.pincode.trim())) {
+      setError("Complete your delivery address.")
+      return false
     }
     if (form.phone.replace(/\D/g, "").length < 10) {
       setError("Enter a 10-digit phone number.")
-      return
+      return false
     }
-    if (!/^\d{6}$/.test(form.pincode.trim())) {
-      setError("Enter a 6-digit PIN code.")
-      return
-    }
-    if (!form.billingSame && (!form.billAddress.trim() || !form.billCity.trim() || !/^\d{6}$/.test(form.billPincode.trim()))) {
+    if (
+      !form.billingSame &&
+      (!form.billAddress.trim() || !form.billCity.trim() || !/^\d{6}$/.test(form.billPincode.trim()))
+    ) {
       setError("Fill in the billing address.")
-      return
+      return false
     }
-    setError("")
-    if (payment === "Pay online") {
-      setPaying(true)
-      setPayError("")
-      return
+    if (!addressComplete) {
+      setError("Enter your shipping address to continue.")
+      return false
     }
-    finishOrder("Cash on delivery")
+    return true
   }
 
-  function finishOrder(method) {
+  function finishOrder() {
     const address = [form.address, form.apartment].map((part) => part.trim()).filter(Boolean).join(", ")
     const saved = saveOrder({
-      customer: `${form.firstName.trim()} ${form.lastName.trim()}`,
+      customer: `${form.firstName.trim()} ${form.lastName.trim()}`.trim() || form.lastName.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
       address,
       city: form.city.trim(),
       state: form.state,
       pincode: form.pincode.trim(),
-      payment: method,
+      payment: "Pay online",
       amount: total,
       couponCode: appliedCode,
       discountAmount: discount,
@@ -192,28 +226,14 @@ export default function Checkout() {
       })),
     })
     if (!buyNowId) clearCart()
-    setPaying(false)
     setOrder(saved)
   }
 
-  function finishPayment(event) {
+  function payNow(event) {
     event.preventDefault()
-    if (payMode === "upi") {
-      if (!/^[\w.-]{2,}@[a-zA-Z]{2,}$/.test(upi.trim())) {
-        setPayError("Enter a UPI ID such as name@oksbi.")
-        return
-      }
-    } else {
-      const digits = card.number.replace(/\D/g, "")
-      if (!card.name.trim() || digits.length < 16 || !/^\d{2}\/\d{2}$/.test(card.expiry) || card.cvv.replace(/\D/g, "").length < 3) {
-        setPayError("Enter the card name, 16-digit number, expiry, and CVV.")
-        return
-      }
-    }
-    setPayError("")
-    setUpi("")
-    setCard({ name: "", number: "", expiry: "", cvv: "" })
-    finishOrder("Pay online")
+    if (!validateContactAndDelivery()) return
+    setError("")
+    finishOrder()
   }
 
   if (order) {
@@ -229,247 +249,299 @@ export default function Checkout() {
             }}
           />
         </div>
-        <Link to="/shop" className="mt-8 inline-block text-sm text-primary">Continue shopping</Link>
+        <Link to="/shop" className="mt-8 inline-block text-sm text-primary">
+          Continue shopping
+        </Link>
       </section>
     )
   }
 
-  if (lines.length === 0 && !paying) {
+  if (lines.length === 0) {
     return (
       <section className="mx-auto max-w-3xl px-4 py-16">
         <h1 className="font-display text-5xl text-primary">Checkout</h1>
         <p className="mt-4">Add a saree before checkout.</p>
-        <Link to="/shop" className="mt-4 inline-block text-sm text-primary">Go to shop</Link>
-      </section>
-    )
-  }
-
-  if (paying) {
-    return (
-      <section className="bg-[#f6f1ea]">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[1.15fr_0.85fr]">
-          <form onSubmit={finishPayment} className="rounded-xl border border-black/10 bg-white p-6">
-            <p className="text-xs tracking-[0.18em] text-secondary uppercase">Online payment</p>
-            <h1 className="mt-2 font-display text-4xl text-primary">Pay {formatPrice(total)}</h1>
-            <p className="mt-2 text-sm text-ink/60">Finish this payment to confirm the order.</p>
-            <div className="mt-5 grid grid-cols-2 gap-2">
-              {[["upi", "UPI"], ["card", "Card"]].map(([id, label]) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setPayMode(id)}
-                  className={`rounded-md border px-3 py-2 text-sm ${payMode === id ? "border-primary bg-[#f6efe4]" : "border-black/15"}`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            {payMode === "upi" ? (
-              <label className="mt-4 grid gap-1 text-sm">
-                UPI ID
-                <input value={upi} onChange={(event) => setUpi(event.target.value)} placeholder="name@oksbi" className="rounded-md border border-black/15 px-3 py-2.5 outline-none focus:border-primary" />
-              </label>
-            ) : (
-              <div className="mt-4 grid gap-3">
-                <label className="grid gap-1 text-sm">
-                  Name on card
-                  <input value={card.name} onChange={(event) => setCard((current) => ({ ...current, name: event.target.value }))} className="rounded-md border border-black/15 px-3 py-2.5 outline-none focus:border-primary" />
-                </label>
-                <label className="grid gap-1 text-sm">
-                  Card number
-                  <input inputMode="numeric" value={card.number} onChange={(event) => setCard((current) => ({ ...current, number: event.target.value }))} placeholder="1234 5678 9012 3456" className="rounded-md border border-black/15 px-3 py-2.5 outline-none focus:border-primary" />
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <label className="grid gap-1 text-sm">
-                    Expiry
-                    <input value={card.expiry} onChange={(event) => setCard((current) => ({ ...current, expiry: event.target.value }))} placeholder="MM/YY" className="rounded-md border border-black/15 px-3 py-2.5 outline-none focus:border-primary" />
-                  </label>
-                  <label className="grid gap-1 text-sm">
-                    CVV
-                    <input inputMode="numeric" value={card.cvv} onChange={(event) => setCard((current) => ({ ...current, cvv: event.target.value }))} className="rounded-md border border-black/15 px-3 py-2.5 outline-none focus:border-primary" />
-                  </label>
-                </div>
-              </div>
-            )}
-            {payError && <p className="mt-3 text-sm text-primary">{payError}</p>}
-            <button type="submit" className="mt-5 w-full rounded-md bg-[#3a1216] py-3.5 text-sm text-[#f6efe4]">
-              Pay {formatPrice(total)}
-            </button>
-            <button type="button" onClick={() => setPaying(false)} className="mt-3 w-full text-sm text-ink/60">
-              Back to checkout
-            </button>
-          </form>
-          <aside className="h-fit rounded-xl border border-black/10 bg-white p-5">
-            <ul className="space-y-4">
-              {lines.map((line) => (
-                <li key={line.id} className="flex items-center gap-3">
-                  <img src={line.product.image} alt="" className="h-16 w-14 rounded-md object-cover object-top" />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm">{line.product.name}</p>
-                    <p className="text-xs text-ink/45">Qty {line.qty}</p>
-                  </div>
-                  <div className="text-right">
-                    {line.product.compareAt && line.product.compareAt !== line.product.price && (
-                      <p className="text-xs text-ink/40 line-through">
-                        {formatPrice(line.product.compareAt * line.qty)}
-                      </p>
-                    )}
-                    <p className="text-sm">{formatPrice(line.product.price * line.qty)}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 border-t border-black/10 pt-4 text-sm">Total {formatPrice(total)}</p>
-          </aside>
-        </div>
+        <Link to="/shop" className="mt-4 inline-block text-sm text-primary">
+          Go to shop
+        </Link>
       </section>
     )
   }
 
   return (
-    <section className="bg-[#f6f1ea]">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <form onSubmit={placeOrder} className="space-y-8">
-          <header>
-            <p className="font-display text-2xl tracking-[0.18em] text-primary uppercase">Karnan Pattu</p>
-            <p className="text-[11px] tracking-[0.16em] text-ink/45 uppercase">Sarees and more</p>
-          </header>
+    <div className="min-h-screen bg-white lg:grid lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_480px]">
+      <div className="border-b border-black/8 px-5 py-8 sm:px-8 lg:border-b-0 lg:px-12 lg:py-10 xl:px-16">
+        <header className="mb-8">
+          <Link to="/" className="font-display text-2xl tracking-[0.12em] text-primary uppercase">
+            Karnan Pattu
+          </Link>
+        </header>
 
-          <fieldset>
-            <label className="grid gap-1 text-sm">
-              Email
-              <input name="email" type="email" value={form.email} onChange={updateField} placeholder="name@email.com" className="rounded-md border border-black/15 bg-white px-3 py-2.5 outline-none focus:border-primary" />
-            </label>
-          </fieldset>
+        <form onSubmit={payNow} className="mx-auto max-w-xl space-y-8">
+            <fieldset>
+              <div className="mb-3 flex items-center justify-between">
+                <legend className="text-base font-medium text-ink">Contact</legend>
+                <Link to="/login" className="text-sm text-primary hover:underline">
+                  Sign in
+                </Link>
+              </div>
+              <label className="grid gap-1.5">
+                <span className="sr-only">Email or mobile phone number</span>
+                <input
+                  name="email"
+                  value={form.email}
+                  onChange={updateField}
+                  placeholder="Email or mobile phone number"
+                  className={inputClass}
+                  autoComplete="email tel"
+                />
+              </label>
+              <label className="mt-3 flex cursor-pointer items-center gap-2.5 text-sm text-ink/80">
+                <input
+                  type="checkbox"
+                  name="marketing"
+                  checked={form.marketing}
+                  onChange={updateField}
+                  className="h-4 w-4 accent-primary"
+                />
+                Email me with news and offers
+              </label>
+            </fieldset>
 
-          <fieldset className="space-y-3">
-            <legend className="text-lg font-medium text-primary">Delivery</legend>
-            <label className="grid gap-1 text-sm">
-              Country / region
-              <select className="rounded-md border border-black/15 bg-white px-3 py-2.5 outline-none" defaultValue="India">
-                <option>India</option>
-              </select>
-            </label>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="First name" name="firstName" value={form.firstName} onChange={updateField} />
-              <Field label="Last name" name="lastName" value={form.lastName} onChange={updateField} />
-            </div>
-            <Field label="Address" name="address" value={form.address} onChange={updateField} />
-            <Field label="Apartment, suite, etc. (optional)" name="apartment" value={form.apartment} onChange={updateField} />
-            <div className="grid gap-3 sm:grid-cols-3">
-              <Field label="City" name="city" value={form.city} onChange={updateField} />
-              <label className="grid gap-1 text-sm">
-                State
-                <select name="state" value={form.state} onChange={updateField} className="rounded-md border border-black/15 bg-white px-3 py-2.5 outline-none">
-                  {states.map((state) => <option key={state}>{state}</option>)}
+            <fieldset className="space-y-3">
+              <legend className="mb-3 text-base font-medium text-ink">Delivery</legend>
+              <label className="grid gap-1.5 text-sm text-ink/70">
+                Country / region
+                <select className={inputClass} defaultValue="India" disabled>
+                  <option>India</option>
                 </select>
               </label>
-              <Field label="PIN code" name="pincode" value={form.pincode} onChange={updateField} />
-            </div>
-            <Field label="Phone" name="phone" value={form.phone} onChange={updateField} />
-          </fieldset>
-
-          <fieldset>
-            <legend className="text-lg font-medium text-primary">Shipping method</legend>
-            <label className="mt-3 flex items-center justify-between rounded-md border border-primary bg-white px-4 py-3 text-sm">
-              <span className="flex items-center gap-2">
-                <input type="radio" checked readOnly />
-                Free delivery across India
-              </span>
-              <span>Free</span>
-            </label>
-          </fieldset>
-
-          <fieldset>
-            <legend className="text-lg font-medium text-primary">Payment</legend>
-            <p className="mt-1 text-sm text-ink/55">All transactions are secure. Pay online opens the payment screen before the order is confirmed.</p>
-            <div className="mt-3 overflow-hidden rounded-md border border-black/15 bg-white">
-              {["Cash on delivery", "Pay online"].map((method) => (
-                <label key={method} className={`flex cursor-pointer items-center gap-3 border-b border-black/10 px-4 py-3 text-sm last:border-b-0 ${payment === method ? "bg-[#f6efe4]" : ""}`}>
-                  <input type="radio" name="payment" checked={payment === method} onChange={() => setPayment(method)} />
-                  {method}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend className="text-lg font-medium text-primary">Billing address</legend>
-            <div className="mt-3 overflow-hidden rounded-md border border-black/15 bg-white">
-              <label className="flex items-center gap-3 border-b border-black/10 px-4 py-3 text-sm">
-                <input type="radio" name="billingSame" checked={form.billingSame} onChange={() => setForm((current) => ({ ...current, billingSame: true }))} />
-                Same as shipping address
-              </label>
-              <label className="flex items-center gap-3 px-4 py-3 text-sm">
-                <input type="radio" name="billingSame" checked={!form.billingSame} onChange={() => setForm((current) => ({ ...current, billingSame: false }))} />
-                Use a different billing address
-              </label>
-            </div>
-            {!form.billingSame && (
-              <div className="mt-3 grid gap-3">
-                <Field label="Billing address" name="billAddress" value={form.billAddress} onChange={updateField} />
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <Field label="City" name="billCity" value={form.billCity} onChange={updateField} />
-                  <label className="grid gap-1 text-sm">
-                    State
-                    <select name="billState" value={form.billState} onChange={updateField} className="rounded-md border border-black/15 bg-white px-3 py-2.5 outline-none">
-                      {states.map((state) => <option key={state}>{state}</option>)}
-                    </select>
-                  </label>
-                  <Field label="PIN code" name="billPincode" value={form.billPincode} onChange={updateField} />
-                </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label="First name (optional)" name="firstName" value={form.firstName} onChange={updateField} />
+                <Field label="Last name" name="lastName" value={form.lastName} onChange={updateField} required />
               </div>
-            )}
-          </fieldset>
+              <Field label="Address" name="address" value={form.address} onChange={updateField} required />
+              <Field
+                label="Apartment, suite, etc. (optional)"
+                name="apartment"
+                value={form.apartment}
+                onChange={updateField}
+              />
+              <div className="grid gap-3 sm:grid-cols-3">
+                <Field label="City" name="city" value={form.city} onChange={updateField} required />
+                <label className="grid gap-1.5 text-sm text-ink/70">
+                  State
+                  <select name="state" value={form.state} onChange={updateField} className={inputClass}>
+                    {states.map((state) => (
+                      <option key={state}>{state}</option>
+                    ))}
+                  </select>
+                </label>
+                <Field label="PIN code" name="pincode" value={form.pincode} onChange={updateField} required />
+              </div>
+              <Field label="Phone" name="phone" value={form.phone} onChange={updateField} required />
+              <label className="flex cursor-pointer items-center gap-2.5 text-sm text-ink/80">
+                <input
+                  type="checkbox"
+                  name="saveInfo"
+                  checked={form.saveInfo}
+                  onChange={updateField}
+                  className="h-4 w-4 accent-primary"
+                />
+                Save this information for next time
+              </label>
+            </fieldset>
 
-          {error && <p className="text-sm text-primary">{error}</p>}
-          <button type="submit" className="w-full rounded-md bg-[#3a1216] py-3.5 text-sm text-[#f6efe4]">
-            {payment === "Pay online" ? "Continue to payment" : "Place order"}
-          </button>
-        </form>
+            <fieldset>
+              <legend className="mb-3 text-base font-medium text-ink">Shipping method</legend>
+              {addressComplete ? (
+                <label className="flex items-center justify-between rounded-lg border border-primary/40 bg-[#faf6f0] px-4 py-3.5 text-sm">
+                  <span className="flex items-center gap-2.5">
+                    <input type="radio" checked readOnly className="accent-primary" />
+                    Standard delivery (India)
+                  </span>
+                  <span className="font-medium">{formatDetailed(SHIPPING_FEE)}</span>
+                </label>
+              ) : (
+                <p className="rounded-lg bg-[#f4f4f4] px-4 py-3.5 text-sm text-ink/55">
+                  Enter your shipping address to view available shipping methods.
+                </p>
+              )}
+            </fieldset>
 
-        <aside className="h-fit rounded-xl border border-black/10 bg-white p-5 lg:sticky lg:top-6">
+            <fieldset>
+              <legend className="text-base font-medium text-ink">Payment</legend>
+              <p className="mt-1 text-sm text-ink/55">All transactions are secure and encrypted.</p>
+              <div className="mt-4 overflow-hidden rounded-lg border-2 border-primary/55">
+                <label className="flex cursor-pointer flex-wrap items-center justify-between gap-3 bg-white px-4 py-3.5 text-sm">
+                  <span className="flex min-w-0 items-center gap-2.5">
+                    <input type="radio" checked readOnly className="accent-primary" />
+                    <span className="leading-snug">
+                      Razorpay Secure{" "}
+                      <span className="text-ink/50">(UPI, Card, Int&apos;l Card, Netbanking)</span>
+                    </span>
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1.5 text-[10px] font-semibold tracking-wide text-ink/45 uppercase">
+                    <span className="rounded border border-black/10 px-1.5 py-0.5">UPI</span>
+                    <span className="rounded border border-black/10 px-1.5 py-0.5">Visa</span>
+                    <span className="rounded border border-black/10 px-1.5 py-0.5">MC</span>
+                    <span className="rounded border border-black/10 px-1.5 py-0.5">+11</span>
+                  </span>
+                </label>
+                <p className="border-t border-black/8 bg-[#f4f4f4] px-4 py-3 text-xs leading-5 text-ink/60">
+                  You&apos;ll be redirected to Razorpay Secure (UPI, Card, Int&apos;l Card, Netbanking) to complete
+                  your purchase.
+                </p>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend className="mb-3 text-base font-medium text-ink">Billing address</legend>
+              <div className="overflow-hidden rounded-lg border border-black/15">
+                <label
+                  className={`flex cursor-pointer items-center gap-3 border-b border-black/10 px-4 py-3.5 text-sm ${
+                    form.billingSame ? "bg-[#faf6f0] ring-1 ring-inset ring-primary/35" : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="billingSame"
+                    checked={form.billingSame}
+                    onChange={() => setForm((current) => ({ ...current, billingSame: true }))}
+                    className="accent-primary"
+                  />
+                  Same as shipping address
+                </label>
+                <label
+                  className={`flex cursor-pointer items-center gap-3 px-4 py-3.5 text-sm ${
+                    !form.billingSame ? "bg-[#faf6f0] ring-1 ring-inset ring-primary/35" : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="billingSame"
+                    checked={!form.billingSame}
+                    onChange={() => setForm((current) => ({ ...current, billingSame: false }))}
+                    className="accent-primary"
+                  />
+                  Use a different billing address
+                </label>
+              </div>
+              {!form.billingSame && (
+                <div className="mt-3 grid gap-3">
+                  <Field label="Billing address" name="billAddress" value={form.billAddress} onChange={updateField} />
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <Field label="City" name="billCity" value={form.billCity} onChange={updateField} />
+                    <label className="grid gap-1.5 text-sm text-ink/70">
+                      State
+                      <select name="billState" value={form.billState} onChange={updateField} className={inputClass}>
+                        {states.map((state) => (
+                          <option key={state}>{state}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <Field label="PIN code" name="billPincode" value={form.billPincode} onChange={updateField} />
+                  </div>
+                </div>
+              )}
+            </fieldset>
+
+            {error && <p className="text-sm text-primary">{error}</p>}
+
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-primary py-3.5 text-sm font-semibold tracking-wide text-cream uppercase transition hover:bg-primary-soft"
+            >
+              Pay now
+            </button>
+
+            <p className="text-xs text-ink/50">
+              <Link to="/terms" className="text-primary underline underline-offset-2">
+                Terms and policies
+              </Link>
+            </p>
+          </form>
+      </div>
+
+      <aside className="bg-[#f4f4f4] px-5 py-8 sm:px-8 lg:px-8 lg:py-10 xl:px-10">
+        <div className="lg:sticky lg:top-8">
           <ul className="space-y-4">
             {lines.map((line) => (
-              <li key={line.id} className="flex items-center gap-3">
-                <img src={line.product.image} alt="" className="h-16 w-14 rounded-md object-cover object-top" />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm">{line.product.name}</p>
-                  <p className="text-xs text-ink/45">Qty {line.qty}</p>
+              <li key={line.id} className="flex gap-4">
+                <div className="relative shrink-0">
+                  <img
+                    src={line.product.image}
+                    alt=""
+                    className="h-[4.5rem] w-[3.6rem] rounded-lg border border-black/10 object-cover object-top"
+                  />
+                  <span className="absolute -top-2 -right-2 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-ink px-1 text-[11px] font-medium text-white">
+                    {line.qty}
+                  </span>
                 </div>
-                <div className="text-right">
-                  {line.product.compareAt && line.product.compareAt !== line.product.price && (
-                    <p className="text-xs text-ink/40 line-through">
-                      {formatPrice(line.product.compareAt * line.qty)}
-                    </p>
-                  )}
-                  <p className="text-sm">{formatPrice(line.product.price * line.qty)}</p>
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <p className="text-sm leading-snug text-ink">{lineTitle(line.product)}</p>
                 </div>
+                <p className="shrink-0 text-sm font-medium text-ink">{formatDetailed(line.product.price * line.qty)}</p>
               </li>
             ))}
           </ul>
-          <form onSubmit={applyCode} className="mt-5 flex gap-2">
-            <input value={code} onChange={(event) => setCode(event.target.value)} placeholder="Discount code or gift card" className="min-w-0 flex-1 rounded-md border border-black/15 px-3 py-2 text-sm outline-none" />
-            <button type="submit" disabled={applyingCode} className="rounded-md bg-[#3a1216] px-4 text-sm text-[#f6efe4] disabled:opacity-60">{applyingCode ? "Checking…" : "Apply"}</button>
+
+          <form onSubmit={applyCode} className="mt-6 flex gap-0 overflow-hidden rounded-lg border border-black/15 bg-white">
+            <input
+              value={code}
+              onChange={(event) => setCode(event.target.value)}
+              placeholder="Discount code"
+              className="min-w-0 flex-1 px-3 py-2.5 text-sm outline-none"
+            />
+            <button
+              type="submit"
+              disabled={applyingCode}
+              className="border-l border-black/15 px-4 text-sm font-medium text-ink/70 transition hover:bg-black/[0.03] disabled:opacity-50"
+            >
+              {applyingCode ? "…" : "Apply"}
+            </button>
           </form>
-          {couponMessage && <p className={`mt-2 text-xs ${appliedCode ? "text-emerald-700" : "text-primary"}`}>{couponMessage}</p>}
-          <dl className="mt-5 space-y-2 border-t border-black/10 pt-4 text-sm">
-            <div className="flex justify-between"><dt>Subtotal · {count} {count === 1 ? "item" : "items"}</dt><dd>{formatPrice(subtotal)}</dd></div>
-            {discount > 0 && <div className="flex justify-between text-emerald-700"><dt>Order discount</dt><dd>−{formatPrice(discount)}</dd></div>}
-            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : formatPrice(shipping)}</dd></div>
-            <div className="flex justify-between pt-2 text-base font-medium"><dt>Total</dt><dd>{formatPrice(total)}</dd></div>
+          {couponMessage && (
+            <p className={`mt-2 text-xs ${appliedCode ? "text-emerald-700" : "text-primary"}`}>{couponMessage}</p>
+          )}
+
+          <dl className="mt-6 space-y-2 border-t border-black/10 pt-5 text-sm text-ink/80">
+            <div className="flex justify-between">
+              <dt>Subtotal</dt>
+              <dd>{formatDetailed(subtotal)}</dd>
+            </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-emerald-700">
+                <dt>Discount</dt>
+                <dd>−{formatDetailed(discount)}</dd>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <dt>Shipping</dt>
+              <dd>{addressComplete ? formatDetailed(shipping) : "Enter shipping address"}</dd>
+            </div>
+            <div className="flex items-end justify-between border-t border-black/10 pt-4">
+              <dt className="text-base font-semibold text-ink">Total</dt>
+              <dd className="text-right">
+                <span className="text-xs font-normal text-ink/50">INR</span>{" "}
+                <span className="text-xl font-semibold text-ink">{formatDetailed(total)}</span>
+              </dd>
+            </div>
+            {taxIncluded > 0 && (
+              <p className="text-right text-xs text-ink/50">Including {formatDetailed(taxIncluded)} in taxes</p>
+            )}
           </dl>
-        </aside>
-      </div>
-    </section>
+        </div>
+      </aside>
+    </div>
   )
 }
 
-function Field({ label, name, value, onChange }) {
+function Field({ label, name, value, onChange, required }) {
   return (
-    <label className="grid gap-1 text-sm">
+    <label className="grid gap-1.5 text-sm text-ink/70">
       {label}
-      <input name={name} value={value} onChange={onChange} className="rounded-md border border-black/15 bg-white px-3 py-2.5 outline-none focus:border-primary" />
+      <input name={name} value={value} onChange={onChange} required={required} className={inputClass} />
     </label>
   )
 }

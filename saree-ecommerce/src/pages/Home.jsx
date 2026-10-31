@@ -1,56 +1,25 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import ProductImagePanel from "../components/ProductImagePanel"
+import ShopCategoriesSection from "../components/ShopCategoriesSection"
+import VisitStoreBanner from "../components/VisitStoreBanner"
+import GoogleReviewsSection from "../components/GoogleReviewsSection"
 import { useCart } from "../context/CartContext"
 import { useProducts } from "../context/ProductsContext"
 import { formatPrice, sareeImages } from "../data/products"
 
 const photo = (index) => sareeImages[index % sareeImages.length]
 
-const heroImage = {
-  src: "/hero/hero-soft-silk.jpg",
-  alt: "A soft silk saree with a coral gold border",
+const mainHero = {
+  src: "/hero/hero-mustard1.avif",
+  alt: "Mustard silk saree in a heritage courtyard",
+  position: "object-[68%_top] sm:object-[62%_top] md:object-[58%_12%]",
+  eyebrow: "Karnan Pattu Centre",
+  title: ["Soft Silk To Wear.", "Old Soft Silk We Buy."],
+  body: "Soft silks leave the counter ready to drape. Bring the soft silk you no longer wear, and we pay a fair cash price the same day.",
+  primaryCta: { label: "Shop soft silk", to: "/shop" },
+  secondaryCta: { label: "Sell soft silk", to: "/old-silk" },
 }
-
-
-const testimonials = [
-  {
-    quote: "I found a beautiful silk saree, and the team helped me choose just the right one.",
-    name: "Ananya R.",
-    initials: "AR",
-  },
-  {
-    quote: "The store visit was lovely. I appreciated the warm welcome and thoughtful service.",
-    name: "Meera S.",
-    initials: "MS",
-  },
-  {
-    quote: "Selling my old soft silk was simple. The process and price were clearly explained.",
-    name: "Lakshmi K.",
-    initials: "LK",
-  },
-  {
-    quote: "The saree is even more beautiful in person. I loved the soft fabric and fine details.",
-    name: "Divya M.",
-    initials: "DM",
-  },
-  {
-    quote: "The team was kind and patient while helping me find a saree for a family occasion.",
-    name: "Kavitha P.",
-    initials: "KP",
-  },
-  {
-    quote: "A smooth experience from choosing my saree to taking it home. I would visit again.",
-    name: "Priya S.",
-    initials: "PS",
-  },
-]
-
-const assurances = [
-  { title: "Thoughtfully chosen silks", icon: "diamond" },
-  { title: "Heritage in every thread", icon: "person" },
-  { title: "A new life for old sarees", icon: "leaf" },
-  { title: "Carefully packed, with love", icon: "box" },
-]
 
 const kinds = [
   {
@@ -75,7 +44,7 @@ const kinds = [
     frame: "object-[center_12%]",
   },
   {
-    label: "Soft Silks",
+    label: "Silk collection",
     note: "Silk light on the body",
     to: "/shop",
     image: "/hero/gulabi-silk.avif",
@@ -84,61 +53,63 @@ const kinds = [
 ]
 
 const weaves = [
-  { label: "Soft silk", note: "Light drape", to: "/shop", image: photo(1) },
-  { label: "Soft silk", note: "Gold border", to: "/shop", image: photo(2) },
-  { label: "Soft silk", note: "Day wear", to: "/shop", image: photo(4) },
-  { label: "Soft silk", note: "Evening wear", to: "/shop", image: photo(3) },
-  { label: "Soft silk", note: "Wedding ready", to: "/shop", image: photo(5) },
-  { label: "Old soft silk", note: "We buy", to: "/old-silk" },
+  { label: "Light drape", note: "Everyday", to: "/shop", image: photo(1) },
+  { label: "Gold border", note: "Classic", to: "/shop", image: photo(2) },
+  { label: "Day wear", note: "Comfort", to: "/shop", image: photo(4) },
+  { label: "Evening wear", note: "Occasions", to: "/shop", image: photo(3) },
+  { label: "Wedding ready", note: "Celebrations", to: "/shop", image: photo(5) },
+  { label: "Old sarees", note: "We buy", to: "/old-silk" },
 ]
 
 const oldSilks = [
   {
-    text: "Fine woven soft silk drapes.",
-    image: "/sarees/soft/soft-02.jpg",
+    text: "Fine woven drapes.",
+    image: "/sarees/soft/soft-02.avif",
   },
   {
     text: "Vibrant and elegant silk drapes.",
-    image: "/sarees/soft/soft-01.jpg",
+    image: "/sarees/soft/soft-01.avif",
   },
   {
     text: "Intricate borders and detailed pallus.",
-    image: "/sarees/soft/soft-08.jpg",
+    image: "/sarees/soft/soft-08.avif",
   },
   {
-    text: "Freshly curated pure soft silk.",
-    image: "/sarees/soft/soft-04.jpg",
+    text: "Freshly curated weaves.",
+    image: "/sarees/soft/soft-04.avif",
   },
   {
-    text: "Heirloom handcrafted soft silk drapes.",
-    image: "/sarees/soft/soft-10.jpg",
+    text: "Heirloom handcrafted drapes.",
+    image: "/sarees/soft/soft-10.avif",
   },
   {
     text: "Classic plain body with rich borders.",
-    image: "/sarees/soft/soft-06.jpg",
+    image: "/sarees/soft/soft-06.avif",
   },
   {
-    text: "Soft silk with pure gold zari borders.",
-    image: "/sarees/soft/soft-07.jpg",
+    text: "Pure gold zari borders.",
+    image: "/sarees/soft/soft-07.avif",
   },
   {
     text: "Woven buttas and traditional pallu work.",
-    image: "/sarees/soft/soft-11.jpg",
+    image: "/sarees/soft/soft-11.avif",
   },
 ];
 
-const promises = [
-  ["check", "A careful check", "Silk and zari are looked at in daylight before a rate is offered."],
-  ["price", "A clear price", "You hear the amount first. Nothing is settled until you accept."],
-  ["cash", "Same-day cash", "Once the saree is checked and you agree, the payment is made that day."],
-  ["silk", "Any condition", "Old, used, torn, and faded soft silk is welcome."],
-]
+const promoHeroBackground = {
+  src: "/hero/bgbannar.png",
+  alt: "Silk sarees collection banner with model and folded weaves",
+  width: 1024,
+  height: 497,
+  imageClass:
+    "absolute left-0 right-0 top-0 h-full w-full max-w-none object-cover object-top sm:h-[185%] sm:object-[50%_36%]",
+}
 
 export default function Home() {
   const [addedId, setAddedId] = useState(null)
   const [saleFilter, setSaleFilter] = useState("all")
-  const [activeTestimonial, setActiveTestimonial] = useState(0)
-  const [isTestimonialPaused, setIsTestimonialPaused] = useState(false)
+  const [shopLookIndex, setShopLookIndex] = useState(0)
+  const [shopLookPerView, setShopLookPerView] = useState(2)
   const { addToCart } = useCart()
   const { products } = useProducts()
   const saleProducts = [3, 1, 4, 2]
@@ -147,19 +118,28 @@ export default function Home() {
   const shownSales =
     saleFilter === "all" ? saleProducts : saleProducts.filter((product) => product.saleGroup === saleFilter)
 
+  const shopLookMaxIndex = Math.max(0, oldSilks.length - shopLookPerView)
+  const shopLookSlideWidth = 100 / shopLookPerView
+
   useEffect(() => {
-    if (isTestimonialPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
+    const desktop = window.matchMedia("(min-width: 1024px)")
+    const sync = () => setShopLookPerView(desktop.matches ? 4 : 2)
+    sync()
+    desktop.addEventListener("change", sync)
+    return () => desktop.removeEventListener("change", sync)
+  }, [])
 
+  useEffect(() => {
+    setShopLookIndex((current) => Math.min(current, shopLookMaxIndex))
+  }, [shopLookMaxIndex])
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
     const timer = window.setInterval(() => {
-      setActiveTestimonial((current) => (current + 1) % testimonials.length)
-    }, 5000)
-
+      setShopLookIndex((current) => (current >= shopLookMaxIndex ? 0 : current + 1))
+    }, 5500)
     return () => window.clearInterval(timer)
-  }, [activeTestimonial, isTestimonialPaused])
-
-  function showTestimonial(index) {
-    setActiveTestimonial((index + testimonials.length) % testimonials.length)
-  }
+  }, [shopLookMaxIndex])
 
   function addPiece(id) {
     addToCart(id)
@@ -173,37 +153,46 @@ export default function Home() {
     <>
       <section className="relative h-[92vh] w-full max-w-full overflow-hidden md:h-screen">
         <img
-          src={heroImage.src}
-          alt={heroImage.alt}
+          src={mainHero.src}
+          alt={mainHero.alt}
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-[72%_center] md:object-[center_22%]"
+          className={`absolute inset-0 h-full w-full object-cover ${mainHero.position}`}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.72)_42%,rgba(28,8,12,0.35)_70%,rgba(28,8,12,0.18)_100%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.88)_0%,rgba(28,8,12,0.7)_34%,rgba(28,8,12,0.28)_58%,transparent_78%)]" />
-        <div className="absolute inset-0 flex items-end pb-28 md:items-center md:pb-0">
-          <div className="mx-auto w-full min-w-0 max-w-7xl px-4 lg:px-8">
-            <div data-slide="left" className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]">
-              <p className="text-[11px] tracking-[0.28em] text-[#d7c4a2] uppercase">Karnan Pattu Centre</p>
-              <h1 className="mt-4 font-display text-4xl leading-[1.05] text-[#f6efe4] sm:text-6xl md:text-7xl">
-                Soft Silk To Wear.
-                <span className="mt-1 block">Old Soft Silk We Buy.</span>
+        <div
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.55)_40%,rgba(28,8,12,0.2)_65%,transparent_88%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.88)_0%,rgba(28,8,12,0.62)_38%,rgba(28,8,12,0.25)_52%,transparent_70%)]"
+          aria-hidden
+        />
+        <div className="absolute inset-0 z-10 flex items-end px-4 pb-28 md:items-center md:pb-0 lg:px-8">
+          <div className="mx-auto w-full min-w-0 max-w-7xl">
+            <div
+              data-slide="left"
+              className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]"
+            >
+              <p className="text-[11px] tracking-[0.28em] text-[#e8d5b5] uppercase">{mainHero.eyebrow}</p>
+              <h1 className="mt-4 font-display text-4xl leading-[1.05] text-[#faf6f0] drop-shadow-sm sm:text-6xl md:text-7xl">
+                {mainHero.title.map((line, lineIndex) => (
+                  <span key={line} className={lineIndex > 0 ? "mt-1 block" : "block"}>
+                    {line}
+                  </span>
+                ))}
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-7 text-[#f6efe4]/85 md:text-base">
-                Soft silks leave the counter ready to drape. Bring the soft silk you no longer wear, and we pay a fair cash price the same day.
+              <p className="mt-5 max-w-md text-sm font-medium leading-7 text-[#f6efe4] md:text-base">
+                {mainHero.body}
               </p>
               <div className="mt-8 flex w-full max-w-md flex-col gap-3 md:flex-row md:flex-wrap">
                 <Link
-                  to="/shop"
-                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-3 bg-secondary px-5 py-3 text-[11px] tracking-[0.16em] text-ink uppercase md:w-auto"
+                  to={mainHero.primaryCta.to}
+                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-3 bg-secondary px-5 py-3 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase md:w-auto"
                 >
-                  Shop soft silk
+                  {mainHero.primaryCta.label}
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link
-                  to="/old-silk"
-                  className="motion-btn inline-flex w-full items-center justify-center gap-3 border border-[#f6efe4] px-5 py-3 text-[11px] tracking-[0.16em] text-[#f6efe4] uppercase hover:bg-[#f6efe4] hover:text-primary md:w-auto"
+                  to={mainHero.secondaryCta.to}
+                  className="motion-btn inline-flex w-full items-center justify-center gap-3 border border-[#f6efe4] bg-[#210a0c]/25 px-5 py-3 text-[11px] font-semibold tracking-[0.16em] text-[#faf6f0] uppercase backdrop-blur-[2px] hover:bg-[#f6efe4] hover:text-primary md:w-auto"
                 >
-                  Sell soft silk
+                  {mainHero.secondaryCta.label}
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
@@ -212,20 +201,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-primary/10 bg-[#f6efe4]">
-        <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-8 px-5 py-8 lg:grid-cols-4 lg:gap-6">
-          {assurances.map((item, index) => (
-            <li
-              key={item.title}
-              data-slide={index === 0 ? "left" : index === 3 ? "right" : "up"}
-              className="flex flex-col items-center gap-3 text-center text-primary"
-            >
-              <AssuranceIcon name={item.icon} />
-              <span className="font-display text-[15px] leading-snug sm:text-[17px]">{item.title}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <ShopCategoriesSection />
 
       <section className="bg-[#f6efe4] px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto max-w-6xl">
@@ -275,98 +251,92 @@ export default function Home() {
         </div>
       </section>
 
-<section className="relative flex w-full items-center justify-center overflow-hidden bg-[#faf6f0] px-4 py-6 text-center sm:min-h-[440px] sm:py-12 md:py-16">
-  {/* Full-width Background Image - Anchored to Top with Custom 143% Height on Desktop */}
-  <img 
-    src="/hero/bgbannar.png" 
-    alt="Silk Sarees Banner" 
-    className="absolute inset-x-0 top-0 w-full object-cover object-top sm:h-[140%] sm:object-center"
-  />
+      <section className="relative w-full overflow-hidden bg-[#faf6f0]">
+        <div className="relative h-[200px] w-full max-w-none sm:h-[240px] md:h-[280px] lg:h-[320px]">
+          <img
+            src={promoHeroBackground.src}
+            alt={promoHeroBackground.alt}
+            decoding="async"
+            width={promoHeroBackground.width}
+            height={promoHeroBackground.height}
+            className={promoHeroBackground.imageClass}
+          />
 
-  {/* Centered Content Block */}
-  <div data-slide="up" className="relative z-10 mx-auto flex max-w-xl flex-col items-center px-2 text-center text-[#210a0c]">
-    
-    <p className="mt-0.5 font-display text-xs italic text-[#b8860b] xs:text-sm sm:mt-1 sm:text-2xl">
-      Silk for every occasion
-    </p>
+          <div
+            data-slide="up"
+            className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-3 pt-1 text-center text-[#210a0c] sm:px-6 sm:pt-0"
+          >
+            <div className="pointer-events-auto mx-auto flex w-full max-w-sm flex-col items-center sm:max-w-md md:max-w-lg md:-translate-y-0.5">
+              <p className="font-display text-[10px] italic text-[#b8860b] xs:text-xs sm:text-lg md:text-xl">
+                Silk for every occasion
+              </p>
 
-    {/* Ornamental Divider */}
-    <div className="my-1.5 flex w-24 items-center justify-center gap-2 xs:w-28 sm:my-3 sm:w-40">
-      <div className="h-[1px] w-full bg-[#b8860b]/60" />
-      <span className="text-[8px] text-[#b8860b] sm:text-[10px]">❖</span>
-      <div className="h-[1px] w-full bg-[#b8860b]/60" />
-    </div>
+              <div className="my-0.5 flex w-16 items-center justify-center gap-1 xs:w-20 sm:my-1 sm:w-28">
+                <div className="h-px w-full bg-[#b8860b]/60" />
+                <span className="text-[7px] text-[#b8860b] sm:text-[9px]">❖</span>
+                <div className="h-px w-full bg-[#b8860b]/60" />
+              </div>
 
-    {/* Subtext (2 lines on mobile, 1 line on desktop) */}
-    <p className="max-w-[240px] text-[10px] leading-snug text-[#3d1a1d]/90 xs:text-[11px] sm:max-w-none sm:text-sm sm:leading-relaxed">
-      Pure silk elegance,<br className="sm:hidden" /> ready for every occasion.
-    </p>
+              <p className="max-w-[220px] text-[9px] leading-snug text-[#3d1a1d]/90 xs:text-[10px] sm:max-w-none sm:text-xs sm:leading-relaxed">
+                Pure silk elegance,<br className="sm:hidden" /> ready for every occasion.
+              </p>
 
-    {/* Discount Callout */}
-    <div className="group relative mt-2 flex items-center justify-center gap-1.5 tracking-widest text-[#210a0c] sm:mt-5 sm:gap-3">
-      {/* Soft Ambient Glow */}
-      <div className="absolute -inset-x-4 -inset-y-1 -z-10 rounded-full bg-[#daa520]/25 blur-lg transition-all duration-500 group-hover:bg-[#daa520]/40" />
-      
-      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3d1a1d] sm:text-sm">
-        Flat
-      </span>
+              <div className="group relative mt-1 flex items-center justify-center gap-1 tracking-widest text-[#210a0c] sm:mt-2 sm:gap-2">
+                <div className="absolute -inset-x-3 -inset-y-0.5 -z-10 rounded-full bg-[#daa520]/25 blur-md transition-all duration-500 group-hover:bg-[#daa520]/40" />
+                <span className="text-[8px] font-bold uppercase tracking-[0.16em] text-[#3d1a1d] sm:text-xs">
+                  Flat
+                </span>
+                <span className="animate-pulse font-display text-xl font-black text-[#b8860b] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] sm:text-4xl md:text-[2.75rem]">
+                  50%
+                </span>
+                <span className="text-[8px] font-bold uppercase tracking-[0.16em] text-[#3d1a1d] sm:text-xs">
+                  Off
+                </span>
+              </div>
 
-      {/* 50% Text */}
-      <span className="animate-pulse font-display text-3xl font-black text-[#b8860b] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] sm:text-6xl md:text-7xl">
-        50%
-      </span>
-
-      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3d1a1d] sm:text-sm">
-        Off
-      </span>
-    </div>
-
-    {/* Action Button */}
-    <div className="mt-3 sm:mt-6">
-      <Link
-        to="/shop"
-        className="motion-btn motion-fill inline-flex transform items-center justify-center bg-[#b8860b] px-5 py-2 text-[9px] font-bold tracking-[0.18em] text-white uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#d4af37] hover:shadow-lg active:scale-95 sm:px-8 sm:py-3.5 sm:text-[11px]"
-        style={{ borderRadius: 0 }}
-      >
-        Shop the look
-      </Link>
-    </div>
-  </div>
-</section>
+              <div className="mt-1.5 sm:mt-2.5">
+                <Link
+                  to="/shop"
+                  className="motion-btn motion-fill inline-flex transform items-center justify-center bg-[#b8860b] px-3.5 py-1 text-[8px] font-bold tracking-[0.14em] text-white uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#d4af37] hover:shadow-lg active:scale-95 sm:px-6 sm:py-2 sm:text-[10px]"
+                  style={{ borderRadius: 0 }}
+                >
+                  Shop the look
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="bg-[#f7f1e8] px-4 py-16 md:py-20">
         <div className="mx-auto max-w-6xl">
           <div data-slide="up" className="mx-auto max-w-xl text-center">
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">On the counter</p>
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Soft silk ready to leave.</h2>
+            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Ready to leave.</h2>
           </div>
-          
-          <ul className="mt-8 grid grid-cols-2 items-stretch gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-6">
+
+          <ul className="mt-8 grid grid-cols-2 items-stretch gap-x-3 gap-y-8 sm:gap-x-4 md:grid-cols-4 md:gap-x-6">
             {shownSales.map((product, index) => (
-              <li key={product.id} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full">
-                <article className="flex h-full flex-col">
-                  <div className="group relative overflow-hidden">
-                    <Link to={`/product/${product.id}`} className="relative block aspect-[3/4]">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        decoding="async"
-                        className="h-full w-full object-cover object-top"
-                      />
-                      <span className="quick-view">View saree</span>
-                    </Link>
-                    {product.compareAt && product.compareAt !== product.price && (
-  <span className="absolute top-3 right-3 z-10 bg-primary px-2.5 py-1 text-[10px] font-medium tracking-wide text-cream shadow-sm">
-    50% OFF
-  </span>
-)}
-                    {product.badge && (
-                      <span className="absolute bottom-12 left-3 z-10 bg-white px-2.5 py-1 text-[11px] text-primary shadow-sm">
-                        {product.badge}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-3 text-[10px] tracking-[0.18em] text-ink/40 uppercase">{product.fabric}</p>
+              <li key={product.id} data-slide={index % 2 === 0 ? "left" : "right"} className="h-full min-w-0">
+                <article className="group flex h-full flex-col">
+                  <ProductImagePanel
+                    product={product}
+                    onQuickAdd={() => addPiece(product.id)}
+                    onAddedToCart={() => {
+                      setAddedId(product.id)
+                      window.setTimeout(() => {
+                        setAddedId((current) => (current === product.id ? null : current))
+                      }, 1200)
+                    }}
+                    badge={
+                      product.compareAt && product.compareAt !== product.price ? (
+                        <span className="absolute bottom-3 left-3 z-10 bg-primary px-2.5 py-1 text-[10px] font-medium tracking-wide text-cream shadow-sm">
+                          50% OFF
+                        </span>
+                      ) : null
+                    }
+                  />
+                  <p className="mt-3 text-[10px] tracking-[0.18em] text-ink/40 uppercase">{product.category}</p>
                   <Link to={`/product/${product.id}`} className="mt-1 block truncate font-display text-[22px] leading-tight text-primary">
                     {product.name}
                   </Link>
@@ -401,430 +371,52 @@ export default function Home() {
         </div>
       </section>
 
-<section className="bg-shell px-4 py-16">
-  <div className="mx-auto max-w-6xl">
-    {/* Section Header */}
-    <div data-slide="up" className="mx-auto max-w-2xl text-center">
-      <h2 className="mt-2 font-display text-4xl text-[#2a0c0f] md:text-5xl">
-        Shop By Look
-      </h2>
-      <p className="mt-3 text-sm leading-6 text-[#3a1216]/80">
-        Explore our curated selection of authentic silk drapes, crafted with timeless traditional weaves and fine zari craftsmanship.
-      </p>
-    </div>
-
-    {/* Saree Grid */}
-    <ul className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-      {oldSilks.map((item, index) => (
-        <li 
-          key={item.name || index} 
-          data-slide={index % 2 === 0 ? "left" : "right"} 
-          className="h-full"
-        >
-          {/* Card Box Container */}
-          <Link
-            to="/Shop"
-            className="group flex h-full flex-col overflow-hidden rounded-xl bg-[#f5ebd9]/70 p-3 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:bg-[#f5ebd9] hover:shadow-md"
-          >
-            {/* Image Container (Border-free) */}
-            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#2a0c0f]">
-              <img
-                src={item.image}
-                alt={item.name || "Silk Saree"}
-                decoding="async"
-                className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-              />
-
-              {/* Dark Overlay on Hover */}
-              <div className="absolute inset-0 bg-[#2a0c0f]/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-              {/* "Shop Now" Button Appears on Hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
-                <span className="transform bg-[#c59b27] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#2a0c0f] shadow-md transition-all duration-300 group-hover:scale-105 hover:bg-[#e6bc42]">
-                  Shop Now
-                </span>
-              </div>
-            </div>
-
-            {/* Dark Text Content Box */}
-            <div className="flex flex-1 flex-col justify-between pt-3 text-center">
-              <div>
-                <h3 className="font-display text-sm font-bold tracking-wide text-[#2a0c0f] transition-colors duration-300 group-hover:text-[#b8860b] md:text-base capitalize">
-                  {item.name}
-                </h3>
-                
-                {item.price && (
-                  <p className="mt-1 text-xs font-semibold text-[#3a1216] md:text-sm">
-                    {item.price}
-                  </p>
-                )}
-
-                {item.text && !item.price && (
-                  <p className="mt-1 text-xs font-medium text-[#3a1216]/80 line-clamp-2">
-                    {item.text}
-                  </p>
-                )}
-              </div>
-            </div>
-          </Link>
-        </li>
-      ))}
-    </ul>
-
-    {/* Single Bottom Explore Collection Button */}
-    <div className="mt-12 text-center">
-      <Link
-        to="/Shop"
-        className="inline-flex items-center justify-center bg-[#c59b27] px-8 py-3.5 text-xs font-bold tracking-[0.18em] text-[#2a0c0f] uppercase shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#e6bc42] hover:shadow-lg active:scale-95"
-      >
-        Explore Full Collection &rarr;
-      </Link>
-    </div>
-  </div>
-</section>
-
-
-     <section className="bg-shell px-4 py-16 md:py-20">
-  <div className="mx-auto max-w-6xl">
-    {/* Section Header */}
-    <div data-slide="up" className="text-center">
-      <p className="text-[12px] font-semibold tracking-[0.25em] text-[#b8860b] uppercase">
-        The Loom
-      </p>
-      <h2 className="mt-2 font-display text-4xl font-bold tracking-wide text-[#2a0c0f] md:text-5xl">
-        Soft Silk Edits
-      </h2>
-      <div className="mx-auto mt-3 h-[2px] w-12 bg-[#b8860b]/60" />
-    </div>
-
-    {/* Circle Grid */}
-    <ul className="mt-12 grid grid-cols-3 gap-6 sm:grid-cols-6 md:gap-8">
-      {weaves.map((weave, index) => (
-        <li 
-          key={`${weave.note}-${index}`} 
-          data-slide={index < 3 ? "left" : "right"}
-        >
-          <Link 
-            to={weave.to} 
-            className="group flex flex-col items-center text-center transition-all duration-300"
-          >
-            {/* Circle Container with Golden Ring Accent */}
-            <div className="relative p-1">
-              {weave.image ? (
-                <img 
-                  src={weave.image} 
-                  alt={weave.label || "Silk Edit"}  
-                  decoding="async" 
-                  className="motion-circle h-24 w-24 rounded-full object-cover shadow-md ring-2 ring-[#c59b27]/40 transition-all duration-300 group-hover:scale-105 group-hover:ring-[#c59b27] group-hover:shadow-lg sm:h-28 sm:w-28" 
-                />
-              ) : (
-                <span className="motion-circle flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#b8860b] bg-[#f5ebd9]/50 text-3xl font-bold text-[#b8860b] shadow-md ring-2 ring-[#c59b27]/30 transition-all duration-300 group-hover:scale-105 group-hover:bg-[#f5ebd9] group-hover:shadow-lg sm:h-28 sm:w-28">
-                  ₹
-                </span>
-              )}
-            </div>
-
-            {/* Labels */}
-            <span className="mt-3.5 text-sm font-bold tracking-wide text-[#2a0c0f] transition-colors duration-300 group-hover:text-[#b8860b] sm:text-base capitalize">
-              {weave.label}
-            </span>
-            <span className="mt-0.5 text-[11px] font-medium text-[#3a1216]/70 sm:text-xs">
-              {weave.note}
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-</section>
-
-      <section className="bg-[#f6efe4] px-4 py-16">
-        <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <div data-slide="left" className="lg:pt-2">
-            <p className="text-[11px] tracking-[0.22em] text-[#c48a3a] uppercase">Our promise</p>
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Why choose us</h2>
-            <p className="mt-4 max-w-md text-sm leading-7 text-ink/70">
-              We buy old silk and sell new silk in Bengaluru. The saree is checked first, the price is told before you agree, and the money is paid the same day.
+      <section className="bg-[#faf6f0] px-4 py-12 md:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div data-slide="left" className="max-w-xl">
+            <h2 className="font-display text-3xl text-primary sm:text-4xl md:text-5xl">Shop by look</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-ink/65">
+              Explore our curated selection of authentic silk drapes, crafted with timeless traditional weaves and
+              fine zari craftsmanship.
             </p>
-            <img
-              src="/hero/temple.avif"
-              alt="A silk saree in a temple courtyard at sunset"
-              decoding="async"
-              className="mt-8 h-72 w-full max-w-md object-cover object-[68%_center]"
-            />
           </div>
-          <ol className="border-y border-[#ead9bf]">
-            {promises.map(([icon, title, text], index) => (
-              <li key={title} data-slide="right" className="flex gap-4 border-b border-[#ead9bf] py-5 last:border-b-0">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#c59b27] text-[#3a1216]">
-                  <PromiseIcon name={icon} />
-                </span>
-                <span>
-                  <span className="text-[11px] tracking-[0.16em] text-[#8a6230] uppercase">0{index + 1}</span>
-                  <h3 className="mt-1 font-display text-xl text-primary">{title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-ink/70">{text}</p>
-                </span>
-              </li>
-            ))}
-          </ol>
+
+          <div className="mt-6 overflow-hidden md:mt-10">
+            <ul
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${shopLookIndex * shopLookSlideWidth}%)` }}
+            >
+              {oldSilks.map((item) => (
+                <li
+                  key={item.text}
+                  className="box-border shrink-0 px-1 sm:px-2"
+                  style={{ width: `${shopLookSlideWidth}%` }}
+                >
+                  <Link to="/shop" className="group flex h-full flex-col">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-cream">
+                      <img
+                        src={item.image}
+                        alt=""
+                        decoding="async"
+                        className="h-full w-full object-cover object-top"
+                      />
+                    </div>
+                    <p className="mt-3 min-h-[2.5rem] text-sm leading-snug font-medium text-primary">{item.text}</p>
+                    <span className="motion-btn mt-3 block w-full rounded-lg bg-primary py-2.5 text-center text-[11px] font-semibold tracking-[0.12em] text-cream uppercase">
+                      View look
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
-     <section className="px-4 py-16 md:py-20 text-[#4a0e17]">
-  <div className="mx-auto max-w-6xl">
-    {/* Header */}
-    <div data-slide="up" className="text-center">
-      <p className="text-[11px] font-semibold tracking-[0.24em] text-[#4a0e17]/80 uppercase">
-        Verified Customer Feedback
-      </p>
-      <h2 className="mt-2 font-display text-4xl font-bold text-[#4a0e17] md:text-5xl">
-        Client Testimonials
-      </h2>
-      <p className="mx-auto mt-3 max-w-lg text-sm text-[#4a0e17]/80">
-        Read what our patrons have to say about our soft silk collections and old saree valuations in Bengaluru.
-      </p>
-      <div className="mx-auto mt-4 h-[1px] w-12 bg-[#4a0e17]/40" />
-    </div>
+      <VisitStoreBanner />
 
-    {/* Testimonials Carousel / Grid Container */}
-    <div
-      className="mx-auto mt-12 max-w-6xl"
-      role="region"
-      aria-roledescription="carousel"
-      aria-label="Client testimonials"
-      onMouseEnter={() => setIsTestimonialPaused(true)}
-      onMouseLeave={(event) => {
-        if (!event.currentTarget.contains(document.activeElement)) setIsTestimonialPaused(false)
-      }}
-      onFocus={() => setIsTestimonialPaused(true)}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setIsTestimonialPaused(false)
-      }}
-    >
-      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {[0, 1, 2].map((offset) => {
-          const testimonialIndex = (activeTestimonial + offset) % testimonials.length
-          const testimonial = testimonials[testimonialIndex]
-
-          return (
-            <li
-              key={testimonial.name}
-              className={`${offset === 1 ? "hidden md:flex" : offset === 2 ? "hidden lg:flex" : "flex"} min-h-[320px] flex-col justify-between border border-[#4a0e17]/20 bg-[#4a0e17]/[0.03] p-6 shadow-sm transition-all duration-300 hover:border-[#4a0e17]/40 sm:p-8`}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${testimonialIndex + 1} of ${testimonials.length}`}
-            >
-              <div>
-                {/* Top Row: Avatar, Name/Time, and Google Icon */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#4a0e17] font-display text-base font-semibold text-[#faf6f0]"
-                    >
-                      {testimonial.initials}
-                    </span>
-                    <div>
-                      <span className="block font-display text-lg font-bold text-[#4a0e17]">
-                        {testimonial.name}
-                      </span>
-                      <span className="block text-[11px] text-[#4a0e17]/60">
-                        {testimonial.timeAgo || "A month ago"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Google G Logo SVG */}
-                  <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      fill="#4285F4"
-                      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.95H1.2v3.14C3.17 21.36 7.24 24 12 24z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.28 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.61H1.2C.43 8.15 0 9.89 0 12s.43 3.85 1.2 5.39l4.08-3.14z"
-                    />
-                    <path
-                      fill="#EA4335"
-                      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.24 0 3.17 2.64 1.2 6.61l4.08 3.14c.95-2.84 3.6-4.95 6.72-4.95z"
-                    />
-                  </svg>
-                </div>
-
-                {/* 5 Star Rating */}
-                <div className="mt-4 flex items-center gap-1 text-[#d4af37]" aria-label="5 out of 5 stars">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">★</span>
-                  ))}
-                </div>
-
-                {/* Review Quote / Text */}
-                <blockquote className="mt-3 text-sm leading-relaxed text-[#4a0e17]/90">
-                  "{testimonial.quote}"
-                </blockquote>
-              </div>
-
-              {/* Bottom Action / See More Link */}
-              <div className="mt-6 pt-4 border-t border-[#4a0e17]/10">
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=Karnan+Pattu+Centre+Bengaluru"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs font-semibold tracking-wider text-[#4a0e17] uppercase transition-colors hover:text-[#8a6230]"
-                >
-                  See more on Google ↗
-                </a>
-              </div>
-            </li>
-          )
-        })}
-      </ul>
-
-      {/* Carousel Navigation Arrows & Indicators */}
-      <div className="mt-8 flex items-center justify-center gap-5">
-        <button
-          type="button"
-          onClick={() => showTestimonial(activeTestimonial - 1)}
-          aria-label="Previous testimonial"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4a0e17]/25 text-[#4a0e17] transition-colors hover:bg-[#4a0e17] hover:text-[#faf6f0]"
-        >
-          <span aria-hidden="true">←</span>
-        </button>
-
-        <div className="flex items-center gap-2" aria-label="Choose a testimonial">
-          {testimonials.map((testimonial, index) => (
-            <button
-              key={testimonial.name}
-              type="button"
-              onClick={() => showTestimonial(index)}
-              aria-label={`Show testimonial ${index + 1}`}
-              aria-current={activeTestimonial === index ? "true" : undefined}
-              className={`h-2.5 rounded-full transition-all ${
-                activeTestimonial === index ? "w-7 bg-[#4a0e17]" : "w-2.5 bg-[#4a0e17]/25"
-              }`}
-            />
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={() => showTestimonial(activeTestimonial + 1)}
-          aria-label="Next testimonial"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4a0e17]/25 text-[#4a0e17] transition-colors hover:bg-[#4a0e17] hover:text-[#faf6f0]"
-        >
-          <span aria-hidden="true">→</span>
-        </button>
-      </div>
-    </div>
-
-    {/* Read or Leave Review CTA */}
-    <div className="mt-10 text-center">
-      <a
-        href="https://www.google.com/maps/search/?api=1&query=Karnan+Pattu+Centre+Bengaluru"
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-3 bg-[#4a0e17] px-6 py-3 text-[11px] font-semibold tracking-[0.14em] text-[#faf6f0] uppercase transition-colors hover:bg-[#6b1a26]"
-      >
-        Read or leave a review
-        <span aria-hidden="true">↗</span>
-      </a>
-    </div>
-  </div>
-</section>
+      <GoogleReviewsSection />
 
     </>
-  )
-}
-
-function AssuranceIcon({ name }) {
-  const common = {
-    viewBox: "0 0 24 24",
-    className: "h-8 w-8 shrink-0",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.4,
-    "aria-hidden": true,
-  }
-
-  if (name === "person") {
-    return (
-      <svg {...common}>
-        <circle cx="12" cy="8" r="2.4" />
-        <path d="M7.5 19v-1.2A3.5 3.5 0 0 1 11 14.4h2a3.5 3.5 0 0 1 3.5 3.4V19" />
-      </svg>
-    )
-  }
-
-  if (name === "leaf") {
-    return (
-      <svg {...common}>
-        <path d="M5 19c8 0 14-6 14-14-8 0-14 6-14 14z" />
-        <path d="M8 16c2-2 4-5 6-8" />
-      </svg>
-    )
-  }
-
-  if (name === "box") {
-    return (
-      <svg {...common}>
-        <rect x="4" y="8" width="16" height="12" rx="1.2" />
-        <path d="M4 12h16" />
-        <path d="M12 8v12" />
-        <path d="M12 8c-1.4-2.4-4.2-2.2-4.2-.4S10.2 9.2 12 8c1.4-2.4 4.2-2.2 4.2-.4S13.8 9.2 12 8z" />
-      </svg>
-    )
-  }
-
-  return (
-    <svg {...common}>
-      <path d="M12 3 20 12l-8 9-8-9 8-9z" />
-    </svg>
-  )
-}
-
-function PromiseIcon({ name }) {
-  const common = {
-    viewBox: "0 0 24 24",
-    className: "h-5 w-5",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    "aria-hidden": true,
-  }
-  if (name === "price") {
-    return (
-      <svg {...common}>
-        <path d="M12 3v18" />
-        <path d="M8 7h6a3 3 0 0 1 0 6H8" />
-        <path d="M8 13h7a3 3 0 0 1 0 6H8" />
-      </svg>
-    )
-  }
-  if (name === "cash") {
-    return (
-      <svg {...common}>
-        <rect x="3" y="6" width="18" height="12" rx="2" />
-        <circle cx="12" cy="12" r="2.5" />
-      </svg>
-    )
-  }
-  if (name === "silk") {
-    return (
-      <svg {...common}>
-        <path d="M4 8c2 2 4 2 6 0s4-2 6 0 4 2 4 0" />
-        <path d="M4 12c2 2 4 2 6 0s4-2 6 0 4 2 4 0" />
-        <path d="M4 16c2 2 4 2 6 0s4-2 6 0 4 2 4 0" />
-      </svg>
-    )
-  }
-  return (
-    <svg {...common}>
-      <circle cx="12" cy="12" r="8" />
-      <path d="m8.5 12 2.2 2.2 4.8-5" />
-    </svg>
   )
 }

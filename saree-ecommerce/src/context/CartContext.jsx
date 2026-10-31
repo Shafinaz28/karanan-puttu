@@ -13,15 +13,17 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   }, [items])
 
-  function addToCart(productId) {
+  function addToCart(productId, qty = 1) {
+    const id = Number(productId)
+    const amount = Math.max(1, Number(qty) || 1)
     setItems((current) => {
-      const found = current.find((item) => item.id === productId)
+      const found = current.find((item) => Number(item.id) === id)
       if (found) {
         return current.map((item) =>
-          item.id === productId ? { ...item, qty: item.qty + 1 } : item,
+          Number(item.id) === id ? { ...item, qty: item.qty + amount, id } : item,
         )
       }
-      return [...current, { id: productId, qty: 1 }]
+      return [...current, { id, qty: amount }]
     })
   }
 

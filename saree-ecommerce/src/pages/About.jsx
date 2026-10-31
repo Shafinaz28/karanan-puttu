@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { sareeImages } from "../data/products"
+import WhyChooseUsSection from "../components/WhyChooseUsSection"
 
 const beliefs = [
   {
@@ -92,7 +92,7 @@ export default function About() {
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 lg:grid-cols-2 lg:px-8">
           <figure className="relative order-2 lg:order-1">
             <img
-              src="/sarees/worn/worn-crimson.jpg"
+              src="/sarees/worn/worn-crimson.avif"
               alt="A crimson soft silk with a plum gold border"
               className="h-72 w-full rounded-2xl object-cover object-top md:h-[460px]"
             />
@@ -133,6 +133,35 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <section className="bg-shell px-4 py-10 md:px-8 md:py-14">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="order-2 lg:order-1">
+            <p className="text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">Founder</p>
+            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Karnan</h2>
+            <p className="mt-2 text-sm font-medium text-[#8a6230]">Founder, Karnan Pattu Centre</p>
+            <p className="mt-5 text-sm leading-7 text-ink/75 md:text-base">
+              Karnan Pattu Centre began in 1985 with a simple counter rule: name the silk in daylight, quote a fair
+              price before anyone agrees, and pay the same day when we buy old soft silk.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-ink/75 md:text-base">
+              From Jayanagar in Bengaluru, the house still sells new soft silks for every occasion and welcomes old,
+              used, torn, and faded drapes at the desk. That promise has not changed—only the families who trust it.
+            </p>
+          </div>
+          <figure className="order-1 lg:order-2">
+            <img
+              src="/hero/family-saree.avif"
+              alt="Founder at Karnan Pattu Centre with silk sarees"
+              decoding="async"
+              className="h-72 w-full rounded-2xl object-cover object-center md:h-[420px]"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <WhyChooseUsSection />
+
       <section className="bg-shell px-4 py-8 md:px-8 md:py-10">
         <ul className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {beliefs.map((item) => (
@@ -148,10 +177,7 @@ export default function About() {
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
             <img
-              src="/hero/about-purple-teal.png"
-              alt="A purple and teal silk saree displayed in the showroom"
-              data-slide="left"
-              className="h-[520px] w-full object-cover object-[center_12%] md:h-[640px]"
+              src="/hero/about-purple-teal.avif"
             />
             <div data-slide="right">
               <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Our house</p>
