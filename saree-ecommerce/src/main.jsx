@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-const HERO_IMAGE = "/hero/hero-mustard1.png"
+const HERO_PNG = "/hero/hero-mustard1.png"
+const HERO_AVIF = "/hero/hero-mustard1.avif"
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -31,9 +32,10 @@ if (loader) {
 
   Promise.all([
     domReady,
-    preloadImage(HERO_IMAGE),
+    preloadImage(HERO_PNG),
     minimumDisplayTime,
   ]).then(() => {
+    preloadImage(HERO_AVIF)
     loader.classList.add("is-hidden")
     window.setTimeout(() => loader.remove(), 1720)
   })

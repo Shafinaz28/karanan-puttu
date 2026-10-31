@@ -12,6 +12,7 @@ const photo = (index) => sareeImages[index % sareeImages.length]
 
 const mainHero = {
   src: "/hero/hero-mustard1.png",
+  srcAvif: "/hero/hero-mustard1.avif",
   alt: "Mustard silk saree in a heritage courtyard",
   position: "object-[68%_top] sm:object-[62%_top] md:object-[58%_12%]",
   eyebrow: "Karnan Pattu Centre",
@@ -159,14 +160,26 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative h-[92vh] w-full max-w-full overflow-hidden md:h-screen">
-        <img
-          src={mainHero.src}
-          alt={mainHero.alt}
-          fetchPriority="high"
-          decoding="async"
-          className={`absolute inset-0 h-full w-full object-cover ${mainHero.position}`}
-        />
+      <section
+        className="relative h-[92vh] w-full max-w-full overflow-hidden bg-[#2c1814] md:h-screen"
+        style={{
+          backgroundImage: `url(${mainHero.src})`,
+          backgroundSize: "cover",
+          backgroundPosition: "58% 12%",
+        }}
+      >
+        <picture className="absolute inset-0 block h-full w-full">
+          <source srcSet={mainHero.srcAvif} type="image/avif" />
+          <img
+            src={mainHero.src}
+            alt={mainHero.alt}
+            fetchPriority="high"
+            decoding="async"
+            width={1024}
+            height={768}
+            className={`h-full w-full object-cover ${mainHero.position}`}
+          />
+        </picture>
         <div
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.55)_40%,rgba(28,8,12,0.2)_65%,transparent_88%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.88)_0%,rgba(28,8,12,0.62)_38%,rgba(28,8,12,0.25)_52%,transparent_70%)]"
           aria-hidden
