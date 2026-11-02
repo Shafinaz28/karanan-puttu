@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 import { sareeImages } from "../data/products"
 
-const phone = "+919894441500"
-const phoneLabel = "+91 98944 41500"
+const phone = "+917200015300"
+const phoneLabel = "+91 72000 15300"
 
 const stores = [
   {

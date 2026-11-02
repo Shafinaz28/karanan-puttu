@@ -134,29 +134,33 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-shell px-4 py-10 md:px-8 md:py-14">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-2 lg:gap-12">
-          <div className="order-2 lg:order-1">
+      <section className="bg-shell px-4 py-6 md:px-8 md:py-8">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-8">
+          <div className="order-2 text-left lg:order-1">
             <p className="text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">Founder</p>
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Karnan</h2>
-            <p className="mt-2 text-sm font-medium text-[#8a6230]">Founder, Karnan Pattu Centre</p>
-            <p className="mt-5 text-sm leading-7 text-ink/75 md:text-base">
+            <h2 className="mt-2 font-display text-4xl text-primary md:text-5xl">Karnan</h2>
+            <p className="mt-1 text-sm font-medium text-[#8a6230]">Founder, Karnan Pattu Centre</p>
+            <p className="mt-3 text-sm leading-6 text-ink/75 md:text-base md:leading-7">
               Karnan Pattu Centre began in 1985 with a simple counter rule: name the silk in daylight, quote a fair
               price before anyone agrees, and pay the same day when we buy old soft silk.
             </p>
-            <p className="mt-4 text-sm leading-7 text-ink/75 md:text-base">
+            <p className="mt-3 text-sm leading-6 text-ink/75 md:text-base md:leading-7">
               From Jayanagar in Bengaluru, the house still sells new soft silks for every occasion and welcomes old,
               used, torn, and faded drapes at the desk. That promise has not changed—only the families who trust it.
             </p>
           </div>
-          <figure className="order-1 lg:order-2">
-            <img
-              src="/hero/family-saree.avif"
-              alt="Founder at Karnan Pattu Centre with silk sarees"
-              decoding="async"
-              className="h-72 w-full rounded-2xl object-cover object-center md:h-[420px]"
-            />
-          </figure>
+          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+            <figure className="w-[12.5rem] sm:w-[13.5rem] lg:w-[14rem] xl:w-[15rem]">
+              <img
+                src="/about/founder-karnan.png"
+                alt="Karnan, founder of Karnan Pattu Centre"
+                decoding="async"
+                width={800}
+                height={1000}
+                className="aspect-[3/4] w-full max-h-[15.5rem] rounded-2xl object-cover object-[center_8%] sm:max-h-[16.5rem] lg:max-h-[17.5rem]"
+              />
+            </figure>
+          </div>
         </div>
       </section>
 
@@ -261,50 +265,39 @@ export default function About() {
           </ul>
         </div>
       </section>
-     <section className="relative min-h-[360px] overflow-hidden bg-[#3a1216]">
-  {/* Background Image - 140% Height on Desktop */}
-  <img
-    src="/hero/family-hall.avif"
-    alt="New & Pre-loved Silk Sarees"
-    className="absolute inset-x-0 top-0 w-full object-cover object-top sm:h-[140%]"
-  />
-
-  {/* Dark Overlay */}
-  <div className="absolute inset-0 bg-[#3a1216]/75" />
-
-  {/* Content Block */}
-  <div className="relative mx-auto flex min-h-[360px] max-w-3xl flex-col items-center justify-center px-6 py-12 text-center text-cream">
-    <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
-      New & pre-loved
-    </p>
-    <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-      New silks to wear. Old silks to treasure.
-    </h2>
-    <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
-      Explore new soft silks and a curated collection of pre-loved sarees. Contact us for current styles, condition, and pricing.
-    </p>
-    <div className="mt-8 flex flex-wrap justify-center gap-3">
-      <Link
-        to="/shop"
-        className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
-      >
-        Shop new silk
-      </Link>
-      <Link
-        to="/old-silk"
-        className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
-      >
-        Discover pre-loved silk
-      </Link>
-      <a
-        href="tel:+919894441500"
-        className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
-      >
-        Call the desk
-      </a>
-    </div>
-  </div>
-</section>
+      <section className="bg-[#3a1216] px-6 py-12 text-center text-cream md:py-14">
+        <div className="mx-auto flex max-w-3xl flex-col items-center">
+          <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
+            New & pre-loved
+          </p>
+          <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
+            New silks to wear. Old silks to treasure.
+          </h2>
+          <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
+            Explore new soft silks and a curated collection of pre-loved sarees. Contact us for current styles, condition, and pricing.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              to="/shop"
+              className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
+            >
+              Shop new silk
+            </Link>
+            <Link
+              to="/old-silk"
+              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
+            >
+              Discover pre-loved silk
+            </Link>
+            <a
+              href="tel:+917200015300"
+              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
+            >
+              Call the desk
+            </a>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

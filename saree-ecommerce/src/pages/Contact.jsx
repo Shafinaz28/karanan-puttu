@@ -98,9 +98,9 @@ export default function Contact() {
           </p>
           <ul className="mt-8 space-y-4">
             {[
-              ["phone", "Call the desk", "tel:+919894441500", "+91 98944 41500", false],
+              ["phone", "Call the desk", "tel:+917200015300", "+91 72000 15300", false],
               ["phone", "Store phone", "tel:+919944055900", "+91 99440 55900", false],
-              ["chat", "WhatsApp", "https://wa.me/919894441500", "Message the showroom", true],
+              ["chat", "WhatsApp", "https://wa.me/917200015300", "Message the showroom", true],
               ["mail", "Email", "mailto:karnanpattucenter@gmail.com", "karnanpattucenter@gmail.com", false],
               ["pin", "Showrooms", "/locations", "V.V. Puram and Jayanagar", false],
             ].map(([icon, label, href, value, external]) => (

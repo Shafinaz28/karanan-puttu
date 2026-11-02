@@ -76,13 +76,13 @@ export default function Navbar() {
       >
       <div className="hidden items-center justify-between gap-4 bg-primary px-4 py-2 text-[11px] whitespace-nowrap text-[#f6efe4] lg:flex lg:px-12 lg:text-[12px]">
         <div className="flex items-center gap-5 lg:gap-7">
-          <a href="tel:+919894441500" className="inline-flex items-center gap-1.5 hover:text-secondary">
+          <a href="tel:+917200015300" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <PhoneIcon />
-            +91 98944 41500
+            +91 72000 15300
           </a>
           <a href="tel:+919944055900" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <PhoneIcon />
-            +91 99440 55900
+            +91 98944 41500
           </a>
           <a href="mailto:karnanpattucenter@gmail.com" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <MailIcon />

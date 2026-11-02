@@ -24,7 +24,7 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-clip bg-shell font-sans text-ink">
       <Navbar />
-      <main className="w-full max-w-full overflow-x-clip pb-[4.25rem] lg:pb-0">{children}</main>
+      <main className="w-full max-w-full overflow-x-clip">{children}</main>
       <div className={pathname.startsWith("/shop") ? "hidden lg:block" : undefined}>
         <TrustBar />
       </div>
@@ -32,7 +32,7 @@ export default function Layout({ children }) {
       <MobileTabBar />
       {createPortal(
         <a
-          href="https://wa.me/919894441500"
+          href="https://wa.me/917200015300"
           target="_blank"
           rel="noreferrer"
           aria-label="WhatsApp"

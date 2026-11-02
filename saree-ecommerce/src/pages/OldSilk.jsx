@@ -172,11 +172,11 @@ export default function OldSilk() {
         </div>
         <div className="mt-12 text-center">
           <a
-            href="tel:+919894441500"
+            href="tel:+917200015300"
             className="motion-btn motion-fill inline-flex items-center gap-2 bg-primary px-6 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
             style={{ borderRadius: 0 }}
           >
-            Call +91 98944 41500
+            Call +91 72000 15300
           </a>
         </div>
       </section>

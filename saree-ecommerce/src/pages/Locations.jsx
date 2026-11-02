@@ -5,25 +5,25 @@ export default function Locations() {
     {
       name: "Jayanagar - Main Branch",
       address: "4th Block, Jayanagar, Bengaluru",
-      phone: "+91 98944 41500",
+      phone: "+91 72000 15300",
       mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.661636157984!2d77.58167999999999!3d12.929455599999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c2814b4f83%3A0xd9d23bbf0d0ff67b!2sKarnan%20Pattu%20Centre%20-%20Jayanagar%20-%20Old%20Silk%20Saree%20Buyers!5e0!3m2!1sen!2sin!4v1793360788675!5m2!1sen!2sin",
     },
     {
       name: "Jayanagar - Branch II",
       address: "Jayanagar Shopping Area, Bengaluru",
-      phone: "+91 98944 41500",
+      phone: "+91 72000 15300",
       mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.6420763706255!2d77.5841447!3d12.930710900000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15e5f6a5dd9d%3A0x131f2d55755f22df!2sKarnan%20Pattu%20Centre%20-%20Jayanagar!5e0!3m2!1sen!2sin!4v1793360822613!5m2!1sen!2sin",
     },
     {
       name: "Jayanagar - Branch III",
       address: "Jayanagar Commercial Enclave, Bengaluru",
-      phone: "+91 98944 41500",
+      phone: "+91 72000 15300",
       mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.667746942816!2d77.58548309999999!3d12.9290634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15ef33ea9283%3A0x4014b67ef0c93dff!2sKarnan%20Pattu%20Centre%20-%20Jayanagar!5e0!3m2!1sen!2sin!4v1793360853851!5m2!1sen!2sin",
     },
     {
       name: "Showroom Street View",
       address: "Boutique Exterior View, Bengaluru",
-      phone: "+91 98944 41500",
+      phone: "+91 72000 15300",
       mapSrc: "https://www.google.com/maps/embed?pb=!4v1793361126751!6m8!1m7!1sc_3QPDsUT3T5L-YpI67edg!2m2!1d12.92003135489287!2d77.59292927983381!3f285.5489!4f0!5f0.7820865974627469",
     },
   ]

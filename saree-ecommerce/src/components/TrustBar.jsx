@@ -8,23 +8,23 @@ const items = [
 export default function TrustBar() {
   return (
     <section
-      className="border-t border-primary/10 bg-[#faf6f0] px-4 py-6 md:px-8 md:py-12 lg:py-12"
+      className="border-t border-primary/10 bg-[#faf6f0] px-4 py-8 md:px-8 md:py-10 lg:py-12"
       aria-label="Shopping assurances"
     >
-      <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-6 sm:gap-x-6 sm:gap-y-8 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-primary/10">
+      <ul className="mx-auto grid max-w-6xl grid-cols-2 items-stretch gap-x-5 gap-y-8 sm:gap-x-8 sm:gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-primary/10">
         {items.map((item) => (
           <li
             key={item.title}
-            className="flex min-w-0 items-start gap-2.5 text-left sm:gap-3 lg:px-6 lg:first:pl-0 lg:last:pr-0"
+            className="flex min-w-0 items-center gap-3 text-left sm:gap-3.5 lg:px-7 lg:first:pl-0 lg:last:pr-0 xl:px-9"
           >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/8 text-primary sm:h-11 sm:w-11">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/8 text-primary">
               <TrustIcon name={item.icon} />
             </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[13px] font-semibold leading-snug text-primary sm:text-[15px]">
+            <span className="min-w-0 flex-1 leading-tight">
+              <span className="block text-[13px] font-semibold leading-snug text-primary sm:text-[15px] sm:leading-tight">
                 {item.title}
               </span>
-              <span className="mt-0.5 block text-[11px] leading-4 text-ink/55 sm:mt-1 sm:text-xs sm:leading-5">
+              <span className="mt-1 block text-[11px] leading-4 text-ink/55 sm:text-xs sm:leading-5">
                 {item.note}
               </span>
             </span>

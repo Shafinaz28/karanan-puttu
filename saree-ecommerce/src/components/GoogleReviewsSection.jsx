@@ -64,7 +64,7 @@ function GoogleMark() {
 
 function Stars() {
   return (
-    <div className="mt-3 flex gap-0.5 text-[#ea4335]" aria-label="5 out of 5 stars">
+    <div className="mt-3 flex justify-start gap-0.5 text-[#ea4335]" aria-label="5 out of 5 stars">
       {[...Array(5)].map((_, index) => (
         <span key={index} className="text-[15px] leading-none">
           ★
@@ -118,7 +118,7 @@ export default function GoogleReviewsSection() {
   const slideWidth = 100 / slidesPerView
 
   return (
-    <section className="bg-white px-4 py-14 md:py-16">
+    <section className="bg-white px-4 pt-12 pb-10 md:pt-14 md:pb-12">
       <div className="mx-auto max-w-6xl">
         <div className="text-center">
           <p className="text-[11px] font-semibold tracking-[0.2em] text-[#8a6230] uppercase">Google reviews</p>
@@ -126,7 +126,7 @@ export default function GoogleReviewsSection() {
         </div>
 
         <div
-          className="relative mt-10"
+          className="relative mt-8 md:mt-10"
           role="region"
           aria-roledescription="carousel"
           aria-label="Customer reviews"
@@ -144,16 +144,16 @@ export default function GoogleReviewsSection() {
 
           <div className="overflow-hidden border border-black/10 bg-white md:mx-6 lg:mx-8">
             <ul
-              className="flex transition-transform duration-500 ease-out"
+              className="flex items-stretch transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${activeIndex * slideWidth}%)` }}
             >
               {reviews.map((review) => (
                 <li
                   key={review.name}
-                  className="box-border shrink-0 border-r border-black/10 px-5 py-6 last:border-r-0 sm:px-6 sm:py-7"
+                  className="box-border flex min-h-[220px] shrink-0 flex-col border-r border-black/10 px-5 py-6 last:border-r-0 sm:min-h-[240px] sm:px-6 sm:py-7"
                   style={{ width: `${slideWidth}%` }}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <img
                         src={review.avatar}
@@ -162,15 +162,15 @@ export default function GoogleReviewsSection() {
                         loading="lazy"
                         decoding="async"
                       />
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-ink">{review.name}</p>
-                        <p className="text-xs text-ink/45">{review.timeAgo}</p>
+                      <div className="min-w-0 text-left">
+                        <p className="truncate text-sm font-semibold leading-tight text-ink">{review.name}</p>
+                        <p className="mt-0.5 text-xs leading-tight text-ink/45">{review.timeAgo}</p>
                       </div>
                     </div>
                     <GoogleMark />
                   </div>
                   <Stars />
-                  <p className="mt-3 text-sm leading-relaxed text-ink/80">{review.quote}</p>
+                  <p className="mt-3 flex-1 text-left text-sm leading-relaxed text-ink/80">{review.quote}</p>
                 </li>
               ))}
             </ul>

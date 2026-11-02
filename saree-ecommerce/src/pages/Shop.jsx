@@ -260,6 +260,28 @@ function ShopPagination({ totalPages, currentPage, onPageChange }) {
   )
 }
 
+function GridColumnsIcon({ columns }) {
+  const gap = 1.25
+  const inset = 2
+  const inner = 16 - inset * 2
+  const barWidth = (inner - gap * (columns - 1)) / columns
+
+  return (
+    <svg viewBox="0 0 16 16" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+      {Array.from({ length: columns }, (_, index) => (
+        <rect
+          key={index}
+          x={inset + index * (barWidth + gap)}
+          y={3}
+          width={barWidth}
+          height={10}
+          rx={0.75}
+        />
+      ))}
+    </svg>
+  )
+}
+
 export default function Shop() {
   const { products, loading } = useProducts()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -299,7 +321,7 @@ export default function Shop() {
   const occasionParam = searchParams.get("occasion") || ""
   const sort = searchParams.get("sort") || "bestselling"
   const page = Math.max(1, Number(searchParams.get("page")) || 1)
-  const cols = Math.min(5, Math.max(2, Number(searchParams.get("cols")) || 4))
+  const cols = Math.min(4, Math.max(2, Number(searchParams.get("cols")) || 4))
   const minPrice = searchParams.get("min") || ""
   const maxPrice = searchParams.get("max") || ""
 
@@ -348,13 +370,11 @@ export default function Shop() {
   const pageItems = sorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
 
   const gridClass =
-    cols === 5
-      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-      : cols === 4
-        ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        : cols === 3
-          ? "grid-cols-2 md:grid-cols-3"
-          : "grid-cols-2"
+    cols === 4
+      ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      : cols === 3
+        ? "grid-cols-2 md:grid-cols-3"
+        : "grid-cols-2"
 
   const filterPanelProps = {
     openFilters,
@@ -466,20 +486,21 @@ export default function Shop() {
                 </label>
               </div>
 
-              <div className="hidden items-center gap-1 lg:flex" aria-label="Grid columns">
-                {[2, 3, 4, 5].map((n) => (
+              <div className="hidden items-center gap-1.5 md:flex" aria-label="Grid columns">
+                {[2, 3, 4].map((n) => (
                   <button
                     key={n}
                     type="button"
                     onClick={() => updateParams({ cols: String(n) })}
-                    className={`flex h-9 w-9 items-center justify-center rounded border text-xs ${
+                    className={`flex h-9 w-9 items-center justify-center rounded border ${
                       cols === n
                         ? "border-primary bg-primary/5 text-primary"
                         : "border-black/15 text-ink/50 hover:border-primary/40"
                     }`}
                     aria-pressed={cols === n}
+                    aria-label={`${n} columns`}
                   >
-                    {n}
+                    <GridColumnsIcon columns={n} />
                   </button>
                 ))}
               </div>

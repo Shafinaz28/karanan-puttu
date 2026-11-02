@@ -452,7 +452,7 @@ export default function AdminDashboard() {
           {tab === "help" && (
             <SimplePanel
               title="Help"
-              text="Call +91 98944 41500 or +91 99440 55900, or email karnanpattucenter@gmail.com. Orders placed in this browser appear on the dashboard right away."
+              text="Call +91 72000 15300 or +91 99440 55900, or email karnanpattucenter@gmail.com. Orders placed in this browser appear on the dashboard right away."
             />
           )}
         </div>
