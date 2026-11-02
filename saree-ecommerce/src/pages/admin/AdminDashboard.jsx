@@ -1,9 +1,16 @@
-import { Fragment, useEffect, useMemo, useState } from "react"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import logo from "../../assets/images/kpc-logo.avif"
 import { clearUser, readUser } from "../Login"
 import { formatPrice } from "../../data/products"
-import { mapDbProduct, toDbPayload } from "../../lib/productMap"
+import {
+  createProduct,
+  deleteProduct as deleteProductRow,
+  setProductActive,
+  updateProduct,
+  validateProductForm,
+} from "../../lib/adminProducts"
+import { mapDbProduct } from "../../lib/productMap"
 import { uploadProductImage } from "../../lib/uploadProductImage"
 import { loadOrders, readOrders, updateOrderStatus } from "../../lib/orders"
 import {
@@ -11,7 +18,16 @@ import {
   updateContactMessageStatus,
 } from "../../lib/contactMessages"
 import { supabase, supabaseConfigured } from "../../lib/supabase"
-import { useProducts } from "../../context/ProductsContext"
+import { PRODUCTS_UPDATED_EVENT, useProducts } from "../../context/ProductsContext"
+import {
+  DASHBOARD,
+  FUNNEL_BAR_COLORS,
+  METRIC_CARD_TINTS,
+  ORDER_STATUS_THEME,
+  buildOrderStatusRows,
+  MESSAGE_STATUS_THEME,
+  orderStatusPillClass,
+} from "../../lib/dashboardTheme"
 
 const emptyForm = {
   name: "",
@@ -24,7 +40,7 @@ const emptyForm = {
   length: "6.3 metres",
   color: "",
   description: "",
-  image: "/sarees/worn/worn-purple.avif",
+  image: "",
   featured: false,
   party: false,
   active: true,
@@ -42,14 +58,9 @@ function uniqueCustomerCount(orders) {
   return new Set(orders.map(customerIdentity).filter((key) => key !== "name:")).size
 }
 
-const statusTone = {
-  Delivered: "bg-primary/10 text-primary",
-  Shipped: "bg-secondary/25 text-[#8a6a1e]",
-  "Out for delivery": "bg-primary-soft/15 text-primary-soft",
-  Processing: "bg-[#f3e8dc] text-primary",
-  Pending: "bg-cream-deep text-primary-soft",
-  Cancelled: "bg-rose-50 text-rose-700",
-}
+const statusTone = Object.fromEntries(
+  Object.entries(ORDER_STATUS_THEME).map(([label, theme]) => [label, theme.pill]),
+)
 
 const navItems = [
   ["overview", "Dashboard"],
@@ -65,6 +76,18 @@ const footItems = [
   ["settings", "Settings"],
   ["help", "Help"],
 ]
+
+const tabMeta = {
+  overview: { title: "Dashboard", subtitle: "Store overview and quick actions" },
+  orders: { title: "Orders", subtitle: "Track and update customer orders" },
+  messages: { title: "Messages", subtitle: "Contact form enquiries" },
+  products: { title: "Products", subtitle: "Add, edit, and hide sarees in the shop" },
+  customers: { title: "Customers", subtitle: "Buyers from saved orders" },
+  analytics: { title: "Analytics", subtitle: "Sales trends and performance" },
+  coupons: { title: "Discounts", subtitle: "Checkout coupon codes" },
+  settings: { title: "Settings", subtitle: "Connection and store tools" },
+  help: { title: "Help", subtitle: "Support contacts" },
+}
 
 function isAdminSession(session) {
   return session?.user?.app_metadata?.role === "admin"
@@ -92,7 +115,7 @@ function NavGlyph({ id }) {
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
-  const { products: storeProducts, refreshProducts, fromDatabase } = useProducts()
+  const { products: storeProducts, refreshProducts } = useProducts()
   const [ready, setReady] = useState(false)
   const [authed, setAuthed] = useState(false)
   const [tab, setTab] = useState("overview")
@@ -106,6 +129,8 @@ export default function AdminDashboard() {
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [productNotice, setProductNotice] = useState("")
+  const [scrollToProductForm, setScrollToProductForm] = useState(false)
   const user = readUser()
   const displayName = user?.email
     ? user.email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase())
@@ -151,6 +176,14 @@ export default function AdminDashboard() {
       window.removeEventListener("storage", refreshOrders)
       window.removeEventListener("karanan-orders", refreshOrders)
     }
+  }, [authed])
+
+  useEffect(() => {
+    if (!authed) return undefined
+    loadContactMessages()
+      .then(setContactMessages)
+      .catch(() => {})
+    return undefined
   }, [authed])
 
   useEffect(() => {
@@ -213,6 +246,14 @@ export default function AdminDashboard() {
     )
   }, [contactMessages, query])
 
+  const visibleProductCount = useMemo(() => rows.filter((product) => product.active !== false).length, [rows])
+  const hiddenProductCount = rows.length - visibleProductCount
+  const newMessageCount = useMemo(
+    () => contactMessages.filter((message) => message.status === "New").length,
+    [contactMessages],
+  )
+  const page = tabMeta[tab] || tabMeta.overview
+
   async function loadRows() {
     setLoading(true)
     setError("")
@@ -231,11 +272,9 @@ export default function AdminDashboard() {
           ? "The products table is not in Supabase yet. Open the SQL Editor, paste supabase/setup.sql, click Run, then refresh this page."
           : fetchError.message,
       )
-      setRows(storeProducts)
-    } else if (!data?.length) {
-      setRows(storeProducts)
+      setRows([])
     } else {
-      setRows(data.map(mapDbProduct))
+      setRows((data || []).map(mapDbProduct))
     }
     setLoading(false)
   }
@@ -247,6 +286,7 @@ export default function AdminDashboard() {
   }
 
   function startEdit(product) {
+    setProductNotice("")
     setEditingId(product.id)
     setTab("products")
     setForm({
@@ -270,7 +310,24 @@ export default function AdminDashboard() {
   function resetForm() {
     setEditingId(null)
     setForm(emptyForm)
+    setProductNotice("")
   }
+
+  function startAddProduct() {
+    setError("")
+    resetForm()
+    setScrollToProductForm(true)
+    setTab("products")
+  }
+
+  useEffect(() => {
+    if (tab !== "products" || !scrollToProductForm) return undefined
+    setScrollToProductForm(false)
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("admin-product-form")?.scrollIntoView({ behavior: "smooth", block: "start" })
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [tab, scrollToProductForm])
 
   async function saveProduct(event) {
     event.preventDefault()
@@ -278,36 +335,67 @@ export default function AdminDashboard() {
       setError("Connect Supabase in .env to save products to the database.")
       return
     }
-    setSaving(true)
-    setError("")
-    const payload = toDbPayload(form)
-    const result = editingId
-      ? await supabase.from("products").update(payload).eq("id", editingId)
-      : await supabase.from("products").insert(payload)
-    setSaving(false)
-    if (result.error) {
-      setError(result.error.message)
+    const validationError = validateProductForm(form)
+    if (validationError) {
+      setError(validationError)
       return
     }
-    resetForm()
-    await loadRows()
-    await refreshProducts()
+    setSaving(true)
+    setError("")
+    setProductNotice("")
+    try {
+      if (editingId) {
+        await updateProduct(editingId, form)
+        setProductNotice("Product updated.")
+      } else {
+        await createProduct(form)
+        setProductNotice("Product added.")
+      }
+      resetForm()
+      await loadRows()
+      await refreshProducts()
+      window.dispatchEvent(new Event(PRODUCTS_UPDATED_EVENT))
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Unable to save this product.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function removeProduct(id) {
-    if (!window.confirm("Delete this saree from the database?")) return
+    if (!window.confirm("Delete this saree from the database? This cannot be undone.")) return
     if (!supabaseConfigured || !supabase) {
       setError("Connect Supabase in .env to delete products from the database.")
       return
     }
-    const { error: deleteError } = await supabase.from("products").delete().eq("id", id)
-    if (deleteError) {
-      setError(deleteError.message)
-      return
+    setError("")
+    setProductNotice("")
+    try {
+      await deleteProductRow(id)
+      if (editingId === id) resetForm()
+      setProductNotice("Product deleted.")
+      await loadRows()
+      await refreshProducts()
+      window.dispatchEvent(new Event(PRODUCTS_UPDATED_EVENT))
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Unable to delete this product.")
     }
-    if (editingId === id) resetForm()
-    await loadRows()
-    await refreshProducts()
+  }
+
+  async function toggleProductActive(product) {
+    if (!supabaseConfigured || !supabase) return
+    setError("")
+    try {
+      await setProductActive(product.id, !product.active)
+      await loadRows()
+      await refreshProducts()
+      window.dispatchEvent(new Event(PRODUCTS_UPDATED_EVENT))
+      if (editingId === product.id) {
+        setForm((current) => ({ ...current, active: !product.active }))
+      }
+    } catch (toggleError) {
+      setError(toggleError instanceof Error ? toggleError.message : "Unable to update visibility.")
+    }
   }
 
   if (!ready) {
@@ -316,7 +404,7 @@ export default function AdminDashboard() {
   if (!authed) return <Navigate to="/admin/login" replace />
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-[radial-gradient(circle_at_top_left,#f3e8dc,transparent_42%),radial-gradient(circle_at_bottom_right,#e7d5c4,transparent_40%),linear-gradient(160deg,#f7f1e8,#f3e8dc_48%,#f6efe4)] text-ink lg:flex-row">
+    <div className="admin-dashboard flex h-dvh flex-col overflow-hidden bg-[radial-gradient(circle_at_top_left,#f3e8dc,transparent_42%),radial-gradient(circle_at_bottom_right,#e7d5c4,transparent_40%),linear-gradient(160deg,#f7f1e8,#f3e8dc_48%,#f6efe4)] text-ink lg:flex-row">
       <aside className="flex shrink-0 flex-col border-white/70 bg-white/55 backdrop-blur-xl lg:h-full lg:w-[240px] lg:border-r">
         <div className="flex items-center gap-3 px-5 py-5">
           <img src={logo} alt="" className="h-10 w-10 rounded-2xl bg-white object-contain p-1 shadow-sm" />
@@ -348,9 +436,14 @@ export default function AdminDashboard() {
                   {orders.length}
                 </span>
               )}
-              {id === "messages" && contactMessages.some((message) => message.status === "New") && (
+              {id === "products" && rows.length > 0 && (
                 <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
-                  {contactMessages.filter((message) => message.status === "New").length}
+                  {rows.length}
+                </span>
+              )}
+              {id === "messages" && newMessageCount > 0 && (
+                <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
+                  {newMessageCount}
                 </span>
               )}
             </button>
@@ -378,8 +471,12 @@ export default function AdminDashboard() {
       </aside>
 
       <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
-        <header className="flex flex-wrap items-center gap-3 px-4 py-4 sm:px-6">
-          <label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-2xl border border-white/80 bg-white/70 px-4 py-2.5 shadow-sm">
+        <header className="flex flex-wrap items-center gap-3 border-b border-white/50 px-4 py-4 sm:px-6">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display text-2xl text-primary">{page.title}</h1>
+            <p className="mt-0.5 text-xs text-slate-500">{page.subtitle}</p>
+          </div>
+          <label className="flex min-w-[200px] flex-1 items-center gap-2 rounded-2xl border border-white/80 bg-white/70 px-4 py-2.5 shadow-sm lg:max-w-xs">
             <span className="text-slate-400" aria-hidden="true">⌕</span>
             <input
               value={query}
@@ -388,7 +485,22 @@ export default function AdminDashboard() {
               className="w-full bg-transparent text-sm outline-none"
             />
           </label>
-          <div className="ml-auto flex items-center gap-2 rounded-2xl border border-white/80 bg-white/70 py-1 pr-3 pl-1 shadow-sm">
+          <button
+            type="button"
+            onClick={startAddProduct}
+            className="hidden rounded-full bg-primary px-4 py-2 text-xs font-semibold tracking-wide text-cream uppercase sm:inline-flex"
+          >
+            + Add product
+          </button>
+          <div className="flex items-center gap-2">
+            <span
+              className={`hidden rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide sm:inline ${
+                supabaseConfigured ? "bg-emerald-50 text-emerald-800" : "bg-amber-50 text-amber-900"
+              }`}
+            >
+              {supabaseConfigured ? "Online" : "Local only"}
+            </span>
+            <div className="flex items-center gap-2 rounded-2xl border border-white/80 bg-white/70 py-1 pr-3 pl-1 shadow-sm">
             <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-xs text-white">
               {displayName.slice(0, 1)}
             </span>
@@ -396,6 +508,7 @@ export default function AdminDashboard() {
               <span className="block max-w-[140px] truncate text-xs leading-none font-medium">{displayName}</span>
               <span className="text-[10px] text-slate-400">Store admin</span>
             </span>
+          </div>
           </div>
         </header>
 
@@ -405,9 +518,15 @@ export default function AdminDashboard() {
             <Overview
               name={/^karnan/i.test(displayName) ? "Karnan" : displayName.split(" ")[0]}
               productCount={rows.length}
+              visibleProductCount={visibleProductCount}
+              hiddenProductCount={hiddenProductCount}
+              newMessageCount={newMessageCount}
+              supabaseReady={supabaseConfigured}
               orders={orders}
               onOpenProducts={() => setTab("products")}
               onOpenOrders={() => setTab("orders")}
+              onOpenMessages={() => setTab("messages")}
+              onAddProduct={startAddProduct}
               onStatus={changeStatus}
             />
           )}
@@ -415,14 +534,20 @@ export default function AdminDashboard() {
             <ProductsPanel
               rows={filteredRows}
               loading={loading}
+              totalCount={rows.length}
+              visibleCount={visibleProductCount}
+              hiddenCount={hiddenProductCount}
               form={form}
               setForm={setForm}
               editingId={editingId}
               saving={saving}
-              fromDatabase={fromDatabase}
+              notice={productNotice}
+              supabaseReady={supabaseConfigured}
               onRefresh={loadRows}
+              onAdd={startAddProduct}
               onEdit={startEdit}
               onDelete={removeProduct}
+              onToggleActive={toggleProductActive}
               onSave={saveProduct}
               onCancel={resetForm}
             />
@@ -444,9 +569,15 @@ export default function AdminDashboard() {
           {tab === "coupons" && <CouponsPanel />}
           {tab === "analytics" && <AnalyticsPanel orders={orders} />}
           {tab === "settings" && (
-            <SimplePanel
-              title="Settings"
-              text={supabaseConfigured ? "Supabase is connected. Product photos upload into the product-images folder." : "Add the Supabase URL and publishable key in .env to save the catalogue."}
+            <SettingsPanel
+              supabaseReady={supabaseConfigured}
+              productCount={rows.length}
+              visibleCount={visibleProductCount}
+              onRefreshProducts={async () => {
+                await loadRows()
+                await refreshProducts()
+              }}
+              onOpenProducts={() => setTab("products")}
             />
           )}
           {tab === "help" && (
@@ -461,6 +592,7 @@ export default function AdminDashboard() {
   )
 }
 function monthDelta(current, previous, phrase = "previous month") {
+  if (current === 0 && previous === 0) return { text: `No activity vs ${phrase}`, up: true }
   if (!previous && !current) return { text: `0% vs ${phrase}`, up: true }
   if (!previous) return { text: "New in this range", up: true }
   const pct = Math.round(((current - previous) / previous) * 1000) / 10
@@ -517,15 +649,29 @@ function previousBoundsFor(key) {
 function withinBounds(order, bounds) {
   if (!bounds || bounds.all) return true
   const created = new Date(order.createdAt)
-  if (Number.isNaN(created.getTime())) return false
-  return created >= bounds.start && created <= bounds.end
+  const fallback = Number.isNaN(created.getTime()) ? new Date(order.date) : created
+  if (Number.isNaN(fallback.getTime())) return false
+  return fallback >= bounds.start && fallback <= bounds.end
 }
 
 function formatRangeDate(date) {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 }
 
-function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, onStatus }) {
+function Overview({
+  name,
+  productCount,
+  visibleProductCount,
+  hiddenProductCount,
+  newMessageCount,
+  supabaseReady,
+  orders,
+  onOpenProducts,
+  onOpenOrders,
+  onOpenMessages,
+  onAddProduct,
+  onStatus,
+}) {
   const [range, setRange] = useState("month")
   const [rangeOpen, setRangeOpen] = useState(false)
   const bounds = boundsFor(range)
@@ -543,36 +689,31 @@ function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, on
   const week = lastSevenDays(shown, range === "lastMonth" ? bounds.end : new Date())
   const weekTotal = week.reduce((sum, day) => sum + day.amount, 0)
   const top = topSelling(shown)
-  const statusRows = [
-    ["Delivered", "#4a0e17"],
-    ["Processing", "#c59b27"],
-    ["Pending", "#6b1a26"],
-    ["Shipped", "#a67c2d"],
-    ["Out for delivery", "#8d3a45"],
-    ["Cancelled", "#c4a484"],
-  ].map(([label, color]) => ({
-    label,
-    color,
-    count: shown.filter((order) => order.status === label).length,
-  }))
-  const counted = statusRows.reduce((sum, row) => sum + row.count, 0)
-  const payments = [
-    ["Cash on delivery", live.filter((order) => /cash/i.test(order.payment || "Cash on delivery")).length, "bg-primary"],
-    ["Pay online", live.filter((order) => /online/i.test(order.payment || "")).length, "bg-secondary"],
+  const statusRowsAll = buildOrderStatusRows((label) => orders.filter((order) => order.status === label).length)
+  const catalogueRows = [
+    { label: "In shop", count: visibleProductCount, color: DASHBOARD.primary },
+    { label: "Hidden", count: hiddenProductCount, color: DASHBOARD.catalogueHidden },
   ]
-  const payTotal = payments.reduce((sum, row) => sum + row[1], 0) || 1
-  const delivered = statusRows.find((row) => row.label === "Delivered").count
+  const chartUsesCatalogue = orders.length === 0 && productCount > 0
+  const donutTotal = chartUsesCatalogue ? productCount : orders.length
+  const donutParts = chartUsesCatalogue ? catalogueRows : statusRowsAll
+  const legendRows = chartUsesCatalogue ? catalogueRows : statusRowsAll
+  const payments = [
+    ["Cash on delivery", live.filter((order) => /cash/i.test(order.payment || "Cash on delivery")).length, DASHBOARD.primary],
+    ["Pay online", live.filter((order) => /online/i.test(order.payment || "")).length, DASHBOARD.secondary],
+  ]
+  const delivered = statusRowsAll.find((row) => row.label === "Delivered").count
   const funnel = [
-    ["Sarees listed", productCount, "#4a0e17"],
-    ["Orders placed", shown.length, "#6b1a26"],
-    ["Customers", customers, "#a67c2d"],
-    ["Delivered", delivered, "#c59b27"],
+    ["Sarees listed", productCount, FUNNEL_BAR_COLORS[0]],
+    ["Orders placed", orders.length, FUNNEL_BAR_COLORS[1]],
+    ["Customers", uniqueCustomerCount(orders), FUNNEL_BAR_COLORS[2]],
+    ["Delivered", delivered, FUNNEL_BAR_COLORS[3]],
   ]
   const cards = [
-    ["Total revenue", formatPrice(revenue), range === "all" ? { text: "All saved orders", up: true } : monthDelta(revenue, prevRevenue, compareLabel), "bg-primary/10 text-primary"],
-    ["Total orders", String(shown.length), range === "all" ? { text: "All saved orders", up: true } : monthDelta(live.length, previous.length, compareLabel), "bg-secondary/20 text-primary"],
-    ["New customers", String(customers), range === "all" ? { text: "All saved orders", up: true } : monthDelta(customers, prevCustomers, compareLabel), "bg-primary-soft/15 text-primary-soft"],
-    ["Average order value", formatPrice(average), range === "all" ? { text: "All saved orders", up: true } : monthDelta(average, prevAverage, compareLabel), "bg-secondary/25 text-[#8a6a1e]"],
+    ["Total revenue", formatPrice(revenue), range === "all" ? { text: "All saved orders", up: true } : monthDelta(revenue, prevRevenue, compareLabel), METRIC_CARD_TINTS[0]],
+    ["Total orders", String(shown.length), range === "all" ? { text: "All saved orders", up: true } : monthDelta(live.length, previous.length, compareLabel), METRIC_CARD_TINTS[1]],
+    ["New customers", String(customers), range === "all" ? { text: "All saved orders", up: true } : monthDelta(customers, prevCustomers, compareLabel), METRIC_CARD_TINTS[2]],
+    ["Average order value", formatPrice(average), range === "all" ? { text: "All saved orders", up: true } : monthDelta(average, prevAverage, compareLabel), METRIC_CARD_TINTS[3]],
   ]
 
   return (
@@ -582,7 +723,23 @@ function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, on
           <p className="text-sm text-slate-500">Welcome back, {name}</p>
           <p className="text-sm text-slate-500">Here&apos;s what&apos;s happening with your saree store today.</p>
         </div>
-        <div className="relative">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onAddProduct?.()}
+            className="rounded-full bg-primary px-4 py-2 text-xs font-semibold tracking-wide text-cream uppercase"
+          >
+            + Add product
+          </button>
+          <Link
+            to="/shop"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-primary/20 bg-white/80 px-4 py-2 text-xs font-semibold tracking-wide text-primary uppercase"
+          >
+            View shop
+          </Link>
+          <div className="relative">
           <button
             type="button"
             onClick={() => setRangeOpen((open) => !open)}
@@ -618,12 +775,35 @@ function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, on
               ))}
             </ul>
           )}
+          </div>
         </div>
       </div>
       <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {[
+          ["In shop", String(visibleProductCount), "Visible on website", onOpenProducts],
+          ["Hidden", String(hiddenProductCount), "Not shown in shop", onOpenProducts],
+          ["New messages", String(newMessageCount), "Contact form", onOpenMessages],
+          ["Catalogue", supabaseReady ? "Live" : "Offline", supabaseReady ? "Supabase connected" : "Add .env keys", onOpenProducts],
+        ].map(([label, value, hint, onClick]) => (
+          <li key={label}>
+            <button
+              type="button"
+              onClick={onClick}
+              className="w-full rounded-2xl border border-white/80 bg-white/60 px-3 py-3 text-left shadow-sm transition hover:bg-white/90"
+            >
+              <p className="text-[10px] tracking-wide text-slate-400 uppercase">{label}</p>
+              <p className="mt-1 text-lg font-semibold text-primary">{value}</p>
+              <p className="text-[11px] text-slate-400">{hint}</p>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map(([label, value, change, tint]) => (
-          <li key={label} className="rounded-3xl border border-white/80 bg-white/75 p-4 shadow-sm">
-            <span className={`mb-3 flex h-9 w-9 items-center justify-center rounded-2xl text-sm ${tint}`}>₹</span>
+          <li key={label} className={`rounded-3xl border p-4 shadow-sm ${tint}`}>
+            <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-white/80 text-sm shadow-sm">
+              ₹
+            </span>
             <p className="text-sm text-slate-500">{label}</p>
             <p className="mt-1 text-2xl font-semibold">{value}</p>
             <p className={`mt-1 text-xs ${change.up ? "text-emerald-600" : "text-rose-600"}`}>{change.text}</p>
@@ -638,21 +818,37 @@ function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, on
           </div>
           <p className="mt-3 text-3xl font-semibold">{formatPrice(weekTotal)}</p>
           <p className="text-xs text-slate-400">Total revenue this week</p>
-          <SalesChart days={week} />
+          <SalesChart days={week} emptyHint={weekTotal === 0 ? "No revenue yet — orders will plot here." : ""} />
         </section>
         <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
           <div className="mb-2 flex items-center justify-between">
-            <h3 className="font-semibold">Order status mix</h3>
-            <button type="button" onClick={onOpenOrders} className="text-xs text-primary">View all</button>
+            <h3 className="font-semibold">{chartUsesCatalogue ? "Catalogue mix" : "Order status mix"}</h3>
+            <button type="button" onClick={chartUsesCatalogue ? onOpenProducts : onOpenOrders} className="text-xs text-primary">
+              {chartUsesCatalogue ? "Manage products" : "View all"}
+            </button>
           </div>
+          <p className="mb-2 text-xs text-slate-400">
+            {chartUsesCatalogue
+              ? "No orders yet — showing in-shop vs hidden products."
+              : `${orders.length} order${orders.length === 1 ? "" : "s"} total${
+                  shown.length !== orders.length
+                    ? ` · ${shown.length} in selected date range`
+                    : ""
+                }`}
+          </p>
           <div className="mt-2 flex flex-wrap items-center justify-center gap-4 sm:justify-between">
-            <PieChart total={shown.length} parts={statusRows} />
+            <RadialRingChart
+              total={donutTotal}
+              parts={donutParts}
+              centerValue={donutTotal}
+              centerLabel={chartUsesCatalogue ? "Products" : "Orders"}
+            />
             <ul className="min-w-[180px] flex-1 space-y-2 text-sm">
-              {statusRows.map((row) => (
-                <li key={row.label} className="grid grid-cols-[1fr_auto_auto] items-center gap-3">
+              {legendRows.map((row) => (
+                <li key={row.label} className="grid grid-cols-[auto_1fr_auto] items-center gap-2">
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: row.color }} aria-hidden />
                   <span>{row.label}</span>
-                  <span className="text-slate-400">{counted ? Math.round((row.count / counted) * 100) : 0}%</span>
-                  <span>{row.count}</span>
+                  <span className="font-medium tabular-nums">{row.count}</span>
                 </li>
               ))}
             </ul>
@@ -667,22 +863,34 @@ function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, on
           </div>
           <ul className="mt-5 space-y-4">
             {payments.map(([label, count, bar]) => (
-              <li key={label} className="grid grid-cols-[140px_1fr_48px] items-center gap-3 text-sm">
-                <span>{label}</span>
-                <div className="h-2 rounded-full bg-slate-100">
-                  <div className={`h-2 rounded-full ${bar}`} style={{ width: `${Math.max(count ? 8 : 0, Math.round((count / payTotal) * 100))}%` }} />
-                </div>
-                <span className="text-right text-slate-500">{Math.round((count / payTotal) * 100)}%</span>
+              <li key={label} className="grid grid-cols-[140px_1fr_auto] items-center gap-3 text-sm">
+                <span title={`${count} order${count === 1 ? "" : "s"}`}>{label}</span>
+                  <div
+                    className="h-2.5 rounded-full bg-slate-100"
+                    title={`${label}: ${count} (${live.length ? Math.round((count / live.length) * 100) : 0}%)`}
+                  >
+                    <div
+                      className="h-2.5 rounded-full transition-all"
+                      style={{
+                        width: `${live.length ? Math.max(count ? 6 : 0, Math.round((count / live.length) * 100)) : 0}%`,
+                        backgroundColor: bar,
+                      }}
+                    />
+                  </div>
+                <span className="text-right tabular-nums text-slate-500" title={`${count} orders`}>
+                  {count} · {live.length ? Math.round((count / live.length) * 100) : 0}%
+                </span>
               </li>
             ))}
           </ul>
+          {!live.length && <p className="mt-3 text-xs text-slate-400">No orders in range — payment split appears after checkout.</p>}
         </section>
         <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">Order funnel</h3>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500">This shop</span>
           </div>
-          <BarChart items={funnel} />
+          <BarChart items={funnel} valueSuffix={chartUsesCatalogue ? " in catalogue" : ""} />
         </section>
       </div>
       <div className="grid gap-3 xl:grid-cols-2">
@@ -724,7 +932,7 @@ function Overview({ name, productCount, orders, onOpenProducts, onOpenOrders, on
             <h3 className="font-semibold">Recent orders</h3>
             <button type="button" onClick={onOpenOrders} className="text-xs text-primary">View all</button>
           </div>
-          <RecentOrders orders={shown.slice(0, 5)} onStatus={onStatus} />
+          <RecentOrders orders={orders.slice(0, 5)} onStatus={onStatus} />
         </section>
       </div>
     </div>
@@ -765,7 +973,7 @@ function RecentOrders({ orders, onStatus }) {
                   <select
                     value={order.status}
                     onChange={(event) => onStatus(order.id, event.target.value)}
-                    className={`rounded-full px-2 py-1 text-[11px] outline-none ${statusTone[order.status] || "bg-slate-100"}`}
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-medium outline-none ${statusTone[order.status] || orderStatusPillClass(order.status)}`}
                   >
                     {["Pending", "Processing", "Shipped", "Out for delivery", "Delivered", "Cancelled"].map((status) => (
                       <option key={status}>{status}</option>
@@ -780,8 +988,9 @@ function RecentOrders({ orders, onStatus }) {
     </div>
   )
 }
-function SalesChart({ days }) {
+function SalesChart({ days, emptyHint = "" }) {
   const max = Math.max(...days.map((day) => day.amount), 1)
+  const allZero = days.every((day) => day.amount === 0)
   const coords = days.map((day, index) => {
     const x = 24 + (index * 280) / Math.max(days.length - 1, 1)
     const y = 78 - (day.amount / max) * 58
@@ -789,83 +998,123 @@ function SalesChart({ days }) {
   })
   const line = coords.map((point) => point.join(",")).join(" ")
   const area = `${coords[0][0]},88 ${line} ${coords[coords.length - 1][0]},88`
-  const peak = coords.reduce((best, point, index) => (point[1] < best.y ? { y: point[1], index, x: point[0] } : best), { y: 999, index: 0, x: 0 })
-  return (
-    <svg viewBox="0 0 320 110" className="mt-2 h-44 w-full">
-      <defs>
-        <linearGradient id="revenue-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#c59b27" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#c59b27" stopOpacity="0.02" />
-        </linearGradient>
-      </defs>
-      {[0, 1, 2, 3].map((row) => (
-        <line key={row} x1="16" x2="310" y1={16 + row * 20} y2={16 + row * 20} stroke="#e2e8f0" />
-      ))}
-      <polygon points={area} fill="url(#revenue-fill)" />
-      <polyline points={line} fill="none" stroke="#4a0e17" strokeWidth="2.5" />
-      <text x={peak.x} y={Math.max(12, peak.y - 8)} fontSize="9" textAnchor="middle" fill="#334155">{formatPrice(days[peak.index].amount)}</text>
-      {days.map((day, index) => (
-        <text key={day.label} x={coords[index][0]} y="104" fontSize="9" textAnchor="middle" fill="#94a3b8">{day.label.replace(/^[A-Za-z]+ /, "")}</text>
-      ))}
-    </svg>
+  const peak = coords.reduce(
+    (best, point, index) => (point[1] < best.y ? { y: point[1], index, x: point[0] } : best),
+    { y: 999, index: 0, x: 0 },
   )
-}
-
-function PieChart({ total, parts }) {
-  let angle = -90
-  const slices = parts.filter((part) => part.count > 0).map((part) => {
-    const sweep = (part.count / total) * 360
-    const start = angle
-    angle += sweep
-    const end = angle
-    const startRadians = (start * Math.PI) / 180
-    const endRadians = (end * Math.PI) / 180
-    const largeArc = sweep > 180 ? 1 : 0
-    const startPoint = [50 + 44 * Math.cos(startRadians), 50 + 44 * Math.sin(startRadians)]
-    const endPoint = [50 + 44 * Math.cos(endRadians), 50 + 44 * Math.sin(endRadians)]
-    const labelRadians = ((start + sweep / 2) * Math.PI) / 180
-    const labelPoint = [50 + 28 * Math.cos(labelRadians), 50 + 28 * Math.sin(labelRadians)]
-    const path = sweep >= 359.99
-      ? "M 50 6 A 44 44 0 1 1 50 94 A 44 44 0 1 1 50 6 Z"
-      : `M 50 50 L ${startPoint[0]} ${startPoint[1]} A 44 44 0 ${largeArc} 1 ${endPoint[0]} ${endPoint[1]} Z`
-
-    return {
-      ...part,
-      percent: Math.round((part.count / total) * 100),
-      labelPoint,
-      path,
-    }
-  })
-
   return (
-    <div className="flex h-44 w-44 shrink-0 items-center justify-center">
-      <svg viewBox="0 0 100 100" className="h-full w-full" role="img" aria-label={`Order status pie chart, ${total} orders`}>
-        {total ? slices.map((slice) => (
-          <g key={slice.label}>
-            <path d={slice.path} fill={slice.color} stroke="white" strokeWidth="0.6" />
-            {slice.percent >= 8 && (
-              <text
-                x={slice.labelPoint[0]}
-                y={slice.labelPoint[1]}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="white"
-                fontSize="5"
-                fontWeight="600"
-              >
-                {slice.percent}%
-              </text>
-            )}
-          </g>
-        )) : (
-          <circle cx="50" cy="50" r="44" fill="#e7e5e4" />
+    <div className="relative">
+      {emptyHint && allZero && <p className="mb-2 text-xs text-slate-400">{emptyHint}</p>}
+      <svg viewBox="0 0 320 110" className="mt-2 h-44 w-full">
+        <defs>
+          <linearGradient id="revenue-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={DASHBOARD.secondary} stopOpacity="0.45" />
+          <stop offset="100%" stopColor={DASHBOARD.secondary} stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+        {[0, 1, 2, 3].map((row) => (
+          <line key={row} x1="16" x2="310" y1={16 + row * 20} y2={16 + row * 20} stroke={DASHBOARD.grid} />
+        ))}
+        {!allZero && (
+          <>
+            <polygon points={area} fill="url(#revenue-fill)" />
+            <polyline points={line} fill="none" stroke={DASHBOARD.primary} strokeWidth="2.5" />
+          </>
         )}
+        {allZero && (
+          <line x1="24" x2="304" y1="78" y2="78" stroke={DASHBOARD.primary} strokeWidth="2" strokeDasharray="4 4" opacity="0.35" />
+        )}
+        {!allZero && days[peak.index].amount > 0 && (
+          <text x={peak.x} y={Math.max(12, peak.y - 8)} fontSize="9" textAnchor="middle" fill="#334155">
+            {formatPrice(days[peak.index].amount)}
+          </text>
+        )}
+        {days.map((day, index) => (
+          <g key={day.label}>
+            <circle cx={coords[index][0]} cy={coords[index][1]} r="4" fill={DASHBOARD.primary}>
+              <title>{`${day.label}: ${formatPrice(day.amount)}`}</title>
+            </circle>
+            <text x={coords[index][0]} y="104" fontSize="9" textAnchor="middle" fill={DASHBOARD.inkMuted}>
+              {day.label.replace(/^[A-Za-z]+ /, "")}
+            </text>
+          </g>
+        ))}
       </svg>
     </div>
   )
 }
 
-function BarChart({ items }) {
+function RadialRingChart({ total, parts, centerLabel, centerValue }) {
+  const cx = 60
+  const cy = 60
+  const stroke = 6
+  const trackColor = DASHBOARD.grid
+  const ringStep = parts.length <= 2 ? 14 : parts.length <= 4 ? 10 : 7.2
+  const outerRadius = 52
+  const sorted = [...parts].sort((a, b) => b.count - a.count)
+
+  const rings = sorted.map((part, index) => {
+    const radius = outerRadius - index * ringStep
+    const percent = total ? Math.round((part.count / total) * 100) : 0
+    const circumference = 2 * Math.PI * radius
+    const dash = (percent / 100) * circumference
+    return {
+      ...part,
+      radius,
+      percent,
+      circumference,
+      dash,
+    }
+  })
+
+  return (
+    <div className="flex h-48 w-48 shrink-0 items-center justify-center sm:h-52 sm:w-52">
+      <svg viewBox="0 0 120 120" className="h-full w-full" role="img" aria-label={`${centerLabel} radial chart, ${centerValue} total`}>
+        {rings.map((ring) => (
+          <g key={ring.label}>
+            <circle cx={cx} cy={cy} r={ring.radius} fill="none" stroke={trackColor} strokeWidth={stroke} opacity="0.85" />
+            {ring.percent > 0 && (
+              <circle
+                cx={cx}
+                cy={cy}
+                r={ring.radius}
+                fill="none"
+                stroke={ring.color}
+                strokeWidth={stroke}
+                strokeLinecap="round"
+                strokeDasharray={`${ring.dash} ${Math.max(ring.circumference - ring.dash, 0.001)}`}
+                transform={`rotate(-90 ${cx} ${cy})`}
+              >
+                <title>{`${ring.label}: ${ring.count}`}</title>
+              </circle>
+            )}
+          </g>
+        ))}
+        {!total && (
+          <circle cx={cx} cy={cy} r={outerRadius} fill="none" stroke={DASHBOARD.donutEmpty} strokeWidth={stroke} />
+        )}
+        <text x={cx} y={cy - 3} textAnchor="middle" dominantBaseline="middle" fill={DASHBOARD.primary} fontSize="16" fontWeight="700">
+          {centerValue}
+        </text>
+        <text x={cx} y={cy + 11} textAnchor="middle" dominantBaseline="middle" fill={DASHBOARD.inkMuted} fontSize="7">
+          {centerLabel}
+        </text>
+      </svg>
+    </div>
+  )
+}
+
+function DonutChart({ total, parts, centerLabel, centerValue }) {
+  return (
+    <RadialRingChart total={total} parts={parts} centerLabel={centerLabel} centerValue={centerValue} />
+  )
+}
+
+function PieChart({ total, parts }) {
+  return <DonutChart total={total} parts={parts} centerLabel="Orders" centerValue={total} />
+}
+
+function BarChart({ items, valueSuffix = "" }) {
   const maxValue = Math.max(...items.map(([, value]) => value), 1)
   const step = Math.max(1, Math.ceil(maxValue / 5))
   const axisMax = step * 5
@@ -885,22 +1134,38 @@ function BarChart({ items }) {
         const y = plot.top + (index / 5) * plot.height
         return (
           <g key={value}>
-            <line x1={plot.left} x2={plot.left + plot.width} y1={y} y2={y} stroke="#e5e7eb" strokeWidth="1" />
-            <text x="21" y={y + 3} textAnchor="end" fill="#64748b" fontSize="9">{value}</text>
+            <line x1={plot.left} x2={plot.left + plot.width} y1={y} y2={y} stroke={DASHBOARD.grid} strokeWidth="1" />
+            <text x="21" y={y + 3} textAnchor="end" fill={DASHBOARD.inkMuted} fontSize="9">
+              {value}
+            </text>
           </g>
         )
       })}
       {items.map(([label, value, color], index) => {
-        const height = (value / axisMax) * plot.height
+        const height = value > 0 ? Math.max((value / axisMax) * plot.height, 6) : 0
         const x = plot.left + slotWidth * index + (slotWidth - barWidth) / 2
         const y = plot.top + plot.height - height
         const [firstWord, ...rest] = label.split(" ")
+        const tooltip = `${label}: ${value}${valueSuffix}`
         return (
           <g key={label}>
-            <rect x={x} y={y} width={barWidth} height={height} fill={color} />
+            <rect x={x} y={y} width={barWidth} height={height} fill={color} rx="2">
+              <title>{tooltip}</title>
+            </rect>
+            {value > 0 && (
+              <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" fill={DASHBOARD.primary} fontSize="9" fontWeight="600">
+                {value}
+              </text>
+            )}
             <text x={x + barWidth / 2} y={plot.top + plot.height + 16} textAnchor="middle" fill="#334155" fontSize="9">
-              <tspan x={x + barWidth / 2} dy="0">{firstWord}</tspan>
-              {rest.length > 0 && <tspan x={x + barWidth / 2} dy="11">{rest.join(" ")}</tspan>}
+              <tspan x={x + barWidth / 2} dy="0">
+                {firstWord}
+              </tspan>
+              {rest.length > 0 && (
+                <tspan x={x + barWidth / 2} dy="11">
+                  {rest.join(" ")}
+                </tspan>
+              )}
             </text>
           </g>
         )
@@ -939,7 +1204,7 @@ function OrdersTable({ orders, onStatus }) {
                   <select
                     value={order.status}
                     onChange={(event) => onStatus(order.id, event.target.value)}
-                    className={`rounded-full px-2 py-1 text-[11px] outline-none ${statusTone[order.status] || "bg-stone-100"}`}
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-medium outline-none ${statusTone[order.status] || orderStatusPillClass(order.status)}`}
                   >
                     {["Pending", "Processing", "Shipped", "Out for delivery", "Delivered", "Cancelled"].map((status) => (
                       <option key={status}>{status}</option>
@@ -1002,7 +1267,7 @@ function ContactMessagesPanel({ messages, loading, onStatus }) {
                   aria-label={`Status for message from ${message.name}`}
                   value={message.status}
                   onChange={(event) => onStatus(message.id, event.target.value)}
-                  className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs text-primary outline-none focus:border-secondary"
+                  className={`rounded-full px-3 py-1.5 text-xs outline-none focus:border-secondary ${MESSAGE_STATUS_THEME[message.status] || MESSAGE_STATUS_THEME.New}`}
                 >
                   {["New", "Contacted", "Closed"].map((status) => (
                     <option key={status}>{status}</option>
@@ -1149,6 +1414,78 @@ function SimplePanel({ title, text }) {
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="mt-3 max-w-xl text-sm leading-6 text-ink/65">{text}</p>
     </section>
+  )
+}
+
+function SettingsPanel({ supabaseReady, productCount, visibleCount, onRefreshProducts, onOpenProducts }) {
+  const [refreshing, setRefreshing] = useState(false)
+
+  async function refresh() {
+    setRefreshing(true)
+    try {
+      await onRefreshProducts()
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      <section className="rounded-3xl border border-white/80 bg-white/75 p-6 shadow-sm">
+        <h3 className="text-lg font-semibold">Store connection</h3>
+        <p className="mt-2 text-sm text-slate-600">
+          {supabaseReady
+            ? "Supabase is connected. Products, photos, orders, and messages sync when you save from this dashboard."
+            : "Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env, then restart the dev server."}
+        </p>
+        <p
+          className={`mt-4 inline-flex rounded-full px-3 py-1 text-xs font-medium ${
+            supabaseReady ? "bg-emerald-50 text-emerald-800" : "bg-amber-50 text-amber-900"
+          }`}
+        >
+          {supabaseReady ? "Status: Online" : "Status: Local only"}
+        </p>
+      </section>
+      <section className="rounded-3xl border border-white/80 bg-white/75 p-6 shadow-sm">
+        <h3 className="text-lg font-semibold">Catalogue</h3>
+        <ul className="mt-4 space-y-2 text-sm text-slate-600">
+          <li>
+            <span className="text-slate-400">Total products:</span> {productCount}
+          </li>
+          <li>
+            <span className="text-slate-400">Visible in shop:</span> {visibleCount}
+          </li>
+          <li>
+            <span className="text-slate-400">Photo uploads:</span> product-images bucket (admin login required)
+          </li>
+        </ul>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={onOpenProducts}
+            className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-cream uppercase"
+          >
+            Manage products
+          </button>
+          <button
+            type="button"
+            onClick={refresh}
+            disabled={refreshing}
+            className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs uppercase disabled:opacity-50"
+          >
+            {refreshing ? "Refreshing…" : "Refresh catalogue"}
+          </button>
+          <Link
+            to="/shop"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-primary/20 px-4 py-2 text-xs font-semibold text-primary uppercase"
+          >
+            Open shop
+          </Link>
+        </div>
+      </section>
+    </div>
   )
 }
 
@@ -1317,12 +1654,43 @@ function CouponsPanel() {
   )
 }
 
+const saleGroupOptions = [
+  ["soft", "Soft silk"],
+  ["tissue", "Tissue"],
+  ["traditional", "Traditional"],
+  ["party", "Party wear"],
+  ["wedding", "Wedding"],
+  ["new", "New arrivals"],
+]
+
 function ProductsPanel({
-  rows, loading, form, setForm, editingId, saving, fromDatabase,
-  onRefresh, onEdit, onDelete, onSave, onCancel,
+  rows,
+  loading,
+  totalCount,
+  visibleCount,
+  hiddenCount,
+  form,
+  setForm,
+  editingId,
+  saving,
+  notice,
+  supabaseReady,
+  onRefresh,
+  onAdd,
+  onEdit,
+  onDelete,
+  onToggleActive,
+  onSave,
+  onCancel,
 }) {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState("")
+  const fileInputRef = useRef(null)
+
+  function openFilePicker() {
+    if (uploading) return
+    fileInputRef.current?.click()
+  }
 
   async function choosePhoto(event) {
     const file = event.target.files?.[0]
@@ -1340,76 +1708,217 @@ function ProductsPanel({
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_380px]">
+    <div className="grid gap-4 lg:grid-cols-[1fr_400px]">
       <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Products</h3>
-          <button type="button" onClick={onRefresh} className="text-xs underline">Refresh</button>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {[
+            ["Total", totalCount],
+            ["In shop", visibleCount],
+            ["Hidden", hiddenCount],
+          ].map(([label, count]) => (
+            <span key={label} className="rounded-full bg-[#faf8f4] px-3 py-1 text-[11px] text-ink/70">
+              {label}: <strong className="text-primary">{count}</strong>
+            </span>
+          ))}
         </div>
-        <p className="mb-3 text-xs text-ink/45">{fromDatabase ? "Saved in Supabase" : "Local catalogue"}</p>
-        {loading ? <p className="text-sm text-ink/50">Loading…</p> : (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-semibold">Products</h3>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={onAdd} className="rounded-full bg-primary px-4 py-2 text-xs font-medium text-cream">
+              + Add product
+            </button>
+            <button type="button" onClick={onRefresh} className="rounded-full border border-black/10 px-4 py-2 text-xs">
+              Refresh
+            </button>
+          </div>
+        </div>
+        {notice && <p className="mb-3 rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{notice}</p>}
+        {loading ? (
+          <p className="text-sm text-ink/50">Loading…</p>
+        ) : rows.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink/55">
+            No products yet. Use <strong>Add product</strong> and fill in the form on the right.
+          </p>
+        ) : (
           <ul className="space-y-3">
             {rows.map((product) => (
-              <li key={product.id} className="flex flex-wrap items-center gap-3 border-b border-black/5 pb-3">
-                <img src={product.image} alt="" className="h-14 w-11 rounded object-cover object-top" />
+              <li
+                key={product.id}
+                className="flex flex-wrap items-center gap-3 rounded-2xl border border-black/[0.06] bg-white/80 px-3 py-3"
+              >
+                <img src={product.image} alt="" className="h-16 w-12 rounded-lg object-cover object-top" />
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-xl">{product.name}</p>
-                  <p className="text-xs text-ink/45">{formatPrice(product.price)}</p>
+                  <p className="font-display text-xl leading-tight text-primary">{product.name}</p>
+                  <p className="text-xs text-ink/45">
+                    {formatPrice(product.price)}
+                    {product.badge ? ` · ${product.badge}` : ""}
+                  </p>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {!product.active && (
+                      <span className="rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-medium uppercase">Hidden</span>
+                    )}
+                    {product.featured && (
+                      <span className="rounded bg-secondary/20 px-1.5 py-0.5 text-[10px] font-medium uppercase">Featured</span>
+                    )}
+                    {product.party && (
+                      <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase">Party</span>
+                    )}
+                  </div>
                 </div>
-                <button type="button" onClick={() => onEdit(product)} className="text-xs uppercase">Edit</button>
-                <button type="button" onClick={() => onDelete(product.id)} className="text-xs text-red-700 uppercase">Delete</button>
+                <div className="flex flex-wrap gap-2 text-xs uppercase tracking-wide">
+                  <button type="button" onClick={() => onEdit(product)} className="text-primary underline">
+                    Edit
+                  </button>
+                  <button type="button" onClick={() => onToggleActive(product)} className="text-ink/70 underline">
+                    {product.active ? "Hide" : "Show"}
+                  </button>
+                  <button type="button" onClick={() => onDelete(product.id)} className="text-red-700 underline">
+                    Delete
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         )}
       </section>
-      <aside className="h-fit rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
-        <h3 className="text-lg font-semibold">{editingId ? "Edit saree" : "Add saree"}</h3>
+      <aside id="admin-product-form" className="h-fit scroll-mt-24 rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm lg:sticky lg:top-4">
+        <h3 className="text-lg font-semibold">{editingId ? "Edit product" : "Add product"}</h3>
+        <p className="mt-1 text-xs text-ink/50">Fields marked with * are required.</p>
         <form onSubmit={onSave} className="mt-4 space-y-3">
-          <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
-            Photo
-            <input type="file" accept="image/*" onChange={choosePhoto} className="mt-1 block w-full text-sm" />
-          </label>
-          {uploading && <p className="text-xs text-ink/50">Uploading photo…</p>}
+          <p className="text-[10px] tracking-wide text-ink/45 uppercase">Product photo *</p>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={choosePhoto}
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden
+          />
+          <button
+            type="button"
+            onClick={openFilePicker}
+            disabled={uploading}
+            className="group relative flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-primary/25 bg-white py-8 transition hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-70"
+          >
+            {form.image ? (
+              <span className="flex flex-col items-center gap-3 px-4 text-center">
+                <span className="h-24 w-[4.5rem] shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-black/10">
+                  <img
+                    src={form.image}
+                    alt=""
+                    className="h-full w-full object-cover object-top"
+                  />
+                </span>
+                <span className="text-sm font-medium text-primary">
+                  {uploading ? "Uploading…" : "Click to change photo"}
+                </span>
+              </span>
+            ) : (
+              <span className="flex flex-col items-center gap-2 px-4 py-2 text-center">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-2xl text-primary" aria-hidden>
+                  +
+                </span>
+                <span className="text-sm font-medium text-primary">
+                  {uploading ? "Uploading…" : "Click to upload image"}
+                </span>
+                <span className="text-xs normal-case text-ink/45">Opens your files — JPG, PNG, WebP</span>
+              </span>
+            )}
+          </button>
           {uploadError && <p className="text-xs text-red-700">{uploadError}</p>}
-          {form.image && <img src={form.image} alt="" className="h-28 w-20 rounded object-cover object-top" />}
-          {[["name", "Name", "text"], ["price", "Price", "number"], ["badge", "Badge", "text"], ["category", "Category", "text"], ["color", "Colour", "text"], ["fabric", "Fabric", "text"], ["length", "Length", "text"], ["line", "Short line", "text"]].map(([key, label, type]) => (
-            <label key={key} className="block text-[10px] tracking-wide text-ink/45 uppercase">
-              {label}
-              <input
-                type={type}
-                required={key === "name" || key === "price"}
-                value={form[key]}
-                onChange={(event) => setForm((current) => ({
-                  ...current,
-                  [key]: type === "number" ? Number(event.target.value) : event.target.value,
-                }))}
-                className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none"
-              />
-            </label>
-          ))}
+          <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
+            Or paste image URL
+            <input
+              type="text"
+              required
+              value={form.image}
+              onChange={(event) => setForm((current) => ({ ...current, image: event.target.value }))}
+              placeholder="/sarees/… or https://…"
+              className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
+            />
+          </label>
+          {[["name", "Name *", "text"], ["price", "Price (₹) *", "number"], ["badge", "Badge", "text"], ["category", "Category", "text"], ["color", "Colour", "text"], ["fabric", "Fabric", "text"], ["length", "Length", "text"], ["line", "Short line", "text"]].map(
+            ([key, label, type]) => (
+              <label key={key} className="block text-[10px] tracking-wide text-ink/45 uppercase">
+                {label}
+                <input
+                  type={type}
+                  required={key === "name" || key === "price"}
+                  value={form[key]}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      [key]: type === "number" ? Number(event.target.value) : event.target.value,
+                    }))
+                  }
+                  className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
+                />
+              </label>
+            ),
+          )}
+          <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
+            Shop collection
+            <select
+              value={form.saleGroup}
+              onChange={(event) => setForm((current) => ({ ...current, saleGroup: event.target.value }))}
+              className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
+            >
+              {saleGroupOptions.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
             Description
             <textarea
               value={form.description}
               onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
               rows={4}
-              className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none"
+              className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
             />
           </label>
-          <label className="flex items-center gap-2 text-sm normal-case text-ink">
-            <input type="checkbox" checked={form.featured} onChange={(event) => setForm((current) => ({ ...current, featured: event.target.checked }))} />
-            Featured
-          </label>
-          <label className="flex items-center gap-2 text-sm normal-case text-ink">
-            <input type="checkbox" checked={form.active} onChange={(event) => setForm((current) => ({ ...current, active: event.target.checked }))} />
-            Show in the shop
-          </label>
-          <button type="submit" disabled={saving} className="w-full bg-[#102117] py-2.5 text-xs tracking-wide text-[#f6efe4] uppercase">
-            {saving ? "Saving…" : editingId ? "Update" : "Add"}
+          <div className="space-y-2 rounded-xl border border-black/[0.06] bg-[#faf8f4] px-3 py-3">
+            <label className="flex items-center gap-2 text-sm normal-case text-ink">
+              <input
+                type="checkbox"
+                checked={form.featured}
+                onChange={(event) => setForm((current) => ({ ...current, featured: event.target.checked }))}
+              />
+              Featured on home
+            </label>
+            <label className="flex items-center gap-2 text-sm normal-case text-ink">
+              <input
+                type="checkbox"
+                checked={form.party}
+                onChange={(event) => setForm((current) => ({ ...current, party: event.target.checked }))}
+              />
+              Party wear filter
+            </label>
+            <label className="flex items-center gap-2 text-sm normal-case text-ink">
+              <input
+                type="checkbox"
+                checked={form.active}
+                onChange={(event) => setForm((current) => ({ ...current, active: event.target.checked }))}
+              />
+              Visible in shop
+            </label>
+          </div>
+          <button
+            type="submit"
+            disabled={saving || !supabaseReady}
+            className="w-full rounded-lg bg-primary py-2.5 text-xs font-semibold tracking-wide text-cream uppercase disabled:opacity-50"
+          >
+            {saving ? "Saving…" : editingId ? "Update product" : "Add product"}
           </button>
           {editingId && (
-            <button type="button" onClick={onCancel} className="w-full border border-black/10 py-2 text-xs uppercase">Cancel</button>
+            <button type="button" onClick={onCancel} className="w-full rounded-lg border border-black/10 py-2 text-xs uppercase">
+              Cancel edit
+            </button>
           )}
         </form>
       </aside>

@@ -2,17 +2,28 @@
 
 html {
   overflow-x: clip;
+  width: 100%;
+  overscroll-behavior-x: none;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
   overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
   background: oklch(87.9% 0.03 65);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 #root {
-  overflow-x: clip;
   min-height: 100%;
+  width: 100%;
+  min-width: 0;
 }
 
 @theme {
@@ -25,7 +36,9 @@ body {
   --color-shell: oklch(87.9% 0.03 65);
   --color-ink: #1c1917;
   --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "DM Sans", sans-serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --default-font-family: var(--font-sans);
+  --font-serif: var(--font-display);
   --text-3xl: 1.5rem;
   --text-3xl--line-height: 1.25;
   --text-4xl: 1.75rem;
@@ -54,6 +67,7 @@ section[id] {
 }
 
 .font-display {
+  font-family: var(--font-display);
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -61,8 +75,38 @@ section[id] {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
   text-transform: capitalize;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .site-container-narrow {
+    @apply mx-auto w-full min-w-0 max-w-3xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .site-section {
+    @apply w-full min-w-0 border-b border-black/[0.06];
+  }
+
+  .site-section-inner {
+    @apply mx-auto w-full min-w-0 max-w-7xl px-4 py-12 sm:px-6 md:py-14 lg:px-8 lg:py-16;
+  }
 }
 
 .service-card {
@@ -101,6 +145,99 @@ h4 {
 
 @media (prefers-reduced-motion: reduce) {
   .service-card:hover {
+    transform: none;
+  }
+}
+
+.about-promise-card {
+  transition:
+    transform 0.45s ease,
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.about-promise-card h3,
+.about-promise-card p {
+  transition: color 0.45s ease;
+}
+
+.about-promise-card .about-promise-icon {
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease;
+}
+
+.about-promise-card:hover {
+  transform: translateY(-6px);
+  background-color: #4a0e17;
+  border-color: #c59b27;
+  box-shadow: 0 16px 34px rgb(74 14 23 / 22%);
+}
+
+.about-promise-card:hover h3,
+.about-promise-card:hover p {
+  color: #f3e8dc;
+}
+
+.about-promise-card:hover .about-promise-icon {
+  border-color: #c59b27;
+  background-color: #c59b27;
+  color: #4a0e17;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-promise-card:hover {
+    transform: none;
+  }
+}
+
+.about-damask-hero {
+  background-color: #4a0418;
+  background-image:
+    radial-gradient(#c89d4b 0.75px, transparent 0.75px),
+    radial-gradient(#c89d4b 0.75px, #4a0418 0.75px);
+  background-size: 30px 30px;
+  background-position:
+    0 0,
+    15px 15px;
+}
+
+.about-subtle-linen {
+  background-color: #faf6ee;
+  background-image: radial-gradient(rgb(200 157 75 / 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.about-shadow-card-gold {
+  box-shadow:
+    0 10px 30px -10px rgb(74 4 24 / 5%),
+    inset 0 0 0 1px rgb(200 157 75 / 0.25);
+}
+
+.about-shadow-luxury {
+  box-shadow:
+    0 20px 40px -15px rgb(92 6 31 / 8%),
+    0 0 25px 0 rgb(200 157 75 / 10%);
+}
+
+.about-promise-card-luxury {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.about-promise-card-luxury:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 40px -15px rgb(92 6 31 / 12%),
+    0 0 25px 0 rgb(200 157 75 / 12%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-promise-card-luxury:hover {
     transform: none;
   }
 }
@@ -541,4 +678,14 @@ h4 {
   .hero-slide {
     transition: none;
   }
+}
+
+/* Admin dashboard — status dropdowns match order-status theme */
+.admin-dashboard select.rounded-full {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a0e17' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  padding-right: 1.75rem;
 }

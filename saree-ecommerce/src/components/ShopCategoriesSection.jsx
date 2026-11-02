@@ -5,8 +5,9 @@ export default function ShopCategoriesSection({ variant = "home", activeCollecti
   const compact = variant === "compact"
 
   return (
-    <section className={compact ? "border-b border-black/10 bg-[#faf6f0] px-4 py-10 sm:px-6" : "bg-[#faf6f0] px-5 py-14 md:px-8 md:py-16"}>
-      <div className={compact ? "mx-auto max-w-7xl" : "mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12"}>
+    <section className={compact ? "site-section border-b border-black/10 bg-[#faf6f0]" : "site-section bg-[#faf6f0]"}>
+      <div className={compact ? "site-section-inner !py-10" : "site-section-inner"}>
+      <div className={compact ? "" : "flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12"}>
         {!compact && (
           <div data-slide="left" className="min-w-0 text-center lg:max-w-sm lg:text-left">
             <p className="text-[11px] tracking-[0.28em] text-primary/80 uppercase">Shop by category</p>
@@ -60,6 +61,7 @@ export default function ShopCategoriesSection({ variant = "home", activeCollecti
             )
           })}
         </ul>
+      </div>
       </div>
     </section>
   )

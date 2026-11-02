@@ -73,7 +73,7 @@ export default function ProductDetails() {
 
   if (!product) {
     return (
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="site-container py-16">
         <h1 className="font-display text-4xl text-primary">Saree not found</h1>
         <Link to="/shop" className="mt-4 inline-block text-sm text-primary">
           Back to shop
@@ -186,7 +186,7 @@ export default function ProductDetails() {
 
   return (
     <div className="bg-white lg:bg-cream">
-      <section className="mx-auto max-w-6xl px-4 py-4 md:py-14">
+      <section className="site-container py-4 md:py-14">
         <nav className="mb-4 text-xs leading-relaxed text-ink/55 lg:mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-primary">
             Home
@@ -361,7 +361,7 @@ export default function ProductDetails() {
       </section>
 
       <section className="border-t border-ink/10 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="site-container py-10">
           <h2 className="border-b border-ink/15 pb-3 text-sm font-medium text-ink">Product description</h2>
           <div className="pt-8">{descriptionBlock}</div>
         </div>
@@ -369,7 +369,7 @@ export default function ProductDetails() {
 
       {similar.length > 0 && (
         <section className="border-t border-ink/10 bg-[#f7f1e8] px-4 py-10 sm:px-6">
-          <div className="mx-auto max-w-6xl">
+          <div className="site-container">
             <h2 className="text-center font-display text-2xl text-primary sm:text-left sm:text-3xl">
               You might also like
             </h2>

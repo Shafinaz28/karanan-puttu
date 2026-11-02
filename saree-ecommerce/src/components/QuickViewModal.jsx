@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { createPortal } from "react-dom"
 import { useCart } from "../context/CartContext"
 import { formatPrice, productDisplayTitle } from "../data/products"
+import { productImageSrc } from "../lib/productMap"
 
 function formatPriceDetailed(amount) {
   return new Intl.NumberFormat("en-IN", {
@@ -71,7 +72,7 @@ export default function QuickViewModal({ product, onClose, onAdded }) {
 
         <div className="relative aspect-[3/4] max-h-[45vh] shrink-0 bg-[#f0e6d8] md:aspect-auto md:max-h-none md:w-[48%]">
           <img
-            src={product.image}
+            src={productImageSrc(product)}
             alt={product.name}
             className="h-full w-full object-cover object-top"
           />

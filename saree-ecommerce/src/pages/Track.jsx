@@ -23,7 +23,7 @@ export default function Track() {
   }
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-16">
+    <section className="site-container-narrow py-16">
       <p className="text-xs tracking-[0.22em] text-secondary uppercase">Order tracking</p>
       <h1 className="mt-2 font-display text-5xl text-primary">Track your saree</h1>
       <p className="mt-3 max-w-xl text-sm text-ink/70">

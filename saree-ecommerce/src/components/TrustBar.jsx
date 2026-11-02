@@ -8,10 +8,11 @@ const items = [
 export default function TrustBar() {
   return (
     <section
-      className="border-t border-primary/10 bg-[#faf6f0] px-4 py-8 md:px-8 md:py-10 lg:py-12"
+      className="site-section border-t border-primary/10 bg-[#faf6f0]"
       aria-label="Shopping assurances"
     >
-      <ul className="mx-auto grid max-w-6xl grid-cols-2 items-stretch gap-x-5 gap-y-8 sm:gap-x-8 sm:gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-primary/10">
+      <div className="site-section-inner !py-8 md:!py-10 lg:!py-12">
+      <ul className="grid grid-cols-2 items-stretch gap-x-5 gap-y-8 sm:gap-x-8 sm:gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-primary/10">
         {items.map((item) => (
           <li
             key={item.title}
@@ -31,6 +32,7 @@ export default function TrustBar() {
           </li>
         ))}
       </ul>
+      </div>
     </section>
   )
 }

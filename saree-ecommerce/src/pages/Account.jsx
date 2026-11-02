@@ -80,7 +80,7 @@ export default function Account() {
   }
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-16 text-center">
+    <section className="site-container-narrow py-16 text-center">
       <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">The house</p>
       <h1 className="mt-3 font-display text-5xl text-primary">Account</h1>
       {loading ? (

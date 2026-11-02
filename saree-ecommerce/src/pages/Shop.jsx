@@ -1,11 +1,12 @@
 import { useMemo, useState, useEffect } from "react"
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import ShopProductCard from "../components/ShopProductCard"
+import PageDamaskHero from "../components/PageDamaskHero"
 import { useProducts } from "../context/ProductsContext"
 import { useMobileShopDrawer } from "../context/MobileShopDrawerContext"
+import useShopMotion from "../hooks/useShopMotion"
 import { resolveShopCategory } from "../data/products"
 import { shopFilterCategories } from "../data/shopCategories"
-import VisitStoreBanner from "../components/VisitStoreBanner"
 
 const PAGE_SIZE = 12
 
@@ -211,7 +212,11 @@ function ShopPagination({ totalPages, currentPage, onPageChange }) {
   const items = buildPaginationSequence(totalPages, currentPage)
 
   return (
-    <nav className="mt-10 flex flex-wrap items-center justify-center gap-2 py-2 lg:mt-12 lg:gap-3" aria-label="Pagination">
+    <nav
+      className="mt-10 flex flex-wrap items-center justify-center gap-2 py-2 lg:mt-12 lg:gap-3"
+      aria-label="Pagination"
+      data-shop-pagination
+    >
           {totalPages > 1 && currentPage > 1 && (
             <button
               type="button"
@@ -283,7 +288,7 @@ function GridColumnsIcon({ columns }) {
 }
 
 export default function Shop() {
-  const { products, loading } = useProducts()
+  const { products, loading, fromDatabase, refreshProducts } = useProducts()
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
   const navigate = useNavigate()
@@ -296,6 +301,10 @@ export default function Shop() {
     occasion: true,
     price: true,
   })
+
+  useEffect(() => {
+    refreshProducts()
+  }, [refreshProducts])
 
   useEffect(() => {
     if (location.state?.openMobileFilters) {
@@ -369,6 +378,13 @@ export default function Shop() {
   const safePage = Math.min(page, totalPages)
   const pageItems = sorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
 
+  const shopMotionKey = useMemo(() => {
+    if (loading) return ""
+    return `${searchParams.toString()}|${pageItems.map((product) => product.id).join(",")}`
+  }, [loading, searchParams, pageItems])
+
+  useShopMotion(shopMotionKey)
+
   const gridClass =
     cols === 4
       ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
@@ -390,7 +406,13 @@ export default function Shop() {
   }
 
   return (
-    <div className="bg-white">
+    <>
+      <PageDamaskHero
+        breadcrumb="Shop"
+        title={collection ? pageTitle : "Browse the collection"}
+        subtitle="“Soft silks with zari work and blouse pieces included—from everyday drapes to tissue weaves and occasion edits. Prices include tax; shipping at checkout.”"
+      />
+    <section className="bg-white" data-shop-section aria-label="Shop catalogue">
       {drawerMounted && (
         <div className="fixed inset-0 z-[90] lg:hidden" role="presentation">
           <button
@@ -424,36 +446,10 @@ export default function Shop() {
         </div>
       )}
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <nav className="text-xs text-ink/55">
-          <Link to="/" className="hover:text-primary">
-            Home
-          </Link>
-          <span className="mx-1.5">›</span>
-          <span className="text-ink/80">Shop</span>
-          {collection && (
-            <>
-              <span className="mx-1.5">›</span>
-              <span className="text-ink/80">{pageTitle}</span>
-            </>
-          )}
-        </nav>
-
-        <header className="mx-auto mt-6 max-w-3xl text-center md:mt-8">
-          <h1 className="font-display text-3xl text-ink md:text-4xl">
-            {collection ? pageTitle : "Browse the collection"}
-          </h1>
-          <p className="mt-4 text-sm leading-7 text-ink/65">
-            Drapes with zari work and blouse pieces included — from everyday silks to tissue weaves and occasion edits.
-            Narrow your browse with the filters beside the grid.
-          </p>
-          <p className="mt-3 text-sm leading-7 text-ink/65">
-            Prices include tax. Shipping is calculated at checkout.
-          </p>
-        </header>
-
-        <div className="mt-12 flex flex-col gap-10 lg:flex-row lg:gap-12">
-          <aside className="hidden w-full shrink-0 lg:block lg:w-[220px] xl:w-[240px]">
+      <section className="site-section bg-shell">
+        <div className="site-section-inner py-8">
+        <div className="mt-2 flex flex-col gap-10 lg:flex-row lg:gap-12">
+          <aside className="hidden w-full shrink-0 lg:block lg:w-[220px] xl:w-[240px]" data-shop-filters>
             <p className="text-sm font-semibold text-ink">Filters</p>
             <div className="mt-2">
               <ShopFiltersPanel {...filterPanelProps} />
@@ -461,7 +457,10 @@ export default function Shop() {
           </aside>
 
           <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/10 pb-4">
+            <div
+              className="flex flex-wrap items-center justify-between gap-4 border-b border-black/10 pb-4"
+              data-shop-toolbar
+            >
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
@@ -506,6 +505,20 @@ export default function Shop() {
               </div>
             </div>
 
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-ink/60" data-shop-meta>
+              {fromDatabase && (
+                <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-medium text-emerald-800">
+                  Live from Supabase
+                </span>
+              )}
+              {!loading && (
+                <span>
+                  {sorted.length} saree{sorted.length === 1 ? "" : "s"}
+                  {collection ? ` · ${pageTitle}` : ""}
+                </span>
+              )}
+            </div>
+
             {loading && <p className="mt-8 text-sm text-ink/50">Loading sarees…</p>}
             {search && (
               <p className="mt-4 text-sm text-ink/70">
@@ -513,13 +526,20 @@ export default function Shop() {
               </p>
             )}
 
-            {!loading && pageItems.length === 0 && (
+            {!loading && products.length === 0 && fromDatabase && (
+              <p className="mt-10 rounded-2xl border border-dashed border-black/10 bg-[#faf8f4] px-4 py-8 text-center text-sm text-ink/70">
+                No sarees in the shop yet. Add products in the admin dashboard with{" "}
+                <strong>Visible in shop</strong> turned on and a photo from the product-images bucket.
+              </p>
+            )}
+
+            {!loading && products.length > 0 && pageItems.length === 0 && (
               <p className="mt-10 text-sm text-ink/70">No saree matches those filters.</p>
             )}
 
-            <ul className={`mt-8 grid gap-x-5 gap-y-10 ${gridClass}`}>
+            <ul className={`mt-8 grid gap-x-5 gap-y-10 ${gridClass}`} data-shop-grid>
               {pageItems.map((product) => (
-                <li key={product.id}>
+                <li key={product.id} data-shop-product>
                   <ShopProductCard product={product} />
                 </li>
               ))}
@@ -537,8 +557,9 @@ export default function Shop() {
             )}
           </div>
         </div>
-      </div>
-      <VisitStoreBanner />
-    </div>
+        </div>
+      </section>
+    </section>
+    </>
   )
 }

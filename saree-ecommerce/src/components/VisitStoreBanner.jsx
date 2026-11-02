@@ -1,32 +1,28 @@
 import { Link } from "react-router-dom"
 
+const bannerSrc = "/hero/visit-store-banner.png"
+
 export default function VisitStoreBanner() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-10 text-center md:py-12">
-        <p className="text-[11px] font-semibold tracking-[0.2em] text-[#8a6230] uppercase md:text-xs">
-          Handcrafted elegance, woven in India
-        </p>
-        <h2 className="mt-3 font-display text-xl leading-snug text-primary md:mt-4 md:text-3xl md:leading-tight">
-          Come experience our collection in person and consult with our stylists
-        </h2>
-        <Link
-          to="/locations"
-          className="motion-btn mt-6 inline-flex items-center justify-center border border-primary px-6 py-3 text-xs font-medium tracking-[0.14em] text-primary uppercase transition hover:bg-primary hover:text-cream md:mt-7 md:px-8 md:py-3.5 md:text-sm"
-        >
-          Visit our store
-        </Link>
-      </div>
-      <div className="w-full">
-        <img
-          src="/hero/visit-store-showroom.png"
-          alt="Karnan Pattu Centre showroom with folded silks and hanging sarees"
-          decoding="async"
-          width={1024}
-          height={205}
-          className="block h-auto w-full max-w-none"
-        />
-      </div>
+    <section
+      className="site-section w-full max-w-full overflow-x-clip bg-[#3a1216]"
+      aria-label="Visit our showrooms"
+    >
+      <Link
+        to="/locations"
+        className="block w-full max-w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+      >
+        <div className="relative h-[240px] w-full max-w-full overflow-hidden sm:h-[280px] md:h-[320px] lg:h-[360px]">
+          <img
+            src={bannerSrc}
+            alt="Handcrafted elegance, woven in India — visit Karnan Pattu Centre showrooms in Bengaluru"
+            width={1024}
+            height={384}
+            decoding="async"
+            className="absolute inset-0 h-full w-full max-w-none object-cover object-left object-top"
+          />
+        </div>
+      </Link>
     </section>
   )
 }

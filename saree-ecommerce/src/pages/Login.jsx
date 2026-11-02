@@ -129,7 +129,7 @@ export default function Login() {
   }
 
   return (
-    <section className="mx-auto max-w-md px-4 py-16">
+    <section className="site-container-narrow py-16">
       <h1 className="mt-3 text-center font-display text-5xl text-primary">
         {isSignUp ? "Create account" : "Login"}
       </h1>

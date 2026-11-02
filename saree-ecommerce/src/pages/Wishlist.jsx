@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 export default function Wishlist() {
   return (
-    <section className="mx-auto max-w-3xl px-4 py-16">
+    <section className="site-container-narrow py-16">
       <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">Saved drapes</p>
       <h1 className="mt-3 font-display text-5xl text-primary">Wishlist</h1>
       <p className="mt-6 text-sm leading-7 text-ink/80">

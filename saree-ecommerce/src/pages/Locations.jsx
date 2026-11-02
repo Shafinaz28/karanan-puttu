@@ -29,7 +29,7 @@ export default function Locations() {
   ]
 
   return (
-    <>
+    <div className="w-full min-w-0 overflow-x-clip">
       {/* Hero Banner Section */}
       <section className="relative flex min-h-[320px] items-center overflow-hidden bg-[#210a0c] sm:min-h-[380px]">
         {/* Full Background Image */}
@@ -43,7 +43,7 @@ export default function Locations() {
         <div className="absolute inset-0 bg-[#210a0c]/85" />
 
         {/* Content Block */}
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-16 text-center text-[#f7f1e8] md:px-10">
+        <div className="site-container relative z-10 py-16 text-center text-[#f7f1e8]">
           <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
             <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
               Home
@@ -62,8 +62,8 @@ export default function Locations() {
       </section>
 
       {/* Visit Stores & Maps Section */}
-      <section className="px-4 py-16 md:px-8 md:py-24 text-[#4a0e17]">
-        <div className="mx-auto max-w-6xl">
+      <section className="py-16 text-[#4a0e17] md:py-24">
+        <div className="site-container min-w-0">
           {/* Section Header */}
           <div className="text-center" data-slide="up">
             <p className="text-[11px] font-semibold tracking-[0.24em] text-[#4a0e17]/80 uppercase">
@@ -79,12 +79,12 @@ export default function Locations() {
           </div>
 
          {/* 4 Stores Grid */}
-<div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
+<div className="mt-12 grid min-w-0 grid-cols-1 gap-8 md:grid-cols-2">
   {stores.map((store, index) => (
     <div 
       key={store.name}
       /* CHANGED: Switched background to light cream/pink and softened the border. Re-styled hover and added a subtle shadow. */
-      className="flex flex-col justify-between border border-[#4a0e17]/10 bg-[#fdf8f4] p-6 shadow-md transition-all duration-300 hover:border-[#4a0e17]/30 hover:shadow-lg"
+      className="flex min-w-0 flex-col justify-between border border-[#4a0e17]/10 bg-[#fdf8f4] p-6 shadow-md transition-all duration-300 hover:border-[#4a0e17]/30 hover:shadow-lg"
       data-slide={index % 2 === 0 ? "left" : "right"}
     >
       <div>
@@ -139,6 +139,6 @@ export default function Locations() {
 </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

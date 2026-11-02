@@ -23,7 +23,7 @@ export default function Cart() {
   const suggestions = products.filter((product) => !inCart.has(product.id)).slice(0, 4)
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12">
+    <section className="site-container py-12">
       <h1 className="font-display text-5xl text-primary">Cart</h1>
 
       {lines.length === 0 ? (

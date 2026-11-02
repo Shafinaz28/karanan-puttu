@@ -74,8 +74,9 @@ export default function Navbar() {
         ref={headerRef}
         className={`${pinned ? "fixed inset-x-0 top-0 shadow-md" : "relative"} z-[80] w-full text-ink ${menuOpen ? "overflow-visible" : "overflow-x-clip"}`}
       >
-      <div className="hidden items-center justify-between gap-4 bg-primary px-4 py-2 text-[11px] whitespace-nowrap text-[#f6efe4] lg:flex lg:px-12 lg:text-[12px]">
-        <div className="flex items-center gap-5 lg:gap-7">
+      <div className="hidden bg-primary xl:block">
+        <div className="site-container flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2.5 text-[11px] text-[#f6efe4] lg:text-[12px]">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1 lg:gap-7">
           <a href="tel:+917200015300" className="inline-flex items-center gap-1.5 hover:text-secondary">
             <PhoneIcon />
             +91 72000 15300
@@ -84,12 +85,12 @@ export default function Navbar() {
             <PhoneIcon />
             +91 98944 41500
           </a>
-          <a href="mailto:karnanpattucenter@gmail.com" className="inline-flex items-center gap-1.5 hover:text-secondary">
+          <a href="mailto:karnanpattucenter@gmail.com" className="inline-flex min-w-0 items-center gap-1.5 hover:text-secondary">
             <MailIcon />
-            karnanpattucenter@gmail.com
+            <span className="truncate">karnanpattucenter@gmail.com</span>
           </a>
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-1">
           <div className="flex items-center gap-3">
             <a
               href="https://www.instagram.com/karnan_pattu_centre_karnataka"
@@ -110,13 +111,11 @@ export default function Navbar() {
               <YouTubeIcon />
             </a>
           </div>
-          <Link to="/locations" className="inline-flex items-center gap-1.5 hover:text-secondary">
-            <PinIcon />
-            Locate Us
-          </Link>
+        </div>
         </div>
       </div>
-      <div className="relative flex h-[72px] items-center justify-between bg-shell px-3 text-primary lg:h-[100px] lg:px-12">
+      <div className="relative w-full border-b border-primary/10 bg-shell text-primary">
+        <div className="site-container relative flex min-h-[72px] items-center justify-between py-2 lg:min-h-[100px] lg:py-3">
         <Link
           to="/"
           className="text-left"
@@ -167,9 +166,11 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+      </div>
       {searchOpen && (
-        <form onSubmit={searchSarees} className="border-t border-primary/15 bg-shell px-4 py-3 lg:px-12">
-          <div className="mx-auto flex max-w-md items-center border border-primary/20 bg-white px-4">
+        <form onSubmit={searchSarees} className="border-t border-primary/15 bg-shell py-3">
+          <div className="site-container">
+            <div className="mx-auto flex max-w-md items-center border border-primary/20 bg-white px-4">
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -180,6 +181,7 @@ export default function Navbar() {
             <button type="submit" aria-label="Search" className="text-primary/60">
               <SearchIcon />
             </button>
+          </div>
           </div>
         </form>
       )}
@@ -238,15 +240,6 @@ function YouTubeIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
       <path d="M20.2 8.2a2.2 2.2 0 0 0-1.6-1.6C17 6.2 12 6.2 12 6.2s-5 0-6.6.4a2.2 2.2 0 0 0-1.6 1.6A23 23 0 0 0 3.4 12a23 23 0 0 0 .4 3.8 2.2 2.2 0 0 0 1.6 1.6c1.6.4 6.6.4 6.6.4s5 0 6.6-.4a2.2 2.2 0 0 0 1.6-1.6 23 23 0 0 0 .4-3.8 23 23 0 0 0-.4-3.8zM10.4 14.8V9.2L15.2 12l-4.8 2.8z" />
-    </svg>
-  )
-}
-
-function PinIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-      <path d="M12 21s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10z" />
-      <circle cx="12" cy="11" r="2" />
     </svg>
   )
 }

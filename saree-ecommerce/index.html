@@ -9,20 +9,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&display=swap"
         rel="stylesheet"
       />
     </noscript>
+    <link rel="preload" as="image" href="/loader-background.png" fetchpriority="high" />
     <link rel="preload" as="image" type="image/avif" href="/kpc-logo.avif" fetchpriority="high" />
-    <link rel="preload" as="image" href="/hero/hero-mustard1.png" fetchpriority="high" />
-    <link rel="preload" as="image" type="image/avif" href="/hero/hero-mustard1.avif" />
+    <link rel="preload" as="image" type="image/avif" href="/hero/slides/banner-1.avif" fetchpriority="low" />
     <title>Karanan Puttu | Heritage Weaves</title>
     <style>
       #initial-loader {
@@ -32,47 +32,45 @@
         display: grid;
         place-items: center;
         overflow: hidden;
+        background: transparent;
         color: #f7f1e8;
-        transition: visibility 0ms linear 1650ms;
-      }
-
-      #initial-loader::before,
-      #initial-loader::after {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: calc(50% + 1px);
-        background-color: #4a0e17;
-        background-image:
-          linear-gradient(rgb(28 8 12 / 55%), rgb(28 8 12 / 55%)),
-          url("/hero/loadingimg.avif");
-        background-size: 200% 100%;
-        background-repeat: no-repeat;
-        content: "";
-        transition: transform 1600ms cubic-bezier(0.65, 0, 0.35, 1);
-        will-change: transform;
-      }
-
-      #initial-loader::before {
-        left: 0;
-        background-position: left center;
-      }
-
-      #initial-loader::after {
-        right: 0;
-        background-position: right center;
+        pointer-events: auto;
       }
 
       #initial-loader.is-hidden {
-        visibility: hidden;
         pointer-events: none;
       }
 
-      #initial-loader.is-hidden::before {
+      .initial-loader-panel {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 0;
+        width: calc(50% + 1px);
+        overflow: hidden;
+        background-color: #1a0508;
+        background-image: url("/loader-background.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        background-attachment: scroll;
+        transition: transform 1200ms cubic-bezier(0.45, 0, 0.2, 1);
+        will-change: transform;
+      }
+
+      .initial-loader-panel--left {
+        left: 0;
+      }
+
+      .initial-loader-panel--right {
+        right: 0;
+      }
+
+      #initial-loader.is-hidden .initial-loader-panel--left {
         transform: translateX(-100%);
       }
 
-      #initial-loader.is-hidden::after {
+      #initial-loader.is-hidden .initial-loader-panel--right {
         transform: translateX(100%);
       }
 
@@ -93,22 +91,22 @@
       .initial-loader-logo-wrap {
         display: grid;
         place-items: center;
-        padding: 18px;
-        border-radius: 50%;
-        background: #f6efe4;
-        box-shadow: 0 10px 32px rgb(0 0 0 / 35%);
       }
 
       .initial-loader-logo {
         width: 88px;
         height: 88px;
         object-fit: contain;
+        filter: drop-shadow(0 4px 12px rgb(0 0 0 / 35%));
       }
 
       .initial-loader-name {
         margin: 0;
-        font: 500 26px Georgia, serif;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 26px;
+        font-weight: 500;
         letter-spacing: 0.06em;
+        text-shadow: 0 2px 12px rgb(0 0 0 / 45%);
       }
 
       .initial-loader-track {
@@ -134,16 +132,17 @@
 
       @media (prefers-reduced-motion: reduce) {
         .initial-loader-track::after { animation: none; }
-        #initial-loader::before,
-        #initial-loader::after,
+        .initial-loader-panel,
         .initial-loader-content { transition: none; }
-        #initial-loader.is-hidden::before,
-        #initial-loader.is-hidden::after { transform: none; }
+        #initial-loader.is-hidden .initial-loader-panel--left,
+        #initial-loader.is-hidden .initial-loader-panel--right { transform: none; }
       }
     </style>
   </head>
   <body>
     <div id="initial-loader" role="status" aria-live="polite" aria-label="Loading">
+      <div class="initial-loader-panel initial-loader-panel--left" aria-hidden="true"></div>
+      <div class="initial-loader-panel initial-loader-panel--right" aria-hidden="true"></div>
       <div class="initial-loader-content">
         <span class="initial-loader-logo-wrap">
           <img

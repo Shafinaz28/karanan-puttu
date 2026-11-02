@@ -118,15 +118,15 @@ export default function GoogleReviewsSection() {
   const slideWidth = 100 / slidesPerView
 
   return (
-    <section className="bg-white px-4 pt-12 pb-10 md:pt-14 md:pb-12">
-      <div className="mx-auto max-w-6xl">
+    <section className="site-section overflow-x-hidden bg-white">
+      <div className="site-section-inner">
         <div className="text-center">
           <p className="text-[11px] font-semibold tracking-[0.2em] text-[#8a6230] uppercase">Google reviews</p>
           <h2 className="mt-2 font-display text-3xl text-primary md:text-4xl">What customers say</h2>
         </div>
 
         <div
-          className="relative mt-8 md:mt-10"
+          className="mt-8 grid min-w-0 grid-cols-1 items-center gap-3 md:mt-10 md:grid-cols-[2.5rem_1fr_2.5rem] md:gap-4"
           role="region"
           aria-roledescription="carousel"
           aria-label="Customer reviews"
@@ -137,12 +137,12 @@ export default function GoogleReviewsSection() {
             type="button"
             onClick={() => goTo(activeIndex - 1)}
             aria-label="Previous reviews"
-            className="absolute top-1/2 left-0 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-black/15 bg-white text-lg text-ink shadow-sm transition hover:border-primary hover:text-primary md:flex md:-left-5 lg:-left-6"
+            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/15 bg-white text-lg text-ink shadow-sm transition hover:border-primary hover:text-primary md:flex"
           >
             ‹
           </button>
 
-          <div className="overflow-hidden border border-black/10 bg-white md:mx-6 lg:mx-8">
+          <div className="min-w-0 overflow-hidden rounded-sm border border-black/10 bg-white">
             <ul
               className="flex items-stretch transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${activeIndex * slideWidth}%)` }}
@@ -180,7 +180,26 @@ export default function GoogleReviewsSection() {
             type="button"
             onClick={() => goTo(activeIndex + 1)}
             aria-label="Next reviews"
-            className="absolute top-1/2 right-0 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-black/15 bg-white text-lg text-ink shadow-sm transition hover:border-primary hover:text-primary md:flex md:-right-5 lg:-right-6"
+            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/15 bg-white text-lg text-ink shadow-sm transition hover:border-primary hover:text-primary md:flex"
+          >
+            ›
+          </button>
+        </div>
+
+        <div className="mt-4 flex justify-center gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex - 1)}
+            aria-label="Previous reviews"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 bg-white text-lg text-ink"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex + 1)}
+            aria-label="Next reviews"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 bg-white text-lg text-ink"
           >
             ›
           </button>

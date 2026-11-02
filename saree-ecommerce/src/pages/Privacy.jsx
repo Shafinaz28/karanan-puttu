@@ -31,7 +31,7 @@ export default function Privacy() {
   return (
     <>
       <section className="flex min-h-[280px] items-center bg-[#4a1520] sm:min-h-[340px]">
-        <div className="mx-auto w-full max-w-6xl px-6 py-16 text-center text-[#f7f1e8]">
+        <div className="site-container py-16 text-center text-[#f7f1e8]">
           <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
             <Link to="/" className="hover:text-[#d7c4a2]">Home</Link>
             <span className="mx-2 text-[#d7c4a2]">/</span>
@@ -41,8 +41,8 @@ export default function Privacy() {
           <span className="mx-auto mt-6 block h-px w-16 bg-[#d7c4a2]" />
         </div>
       </section>
-      <section className="bg-[#f7f1e8] px-4 py-16">
-        <div className="mx-auto max-w-3xl space-y-8">
+      <section className="bg-[#f7f1e8] py-16">
+        <div className="site-container-narrow space-y-8">
           <p className="text-sm leading-7 text-ink/75">
             Karnan Pattu Centre keeps only what we need to sell new silk and to buy old silk.
           </p>

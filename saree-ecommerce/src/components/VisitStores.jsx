@@ -30,7 +30,8 @@ const stores = [
 
 export default function VisitStores({ preview = false }) {
   return (
-    <section className="bg-[#f7f1e8] px-4 py-16 text-center">
+    <section className="bg-[#f7f1e8] py-16 text-center">
+      <div className="site-container">
       <p className="mx-auto w-fit rounded-full bg-white px-4 py-1.5 text-[10px] tracking-[0.18em] text-primary uppercase shadow-sm">
         3 shops in Bengaluru
       </p>
@@ -38,7 +39,7 @@ export default function VisitStores({ preview = false }) {
       <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-ink/60">
         V.V. Puram and Jayanagar. Call the desk on {phoneLabel}.
       </p>
-      <ul className="mx-auto mt-10 grid max-w-6xl items-stretch gap-6 text-left md:grid-cols-2">
+      <ul className="mt-10 grid items-stretch gap-6 text-left md:grid-cols-2">
         {stores.map((store, index) => (
           <li
             key={store.name}
@@ -86,6 +87,7 @@ export default function VisitStores({ preview = false }) {
           <span aria-hidden="true">→</span>
         </Link>
       )}
+      </div>
     </section>
   )
 }

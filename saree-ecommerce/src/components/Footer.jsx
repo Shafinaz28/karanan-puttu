@@ -28,8 +28,8 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#3a0c14] text-cream">
-      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
+    <footer className="w-full min-w-0 bg-[#3a0c14] text-cream">
+      <div className="site-section-inner !py-14 lg:!py-16">
         {/* Main Footer Grid with Tighter Spacing */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 items-start">
           
@@ -43,6 +43,17 @@ export default function Footer() {
             <p className="mt-4 max-w-xs text-sm leading-6 text-cream/75">
               We buy old, used and damaged soft silk at the best price, and we sell new soft silks for the next occasion.
             </p>
+            <div className="mt-4">
+              <p className="text-xs font-semibold tracking-[0.18em] text-secondary uppercase">Contact</p>
+              <div className="mt-2 flex flex-col gap-1.5 text-sm text-cream/85">
+                <a href="tel:+917200015300" className="transition-colors hover:text-secondary">
+                  +91 72000 15300
+                </a>
+                <a href="tel:+919944055900" className="transition-colors hover:text-secondary">
+                  +91 99440 55900
+                </a>
+              </div>
+            </div>
             <div className="mt-5 flex gap-3">
               <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
               <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />

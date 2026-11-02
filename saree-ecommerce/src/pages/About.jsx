@@ -1,300 +1,299 @@
-import { useState } from "react"
 import { Link } from "react-router-dom"
-import WhyChooseUsSection from "../components/WhyChooseUsSection"
+import PageDamaskHero, { ZariOrnament } from "../components/PageDamaskHero"
 
-const beliefs = [
-  {
-    icon: "leaf",
-    title: "At the loom",
-    text: "Korvai borders and hand-drawn zari stay the house rule.",
-  },
-  {
-    icon: "diamond",
-    title: "Chosen in daylight",
-    text: "Named silk is checked at the counter before it leaves.",
-  },
-  {
-    icon: "cycle",
-    title: "We buy old silk",
-    text: "Old, used, and torn silk is welcome. The rate is told first.",
-  },
+const stats = [
+  ["1985", "Founded", "The first counter in Jayanagar"],
+  ["450+", "Weaver families", "Partners across South India"],
+  ["100%", "Zari tested", "Checked before we quote"],
 ]
 
-const faqs = [
+const storyParagraphs = [
+  "Karnan Pattu Centre sells new soft silks and buys the soft silk you no longer wear. Both are looked at in daylight before a price is named. A new drape leaves with a blouse piece; an old one is welcome in any condition—the rate is told first, and the money is paid the same day.",
+  "Founded in 1985 in Bengaluru, the house grew around three promises: name the silk honestly, quote a fair price before anyone agrees, and treat every customer—buying or selling—the same way at the counter.",
+  "Whether you are choosing a drape for a wedding or turning old soft silk into cash, you hear the amount first. Nothing is settled until you accept, and payment is made the same day when we buy from you.",
+]
+
+const founder = {
+  name: "Karnan",
+  role: "Founder, Karnan Pattu Centre",
+  image: "/hero/Founder-Karnan.jpg",
+  tagline: "Weaving a legacy of elegant silks",
+  quote: "Honesty in daylight, honor in the loom.",
+  bio: [
+    "Karnan Pattu Centre began in 1985 with a simple counter rule: name the silk in daylight, quote a fair price before anyone agrees, and pay the same day when we buy old soft silk.",
+    "From Jayanagar in Bengaluru, the house still sells new soft silks for every occasion and welcomes old, used, torn, and faded drapes at the desk.",
+    "Karnan grew the business by listening at the counter—what brides needed for muhurtham, what families wanted for daily wear, and what sellers expected when they brought inherited soft silk to sell.",
+    "He still believes a pattu house earns trust one conversation at a time: show the zari in natural light, explain the weave without hurry, and never press a customer once the price is on the table.",
+  ],
+}
+
+const whyChoose = [
   {
-    question: "Do you buy damaged soft silk sarees?",
-    answer: "Yes. Old, used, torn, and faded soft silk sarees are welcome. We check the silk before we name a price.",
+    icon: "quality",
+    title: "Unmatched quality",
+    text: "Every soft silk is checked in daylight before it reaches the counter.",
   },
   {
-    question: "How do I get a price?",
-    answer: "Send photos on WhatsApp, call the desk, or bring the saree to a showroom. We tell you the rate before you agree.",
+    icon: "heritage",
+    title: "Handpicked heritage",
+    text: "Temple borders, korvai, and zari work chosen with the house rule since 1985.",
   },
   {
-    question: "When is the money paid?",
-    answer: "Once the saree is checked and you accept the offer, the amount is paid the same day.",
+    icon: "trust",
+    title: "Trust & transparency",
+    text: "We name the price first—for new silks and old silk we buy the same day.",
   },
   {
-    question: "Can you collect the saree from home?",
-    answer: "Yes. Ask for a doorstep pickup. We collect the saree, check it, and pay you.",
-  },
-  {
-    question: "Do new sarees include a blouse piece?",
-    answer: "Yes. Every new drape leaves the counter with a blouse piece.",
+    icon: "reach",
+    title: "Across Karnataka",
+    text: "Showrooms in Bengaluru with doorstep pickup when you sell old soft silk.",
   },
 ]
 
 export default function About() {
-  const [open, setOpen] = useState(0)
   return (
     <>
-      <section className="relative flex min-h-[320px] flex-col overflow-hidden bg-[#210a0c] sm:min-h-[440px]">
-  {/* Full Background Image */}
-  <img 
-     src="/hero/image.avif" 
-    alt="Silk Sarees Background" 
-    className="absolute inset-0 h-full w-full object-cover object-center"
-  />
-
-  {/* Soft Dark Overlay for Crisp Text Readability */}
-  <div className="absolute inset-0 bg-[#210a0c]/85" />
-
-  {/* Content Block */}
-  <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
-    <div className="w-full">
-      {/* Breadcrumb Navigation */}
-      <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
-        <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
-          Home
-        </Link>
-        <span className="mx-2 text-[#d7c4a2]">/</span>
-        About Us
-      </p>
-
-      {/* Page Title */}
-      <h1 className="mt-4 font-display text-5xl font-bold tracking-wide text-[#faf6f0] md:text-7xl">
-        About Us
-      </h1>
-
-      {/* Subtitle */}
-      <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85 md:text-base">
-        A house that sells soft silk, and buys old soft silk, with the same care.
-      </p>
-
-      {/* Gradient Divider Line */}
-      <span 
-        className="mx-auto mt-6 block h-0.5 w-16 bg-[linear-gradient(to_right,#4a0e17,#c59b27)]" 
-        aria-hidden="true" 
+      <PageDamaskHero
+        breadcrumb="About Us"
+        title="About Us"
+        subtitle="“A house that sells soft silk, and buys old soft silk, with the same care.”"
       />
-    </div>
-  </div>
-</section>
-      <section className="bg-[#f6efe4] py-8 md:py-10">
-        <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 lg:grid-cols-2 lg:px-8">
-          <figure className="relative order-2 lg:order-1">
-            <img
-              src="/sarees/worn/worn-crimson.avif"
-              alt="A crimson soft silk with a plum gold border"
-              className="h-72 w-full rounded-2xl object-cover object-top md:h-[460px]"
-            />
-            <figcaption className="absolute bottom-5 left-5 rounded-lg bg-[#c59b27] px-4 py-3 text-[#3a1216] shadow-md">
-              <p className="font-display text-3xl leading-none">30+</p>
-              <p className="mt-1 text-xs">Years old</p>
-            </figcaption>
-          </figure>
-          <div className="order-1 lg:order-2">
-            <p className="text-[11px] tracking-[0.2em] text-[#8a6230] uppercase">
-              A soft silk house since 1985
-            </p>
-            <h2 className="mt-3 font-display text-4xl leading-tight text-ink md:text-5xl">
-              Soft silks chosen for every occasion
-            </h2>
-            <p className="mt-5 text-sm leading-7 text-ink/75">
-              Founded in South India in 1985, Karnan Pattu Centre began with three
-              promises: soft silk you can name, a fair check at the counter, and
-              drapes ready for temple days and weddings.
-            </p>
-            <p className="mt-4 text-sm leading-7 text-ink/75">
-              Today the same house still buys old soft silk honestly and sells
-              new soft silk for the next occasion. A drape that leaves our
-              counter is ready to wear.
-            </p>
-            <dl className="mt-8 grid grid-cols-3 gap-3">
-              {[
-                ["1985", "The first loom"],
-                ["450+", "Weaver families"],
-                ["100%", "Zari tested"],
-              ].map(([value, label]) => (
-                <div key={label} className="rounded-lg bg-[#c59b27] px-2 py-4 text-center text-[#3a1216]">
-                  <dt className="font-display text-2xl md:text-3xl">{value}</dt>
-                  <dd className="mt-1 text-[11px] leading-4">{label}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </section>
 
-      <section className="bg-shell px-4 py-6 md:px-8 md:py-8">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-8">
-          <div className="order-2 text-left lg:order-1">
-            <p className="text-[11px] tracking-[0.22em] text-[#8a6230] uppercase">Founder</p>
-            <h2 className="mt-2 font-display text-4xl text-primary md:text-5xl">Karnan</h2>
-            <p className="mt-1 text-sm font-medium text-[#8a6230]">Founder, Karnan Pattu Centre</p>
-            <p className="mt-3 text-sm leading-6 text-ink/75 md:text-base md:leading-7">
-              Karnan Pattu Centre began in 1985 with a simple counter rule: name the silk in daylight, quote a fair
-              price before anyone agrees, and pay the same day when we buy old soft silk.
-            </p>
-            <p className="mt-3 text-sm leading-6 text-ink/75 md:text-base md:leading-7">
-              From Jayanagar in Bengaluru, the house still sells new soft silks for every occasion and welcomes old,
-              used, torn, and faded drapes at the desk. That promise has not changed—only the families who trust it.
-            </p>
-          </div>
-          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
-            <figure className="w-[12.5rem] sm:w-[13.5rem] lg:w-[14rem] xl:w-[15rem]">
-              <img
-                src="/about/founder-karnan.png"
-                alt="Karnan, founder of Karnan Pattu Centre"
-                decoding="async"
-                width={800}
-                height={1000}
-                className="aspect-[3/4] w-full max-h-[15.5rem] rounded-2xl object-cover object-[center_8%] sm:max-h-[16.5rem] lg:max-h-[17.5rem]"
-              />
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      <WhyChooseUsSection />
-
-      <section className="bg-shell px-4 py-8 md:px-8 md:py-10">
-        <ul className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-          {beliefs.map((item) => (
-            <li key={item.title} className="flex flex-col items-center text-center">
-              <BeliefIcon name={item.icon} />
-              <h2 className="mt-4 font-display text-2xl text-[#3a221c]">{item.title}</h2>
-              <p className="mt-2 max-w-xs text-sm leading-6 text-ink/65">{item.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section className="bg-[#f6efe4] px-4 py-8 md:px-8 md:py-12">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
-            <img
-              src="/hero/about-purple-teal.avif"
-            />
-            <div data-slide="right">
-              <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Our house</p>
-              <h2 className="mt-4 font-display text-[40px] leading-[1.05] text-[#3a221c] md:text-[56px]">
-                A drape is more
-                <span className="block">than six yards.</span>
-              </h2>
-              <p className="mt-6 max-w-md text-sm leading-7 text-ink/70">
-                Karnan Pattu Centre sells new soft silks, and buys the soft silk you no longer wear. Both are looked at in daylight before a price is named.
-              </p>
-              <p className="mt-4 max-w-md text-sm leading-7 text-ink/70">
-                A new drape leaves with a blouse piece. An old one is welcome in any condition. The rate is told first, and the money is paid the same day.
-              </p>
-              <Link
-                to="/shop"
-                className="motion-btn motion-fill mt-8 inline-flex items-center gap-2 bg-primary px-5 py-2.5 text-sm text-[#f6efe4]"
-                style={{ borderRadius: 0 }}
+      {/* Our story */}
+      <section className="about-subtle-linen border-b border-secondary/20 py-20 md:py-28">
+        <div className="site-container grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="space-y-6 lg:col-span-7" data-motion-text>
+            <div className="space-y-2">
+              <span
+                data-motion-item
+                className="block font-sans text-xs font-bold tracking-[0.3em] text-[#8a6626] uppercase"
               >
-                See the weaves
-                <span aria-hidden="true">→</span>
-              </Link>
+                Our story
+              </span>
+              <h2
+                data-motion-item
+                className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl"
+              >
+                Rooted in tradition
+              </h2>
+              <div data-motion-item className="mt-2 h-0.5 w-20 bg-secondary" aria-hidden />
             </div>
+            <div className="space-y-4 font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
+              {storyParagraphs.map((paragraph, index) => (
+                <p
+                  key={index}
+                  data-motion-item
+                  className={index === 2 ? "text-stone-700" : undefined}
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <ul className="grid grid-cols-3 gap-2 pt-2 sm:gap-4 sm:pt-4">
+              {stats.map(([value, label, note]) => (
+                <li
+                  key={label}
+                  data-motion-item
+                  className="rounded-xl border border-secondary/40 bg-white/80 p-2.5 text-center shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-secondary sm:p-4"
+                >
+                  <span className="block font-display text-xl font-bold text-primary sm:text-3xl">{value}</span>
+                  <span className="mt-1 block text-[9px] font-semibold text-[#8a6626] uppercase sm:text-xs">
+                    {label}
+                  </span>
+                  <span className="mt-0.5 block text-[8px] leading-tight text-stone-500 sm:text-[10px]">{note}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
-      <section className="bg-[#f6efe4] py-12 md:py-16">
-        <div className="mx-auto grid max-w-7xl items-stretch gap-6 px-4 md:grid-cols-2 lg:px-8">
-          <article className="motion-card flex h-full flex-col overflow-hidden rounded-2xl border border-secondary/40 bg-white">
-            <div className="h-2 bg-secondary" />
-            <div className="p-8">
-              <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">Looking ahead</p>
-              <h2 className="mt-3 font-display text-4xl text-primary">Vision</h2>
-              <p className="mt-4 text-sm leading-7 text-ink/75">
-                To be the trusted house of South India for soft silk: a place where a new soft silk is chosen with care, and an old soft silk is turned into honest cash.
-              </p>
+
+          <figure className="relative lg:col-span-5" data-motion-image>
+            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+              <div
+                className="absolute -inset-3 rotate-1 rounded-2xl bg-gradient-to-tr from-secondary/20 via-primary/10 to-secondary/30 sm:-inset-4 sm:rotate-2"
+                aria-hidden
+              />
+              <div className="relative overflow-hidden rounded-2xl border-2 border-secondary/50 bg-[#2c1814] shadow-2xl">
+                <div className="relative aspect-[4/5] w-full">
+                  <img
+                    src="/sarees/worn/worn-crimson.avif"
+                    alt="Model in handwoven crimson soft silk saree with zari border"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_12%]"
+                    decoding="async"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-[#32020f]/92 via-[#32020f]/35 to-transparent"
+                    aria-hidden
+                  />
+                </div>
+                <div className="absolute right-3 bottom-3 left-3 rounded-lg border border-secondary/25 bg-[#32020f]/88 px-3 py-3 backdrop-blur-[2px] sm:right-4 sm:bottom-4 sm:left-4 sm:px-4 sm:py-3.5">
+                  <span className="block text-[10px] font-semibold tracking-[0.2em] text-secondary uppercase sm:text-xs">
+                    Handwoven soft silk
+                  </span>
+                  <span className="mt-0.5 block font-display text-sm leading-snug text-stone-200 italic sm:text-base">
+                    Kanchipuram &amp; Arani weaving masterpieces
+                  </span>
+                </div>
+              </div>
             </div>
-          </article>
-          <article className="motion-card flex h-full flex-col overflow-hidden rounded-2xl bg-primary text-cream">
-            <div className="h-2 bg-[#d7c4a2]" />
-            <div className="p-8">
-              <p className="text-[11px] tracking-[0.24em] text-secondary uppercase">What we keep</p>
-              <h2 className="mt-3 font-display text-4xl">Mission</h2>
-              <p className="mt-4 text-sm leading-7 text-cream/80">
-                We sell soft silk that can be named, and we buy old, used, and damaged soft silk at the best price. Every piece is checked before a rate is offered, and the amount is paid the same day.
-              </p>
-            </div>
-          </article>
+          </figure>
         </div>
       </section>
 
-      <section className="bg-[#f7f1e8] py-8 md:py-10">
-        <div className="mx-auto max-w-3xl px-4 lg:px-8">
-          <p className="text-center text-[11px] tracking-[0.24em] text-secondary uppercase">
-            Questions
-          </p>
-          <h2 className="mt-3 text-center font-display text-4xl text-primary md:text-5xl">
-            FAQ
-          </h2>
-          <ul className="mt-6 space-y-3">
-            {faqs.map((item, index) => {
-              const shown = open === index
-              return (
-                <li key={item.question} className="overflow-hidden rounded-2xl border border-secondary/30 bg-white">
-                  <button
-                    type="button"
-                    aria-expanded={shown}
-                    onClick={() => setOpen(shown ? -1 : index)}
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
-                  >
-                    <span className="font-display text-lg text-primary">{item.question}</span>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary text-lg text-primary" aria-hidden="true">
-                      {shown ? "−" : "+"}
-                    </span>
-                  </button>
-                  {shown && (
-                    <p className="px-5 pb-5 text-sm leading-7 text-ink/75">{item.answer}</p>
-                  )}
-                </li>
-              )
-            })}
+      {/* Founder */}
+      <section className="relative border-b border-secondary/20 bg-[#f6f0e6] py-20 md:py-28">
+        <div className="site-container grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+          <figure
+            className="order-2 lg:order-1 lg:col-span-5"
+            data-motion-image="left"
+          >
+            <div className="relative mx-auto max-w-sm lg:max-w-md">
+              <div
+                className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-secondary to-primary opacity-30 blur-lg"
+                aria-hidden
+              />
+              <div className="relative overflow-hidden rounded-2xl border-4 border-white bg-slate-100 shadow-xl">
+                <img
+                  src={founder.image}
+                  alt={`${founder.name}, founder of Karnan Pattu Centre`}
+                  width={1122}
+                  height={1402}
+                  decoding="async"
+                  className="w-full object-cover object-top contrast-[1.05]"
+                />
+              </div>
+            </div>
+          </figure>
+
+          <div className="order-1 space-y-6 lg:order-2 lg:col-span-7" data-motion-text>
+            <div className="space-y-2">
+              <span
+                data-motion-item
+                className="block font-sans text-xs font-bold tracking-[0.25em] text-[#8a6626] uppercase"
+              >
+                Founder · Since 1985
+              </span>
+              <h2
+                data-motion-item
+                className="font-display text-4xl font-bold tracking-tight text-primary sm:text-5xl"
+              >
+                {founder.name}
+              </h2>
+              <h3
+                data-motion-item
+                className="font-display text-2xl font-medium text-secondary italic sm:text-3xl"
+              >
+                {founder.tagline}
+              </h3>
+              <p data-motion-item className="pt-1 text-xs font-semibold tracking-wider text-stone-600 uppercase">
+                {founder.role}
+              </p>
+              <div data-motion-item className="my-4 h-0.5 w-16 bg-secondary" aria-hidden />
+            </div>
+            <div className="space-y-4 font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
+              {founder.bio.map((paragraph, index) => (
+                <p key={index} data-motion-item>
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <p
+              data-motion-item
+              className="border-t border-secondary/30 pt-4 font-display text-sm text-primary italic sm:text-base"
+            >
+              “{founder.quote}”
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Promise cards */}
+      <section className="border-b border-secondary/20 bg-[#fcfaf6] py-20 md:py-28">
+        <div className="site-container">
+          <div className="mx-auto mb-16 max-w-2xl text-center" data-motion-text>
+            <span
+              data-motion-item
+              className="mb-2 block font-sans text-xs font-bold tracking-[0.3em] text-[#8a6626] uppercase"
+            >
+              Why choose us
+            </span>
+            <h2
+              data-motion-item
+              className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl md:text-5xl"
+            >
+              The Karnan Pattu promise
+            </h2>
+            <ZariOrnament data-motion-item className="mt-4" dark />
+          </div>
+          <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-8" data-motion-stagger>
+            {whyChoose.map((item) => (
+              <li
+                key={item.title}
+                data-motion-item
+                className="about-promise-card-luxury about-shadow-card-gold flex flex-col items-center rounded-xl border border-secondary/30 bg-white p-8 text-center"
+              >
+                <span className="mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-secondary/40 bg-[#faf6ee] text-secondary">
+                  <ChooseIcon name={item.icon} />
+                </span>
+                <h3 className="font-display text-xl font-bold text-primary">{item.title}</h3>
+                <p className="mt-3 font-sans text-sm leading-relaxed text-stone-600">{item.text}</p>
+              </li>
+            ))}
           </ul>
         </div>
       </section>
-      <section className="bg-[#3a1216] px-6 py-12 text-center text-cream md:py-14">
-        <div className="mx-auto flex max-w-3xl flex-col items-center">
-          <p className="text-[11px] tracking-[0.22em] text-[#d7c4a2] uppercase">
-            New & pre-loved
-          </p>
-          <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-            New silks to wear. Old silks to treasure.
+
+      {/* Vision & mission */}
+      <section className="about-subtle-linen border-b border-secondary/20 py-20 md:py-24">
+        <div className="site-container grid grid-cols-1 items-stretch gap-8 md:grid-cols-2" data-motion-stagger>
+          <article
+            data-motion-item
+            className="about-shadow-card-gold rounded-2xl border border-t-4 border-secondary/30 border-t-secondary bg-white p-8 sm:p-12"
+          >
+            <span className="mb-2 block font-sans text-xs font-bold tracking-[0.25em] text-[#8a6626] uppercase">
+              Vision
+            </span>
+            <h2 className="font-display text-3xl font-bold text-primary sm:text-4xl">Looking ahead</h2>
+            <p className="mt-6 font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
+              To be the trusted house of South India for soft silk—a place where new soft silk is chosen with care, and
+              old soft silk is turned into honest cash.
+            </p>
+          </article>
+          <article
+            data-motion-item
+            className="about-shadow-luxury rounded-2xl border border-t-4 border-[#32020f] border-t-secondary bg-primary p-8 text-white sm:p-12"
+          >
+            <span className="mb-2 block font-sans text-xs font-bold tracking-[0.25em] text-secondary uppercase">
+              Mission
+            </span>
+            <h2 className="font-display text-3xl font-bold sm:text-4xl">What we keep</h2>
+            <p className="mt-6 font-sans text-base leading-relaxed text-stone-200 sm:text-lg">
+              We sell soft silk that can be named, and we buy old, used, and damaged soft silk at a fair price. Every
+              piece is checked before a rate is offered, and the amount is paid the same day.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative overflow-hidden border-b border-secondary/30 bg-[#32020f] py-16 text-center text-white md:py-20">
+        <div className="about-damask-hero pointer-events-none absolute inset-0 opacity-30" aria-hidden />
+        <div className="site-container relative z-10 max-w-4xl space-y-8" data-motion-hero>
+          <h2
+            data-motion-item
+            className="font-display text-3xl font-normal tracking-wide sm:text-4xl md:text-5xl"
+          >
+            Discover the elegance of Karnan Pattu Centre
           </h2>
-          <p className="mt-4 max-w-lg text-sm leading-7 text-cream/85">
-            Explore new soft silks and a curated collection of pre-loved sarees. Contact us for current styles, condition, and pricing.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div data-motion-item>
             <Link
               to="/shop"
-              className="motion-btn motion-gold bg-[#d7c4a2] px-5 py-3 text-[11px] tracking-[0.14em] text-[#3a1216] uppercase"
+              className="motion-btn inline-flex items-center justify-center rounded-md bg-gradient-to-r from-secondary via-[#e5c378] to-secondary px-10 py-4 font-sans text-sm font-bold tracking-widest text-primary uppercase shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-secondary/25"
             >
-              Shop new silk
+              Shop now
+              <span className="ml-2" aria-hidden="true">
+                →
+              </span>
             </Link>
-            <Link
-              to="/old-silk"
-              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
-            >
-              Discover pre-loved silk
-            </Link>
-            <a
-              href="tel:+917200015300"
-              className="motion-btn motion-ghost border border-cream px-5 py-3 text-[11px] tracking-[0.14em] uppercase"
-            >
-              Call the desk
-            </a>
           </div>
         </div>
       </section>
@@ -302,40 +301,52 @@ export default function About() {
   )
 }
 
-function BeliefIcon({ name }) {
+function ChooseIcon({ name }) {
   const common = {
     viewBox: "0 0 24 24",
-    className: "h-7 w-7 text-[#8a6230]",
+    className: "h-6 w-6",
     fill: "none",
     stroke: "currentColor",
-    strokeWidth: 1.3,
+    strokeWidth: 1.7,
     "aria-hidden": true,
   }
-
-  if (name === "leaf") {
+  if (name === "heritage") {
     return (
       <svg {...common}>
-        <path d="M12 21V10" />
-        <path d="M12 13c0-4 2.5-7 7-8-1 5-4 8-7 8z" />
-        <path d="M12 15c0-3-2-5.5-6-6.5 1 4 3.2 6.5 6 6.5z" />
+        <path
+          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     )
   }
-
-  if (name === "diamond") {
+  if (name === "trust") {
     return (
       <svg {...common}>
-        <path d="M4 9h16l-8 11L4 9z" />
-        <path d="M4 9 8 4h8l4 5" />
-        <path d="M8 4 12 9l4-5" />
+        <path
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     )
   }
-
+  if (name === "reach") {
+    return (
+      <svg {...common}>
+        <path
+          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    )
+  }
   return (
     <svg {...common}>
-      <path d="M20 12a8 8 0 1 1-2.2-5.5" />
-      <path d="M20 4v4h-4" />
+      <path d="M12 3l8 14H4L12 3z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 9l3 6H9l3-6z" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

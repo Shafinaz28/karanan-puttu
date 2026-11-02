@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom"
+import PageDamaskHero from "../components/PageDamaskHero"
+import useOldSilkMotion from "../hooks/useOldSilkMotion"
 
 const bought = [
   {
@@ -31,7 +32,7 @@ const bought = [
     text: "Plain worn silk, light or heavy, folded away or already worn.",
     image: "/sarees/worn/old-soft-silk.avif",
   },
-];
+]
 
 const youtubeShorts = [
   {
@@ -46,54 +47,22 @@ const youtubeShorts = [
     title: "Visit Karnan Pattu Center for Best Rates",
     embedUrl: "https://www.youtube.com/embed/fojwLiRTW8U",
   },
-];
+]
 
 export default function OldSilk() {
+  useOldSilkMotion()
+
   return (
     <>
- <section className="relative flex min-h-[320px] flex-col overflow-hidden sm:min-h-[480px]">
-  {/* Full Background Image */}
-  <img 
-    src="/hero/image.avif" 
-    alt="Faded antique silk saree texture" 
-    className="absolute inset-0 h-full w-full object-cover object-center"
-  />
+      <PageDamaskHero
+        breadcrumb="Old silk"
+        title="We buy all kind of zari & soft silk sarees in any condition"
+        subtitle="“Old, used, torn, and faded soft silk. The weave and the border are checked in daylight, then a cash price is named and paid the same day.”"
+      />
 
-  {/* Soft Deep Red Overlay to ensure text readability */}
-  <div className="absolute inset-0 bg-[#3a1216]/85" />
-
-  {/* Content Block */}
-  <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-20 text-center text-[#f7f1e8] sm:py-24 lg:px-8">
-    <div className="w-full">
-      {/* Breadcrumbs */}
-      <p className="text-xs tracking-[0.16em] text-[#d7c4a2]/80 uppercase">
-        <Link to="/" className="transition-colors duration-300 hover:text-[#f7f1e8]">
-          Home
-        </Link>
-        <span className="mx-2 text-[#d7c4a2]/50">/</span>
-        <span className="text-[#f7f1e8]">Old silk</span>
-      </p>
-
-      {/* Main Heading */}
-      <h1 className="mt-4 font-display text-5xl font-bold leading-tight text-[#faf6f0] md:text-7xl">
-         We Buy All Kind Of Zari & Soft Silk Sarees In Any Condition
-      </h1>
-
-      {/* Divider Accent */}
-      <div className="mx-auto mt-6 h-[1px] w-16 bg-[#c59b27]/70" />
-
-      {/* Body Text */}
-      <p className="mx-auto mt-6 max-w-lg text-sm leading-7 text-[#f7f1e8]/90 drop-shadow-sm md:text-base">
-        Old, used, torn, and faded soft silk. The weave and the border are checked in daylight, then a cash price is named and paid the same day.
-      </p>
-    </div>
-  </div>
-</section>
-
-      {/* Sarees Grid Section */}
-      <section className="bg-[#f6efe4] px-4 py-16">
-        <div className="mx-auto max-w-6xl">
-          <div data-slide="up" className="mx-auto max-w-2xl text-center">
+      <section className="bg-[#f6efe4] py-16" data-old-silk-section>
+        <div className="site-container">
+          <div data-old-silk-intro className="mx-auto max-w-2xl text-center">
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">What we take</p>
             <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Soft silk in any condition</h2>
             <p className="mt-4 text-sm leading-7 text-ink/70">
@@ -101,10 +70,10 @@ export default function OldSilk() {
             </p>
           </div>
 
-          <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
-            {bought.map((item, index) => (
-              <li key={item.name} data-slide={index % 2 === 0 ? "left" : "right"}>
-                <article className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216]">
+          <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6" data-old-silk-grid>
+            {bought.map((item) => (
+              <li key={item.name}>
+                <article data-old-silk-card className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216]">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -123,10 +92,12 @@ export default function OldSilk() {
         </div>
       </section>
 
-      {/* YouTube Shorts Section */}
-      <section className="bg-[#efe7db] px-4 py-16 border-t border-[#c59b27]/20">
-        <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center">
+      <section
+        className="border-t border-[#c59b27]/20 bg-[#efe7db] py-16"
+        data-old-silk-section
+      >
+        <div className="site-container">
+          <div data-old-silk-intro className="mx-auto max-w-2xl text-center">
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Watch & Learn</p>
             <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">See How We Value Your Sarees</h2>
             <p className="mt-3 text-sm text-ink/70">
@@ -134,9 +105,13 @@ export default function OldSilk() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {youtubeShorts.map((video, idx) => (
-              <div key={idx} className="flex flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216] shadow-md">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3" data-old-silk-videos>
+            {youtubeShorts.map((video) => (
+              <div
+                key={video.embedUrl}
+                data-old-silk-video
+                className="flex flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216] shadow-md"
+              >
                 <div className="relative aspect-[9/16] w-full bg-black">
                   <iframe
                     src={video.embedUrl}
@@ -144,40 +119,14 @@ export default function OldSilk() {
                     className="absolute inset-0 h-full w-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                  ></iframe>
+                  />
                 </div>
                 <div className="p-3 text-center text-[#f7f1e8]">
-                  <h3 className="font-display text-xs md:text-sm line-clamp-2">{video.title}</h3>
+                  <h3 className="line-clamp-2 font-display text-xs md:text-sm">{video.title}</h3>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Steps & Call Action Section */}
-      <section className="bg-shell px-4 py-16">
-        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
-          {[
-            ["01", "Show the saree", "Bring it to V.V. Puram or Jayanagar, or ask for a doorstep pickup in Bengaluru."],
-            ["02", "Hear the rate", "Soft silk is looked at in daylight. The price is told before you agree."],
-            ["03", "Take the cash", "Once you accept, the money is paid the same day."],
-          ].map(([step, title, text], index) => (
-            <article key={step} data-slide={index % 2 === 0 ? "left" : "right"} className="text-center">
-              <p className="text-[11px] tracking-[0.16em] text-[#c48a3a] uppercase">{step}</p>
-              <h3 className="mt-2 font-display text-2xl text-primary">{title}</h3>
-              <p className="mt-2 text-sm leading-6 text-ink/70">{text}</p>
-            </article>
-          ))}
-        </div>
-        <div className="mt-12 text-center">
-          <a
-            href="tel:+917200015300"
-            className="motion-btn motion-fill inline-flex items-center gap-2 bg-primary px-6 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
-            style={{ borderRadius: 0 }}
-          >
-            Call +91 72000 15300
-          </a>
         </div>
       </section>
     </>

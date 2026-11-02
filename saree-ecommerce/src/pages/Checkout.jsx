@@ -238,7 +238,7 @@ export default function Checkout() {
 
   if (order) {
     return (
-      <section className="mx-auto max-w-3xl px-4 py-16">
+      <section className="site-container-narrow py-16">
         <p className="text-xs tracking-[0.22em] text-secondary uppercase">Thank you, {order.customer}</p>
         <div className="mt-8">
           <OrderConfirmed
@@ -258,7 +258,7 @@ export default function Checkout() {
 
   if (lines.length === 0) {
     return (
-      <section className="mx-auto max-w-3xl px-4 py-16">
+      <section className="site-container-narrow py-16">
         <h1 className="font-display text-5xl text-primary">Checkout</h1>
         <p className="mt-4">Add a saree before checkout.</p>
         <Link to="/shop" className="mt-4 inline-block text-sm text-primary">

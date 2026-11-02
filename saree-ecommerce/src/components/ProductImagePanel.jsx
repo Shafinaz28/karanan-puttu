@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { isInWishlist, toggleWishlistId } from "../hooks/useWishlist"
+import { productImageSrc } from "../lib/productMap"
 import QuickViewModal from "./QuickViewModal"
 
 function ActionIcon({ label, tooltip, onClick, active, children }) {
@@ -32,6 +33,11 @@ function ActionIcon({ label, tooltip, onClick, active, children }) {
 export default function ProductImagePanel({ product, onAddedToCart, badge }) {
   const [saved, setSaved] = useState(() => isInWishlist(product.id))
   const [quickViewOpen, setQuickViewOpen] = useState(false)
+  const [imageSrc, setImageSrc] = useState(() => productImageSrc(product))
+
+  useEffect(() => {
+    setImageSrc(productImageSrc(product))
+  }, [product.id, product.image, product.name])
 
   useEffect(() => {
     const sync = () => setSaved(isInWishlist(product.id))
@@ -42,7 +48,15 @@ export default function ProductImagePanel({ product, onAddedToCart, badge }) {
   return (
     <div className="product-media relative w-full max-w-full">
       <Link to={`/product/${product.id}`} className="arch-photo relative block" tabIndex={-1}>
-        <img src={product.image} alt={product.name} decoding="async" />
+        <img
+          src={imageSrc}
+          alt={product.name}
+          decoding="async"
+          onError={() => {
+            const fallback = productImageSrc({ ...product, image: "" })
+            if (fallback && fallback !== imageSrc) setImageSrc(fallback)
+          }}
+        />
         {badge}
       </Link>
 

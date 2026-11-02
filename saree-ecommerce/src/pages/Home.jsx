@@ -1,26 +1,14 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ProductImagePanel from "../components/ProductImagePanel"
+import HomeHeroCarousel from "../components/HomeHeroCarousel"
 import ShopCategoriesSection from "../components/ShopCategoriesSection"
-import VisitStoreBanner from "../components/VisitStoreBanner"
 import GoogleReviewsSection from "../components/GoogleReviewsSection"
 import { useCart } from "../context/CartContext"
 import { useProducts } from "../context/ProductsContext"
 import { formatPrice, sareeImages } from "../data/products"
 
 const photo = (index) => sareeImages[index % sareeImages.length]
-
-const mainHero = {
-  src: "/hero/hero-mustard1.png",
-  srcAvif: "/hero/hero-mustard1.avif",
-  alt: "Mustard silk saree in a heritage courtyard",
-  position: "object-[68%_top] sm:object-[62%_top] md:object-[58%_12%]",
-  eyebrow: "Karnan Pattu Centre",
-  title: ["Soft Silk To Wear.", "Old Soft Silk We Buy."],
-  body: "Soft silks leave the counter ready to drape. Bring the soft silk you no longer wear, and we pay a fair cash price the same day.",
-  primaryCta: { label: "Shop soft silk", to: "/shop" },
-  secondaryCta: { label: "Sell soft silk", to: "/old-silk" },
-}
 
 const kinds = [
   {
@@ -100,10 +88,10 @@ const oldSilks = [
 const promoHeroBackground = {
   src: "/hero/bgbannar.png",
   alt: "Silk sarees collection banner with model and folded weaves",
-  width: 1024,
-  height: 497,
+  width: 1800,
+  height: 874,
   imageClass:
-    "absolute left-0 right-0 top-0 h-full w-full max-w-none object-cover object-top sm:h-[185%] sm:object-[50%_36%]",
+    "absolute inset-0 h-full w-full object-cover object-[22%_top] sm:object-[26%_top]",
 }
 
 export default function Home() {
@@ -160,72 +148,12 @@ export default function Home() {
 
   return (
     <>
-      <section
-        className="relative h-[92vh] w-full max-w-full overflow-hidden bg-[#2c1814] md:h-screen"
-        style={{
-          backgroundImage: `url(${mainHero.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "58% 12%",
-        }}
-      >
-        <picture className="absolute inset-0 block h-full w-full">
-          <source srcSet={mainHero.srcAvif} type="image/avif" />
-          <img
-            src={mainHero.src}
-            alt={mainHero.alt}
-            fetchPriority="high"
-            decoding="async"
-            width={1024}
-            height={768}
-            className={`h-full w-full object-cover ${mainHero.position}`}
-          />
-        </picture>
-        <div
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(28,8,12,0.9)_0%,rgba(28,8,12,0.55)_40%,rgba(28,8,12,0.2)_65%,transparent_88%)] md:bg-[linear-gradient(to_right,rgba(28,8,12,0.88)_0%,rgba(28,8,12,0.62)_38%,rgba(28,8,12,0.25)_52%,transparent_70%)]"
-          aria-hidden
-        />
-        <div className="absolute inset-0 z-10 flex items-end px-4 pb-36 md:items-center md:pb-0 lg:px-8">
-          <div className="mx-auto w-full min-w-0 max-w-7xl">
-            <div
-              data-slide="left"
-              className="w-full min-w-0 max-w-xl text-left text-[#f6efe4]"
-            >
-              <p className="text-[11px] tracking-[0.28em] text-[#e8d5b5] uppercase">{mainHero.eyebrow}</p>
-              <h1 className="mt-4 font-display text-4xl leading-[1.05] text-[#faf6f0] drop-shadow-sm sm:text-6xl md:text-7xl">
-                {mainHero.title.map((line, lineIndex) => (
-                  <span key={line} className={lineIndex > 0 ? "mt-1 block" : "block"}>
-                    {line}
-                  </span>
-                ))}
-              </h1>
-              <p className="mt-5 mb-1 max-w-md text-sm font-medium leading-7 text-[#f6efe4] md:mb-0 md:text-base">
-                {mainHero.body}
-              </p>
-              <div className="mt-8 flex w-full max-w-md flex-col gap-2 md:mt-8 md:gap-3 md:flex-row md:flex-wrap">
-                <Link
-                  to={mainHero.primaryCta.to}
-                  className="motion-btn motion-gold inline-flex w-full max-w-[15.5rem] items-center justify-center gap-2 bg-secondary px-4 py-2 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase md:w-auto md:max-w-none md:gap-3 md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
-                >
-                  {mainHero.primaryCta.label}
-                  <span aria-hidden="true">→</span>
-                </Link>
-                <Link
-                  to={mainHero.secondaryCta.to}
-                  className="motion-btn inline-flex w-full max-w-[15.5rem] items-center justify-center gap-2 border border-[#f6efe4] bg-[#210a0c]/25 px-4 py-2 text-[10px] font-semibold tracking-[0.14em] text-[#faf6f0] uppercase backdrop-blur-[2px] hover:bg-[#f6efe4] hover:text-primary md:w-auto md:max-w-none md:gap-3 md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
-                >
-                  {mainHero.secondaryCta.label}
-                  <span aria-hidden="true">→</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HomeHeroCarousel />
 
       <ShopCategoriesSection />
 
-      <section className="bg-[#f6efe4] px-5 py-16 md:px-8 md:py-20">
-        <div className="mx-auto max-w-6xl">
+      <section className="site-section bg-[#f6efe4]">
+        <div className="site-section-inner">
           <div className="flex min-w-0 flex-col items-center gap-8 text-center md:flex-row md:items-end md:justify-between md:text-left">
             <div data-slide="left" className="min-w-0">
               <p className="text-[11px] tracking-[0.28em] text-[#3a2a24]/70 uppercase">Choose by the weave</p>
@@ -272,8 +200,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative w-full overflow-hidden bg-[#faf6f0]">
-        <div className="relative h-[200px] w-full max-w-none sm:h-[240px] md:h-[280px] lg:h-[320px]">
+      <section className="site-section relative overflow-hidden bg-[#faf6f0]">
+        <div className="relative h-[240px] w-full sm:h-[280px] md:h-[320px] lg:h-[360px]">
           <img
             src={promoHeroBackground.src}
             alt={promoHeroBackground.alt}
@@ -329,8 +257,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#f7f1e8] px-4 py-16 md:py-20">
-        <div className="mx-auto max-w-6xl">
+      <section className="site-section bg-[#f7f1e8]">
+        <div className="site-section-inner">
           <div data-slide="up" className="mx-auto max-w-xl text-center">
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">On the counter</p>
             <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Ready to leave.</h2>
@@ -392,8 +320,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#faf6f0] px-4 py-12 md:py-20">
-        <div className="mx-auto max-w-6xl">
+      <section className="site-section bg-[#faf6f0]">
+        <div className="site-section-inner">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div data-slide="left" className="max-w-xl">
               <h2 className="font-display text-3xl text-primary sm:text-4xl md:text-5xl">Shop by look</h2>
@@ -455,8 +383,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <VisitStoreBanner />
 
       <GoogleReviewsSection />
 

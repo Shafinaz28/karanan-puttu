@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import PageDamaskHero from "../components/PageDamaskHero"
 import { submitContactMessage } from "../lib/contactMessages"
 
 const emptyForm = { name: "", mobile: "", email: "", message: "" }
@@ -47,49 +48,13 @@ export default function Contact() {
 
   return (
     <>
-   <section className="relative flex min-h-[320px] flex-col overflow-hidden bg-[#210a0c] sm:min-h-[380px]">
-  {/* Full Background Image */}
-  <img 
-    src="/hero/image.avif" 
-    alt="Silk Sarees Contact Background" 
-    className="absolute inset-0 h-full w-full object-cover object-center"
-  />
-
-  {/* Soft Dark Overlay for Crisp Text Readability */}
-  <div className="absolute inset-0 bg-[#210a0c]/85" />
-
-  {/* Content Block */}
-  <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-4 py-16 text-center text-[#f7f1e8] lg:px-8">
-    <div className="w-full">
-      {/* Breadcrumbs */}
-      <p className="text-xs tracking-[0.16em] text-[#f7f1e8]/80 uppercase">
-        <Link to="/" className="transition-colors duration-300 hover:text-[#d7c4a2]">
-          Home
-        </Link>
-        <span className="mx-2 text-[#d7c4a2]">/</span>
-        Contact
-      </p>
-
-      {/* Title */}
-      <h1 className="mt-4 font-display text-5xl font-bold tracking-wide text-[#faf6f0] md:text-7xl">
-        Contact
-      </h1>
-
-      {/* Subtitle */}
-      <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#f7f1e8]/85 md:text-base">
-        Tell us about an old silk saree, or ask about a new drape.
-      </p>
-
-      {/* Gradient Divider Line */}
-      <span 
-        className="mx-auto mt-6 block h-0.5 w-16 bg-[linear-gradient(to_right,#4a0e17,#c59b27)]" 
-        aria-hidden="true" 
+      <PageDamaskHero
+        breadcrumb="Contact"
+        title="Contact"
+        subtitle="“Tell us about an old silk saree, or ask about a new drape.”"
       />
-    </div>
-  </div>
-</section>
-    <section id="write" className="bg-[#f6efe4] px-4 py-16">
-      <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+    <section id="write" className="bg-[#f6efe4] py-16">
+      <div className="site-container grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
         <div>
           <p className="text-[11px] tracking-[0.22em] text-[#c59b27] uppercase">The desk</p>
           <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Write to the desk</h2>
@@ -204,8 +169,8 @@ export default function Contact() {
         )}
       </div>
     </section>
-    <section className="bg-shell px-4 py-12">
-      <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+    <section className="bg-shell py-12">
+      <div className="site-container grid gap-6 md:grid-cols-2">
         <article className="rounded-2xl border border-ink/10 bg-paper p-8">
           <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Buy</p>
           <h2 className="mt-3 font-display text-3xl text-primary">Buy a soft silk</h2>
