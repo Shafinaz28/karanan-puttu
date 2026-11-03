@@ -12,7 +12,9 @@ export default function ShopCategoriesSection({ variant = "home", activeCollecti
           <div data-slide="left" className="min-w-0 text-center lg:max-w-sm lg:text-left">
             <p className="text-[11px] tracking-[0.28em] text-primary/80 uppercase">Shop by category</p>
             <h2 className="mt-3 font-display text-4xl leading-tight text-primary md:text-5xl">Explore our collections</h2>
-            <p className="mt-4 text-sm leading-7 text-ink/65">Discover sarees for every mood, occasion, and style.</p>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-ink/65 max-md:px-1">
+              Discover sarees for every mood, occasion, and style.
+            </p>
             <Link
               to="/shop"
               className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline"

@@ -66,7 +66,7 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen font-sans text-ink antialiased">
+      <div className="min-h-[100dvh] font-sans text-ink antialiased">
         <AppRoutes />
       </div>
     </BrowserRouter>

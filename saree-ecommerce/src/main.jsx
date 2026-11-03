@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-const HERO_IMAGE = "/hero/slides/banner-1.webp"
+const HERO_IMAGE = "/hero/slides/banner-1.webp?v=3"
 const LOADER_SLIDE_MS = 1200
 const LOADER_MIN_MS = 380
 const LOADER_MAX_MS = 3200

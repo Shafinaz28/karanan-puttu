@@ -22,9 +22,9 @@ export default function Layout({ children }) {
   usePageMotion(pathname)
 
   return (
-    <div className="min-h-screen w-full min-w-0 bg-shell font-sans text-ink">
+    <div className="min-h-[100dvh] w-full min-w-0 bg-shell font-sans text-ink">
       <Navbar />
-      <main className="w-full min-w-0">{children}</main>
+      <main className="w-full min-w-0 pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0">{children}</main>
       <div className={pathname.startsWith("/shop") ? "hidden lg:block" : undefined}>
         <TrustBar />
       </div>

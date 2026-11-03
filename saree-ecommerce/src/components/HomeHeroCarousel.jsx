@@ -4,14 +4,14 @@ import { Link } from "react-router-dom"
 const heroBanners = [
   {
     id: "banner-1",
-    avif: "/hero/slides/banner-1.avif",
-    webp: "/hero/slides/banner-1.webp",
+    avif: "/hero/slides/banner-1.avif?v=3",
+    webp: "/hero/slides/banner-1.webp?v=3",
     alt: "Karnan Pattu Centre founder at the silk showroom",
-    width: 1800,
-    height: 874,
-    bg: "#3a1216",
-    imageClass: "object-cover object-left object-top",
-    displayAspect: "1800/874",
+    width: 1024,
+    height: 768,
+    bg: "#b1121a",
+    imageClass: "object-contain object-center",
+    displayAspect: "1024/768",
     copy: {
       align: "right",
       eyebrow: "Karnan Pattu Centre",
@@ -28,10 +28,11 @@ const heroBanners = [
     width: 1800,
     height: 874,
     bg: "#2c1814",
-    imageClass: "object-cover object-[18%_top] sm:object-[22%_top]",
+    imageClass: "object-contain object-center",
     displayAspect: "1800/874",
     copy: {
       align: "left",
+      contentClass: "md:ml-6 lg:ml-12 xl:ml-16",
       eyebrow: "Old silk buyers",
       title: ["Old sarees.", "Cash today."],
       body: "We buy all types of used and old sarees — soft silk, Kanjivaram, Banarasi, cotton silk, and more. Fair valuation and payment at the counter.",
@@ -46,10 +47,11 @@ const heroBanners = [
     width: 1800,
     height: 874,
     bg: "#e8dcc8",
-    imageClass: "object-cover object-right object-top",
+    imageClass: "object-contain object-center",
     displayAspect: "1800/874",
     copy: {
       align: "left",
+      contentClass: "md:ml-8 lg:ml-16 xl:ml-24",
       eyebrow: "Limited time",
       title: ["50% off", "select sarees."],
       body: "Celebration-ready soft silks and classic weaves at half price — shop the offer while stocks last.",
@@ -80,17 +82,15 @@ export default function HomeHeroCarousel() {
     setIndex((next + total) % total)
   }
 
-  const aspectClass = "aspect-[1800/874]"
-
   return (
     <section
       data-page-hero
-      className={`relative w-full max-w-full overflow-hidden transition-[aspect-ratio] duration-500 ease-out ${aspectClass}`}
+      className="relative w-full max-w-full overflow-hidden bg-black max-md:h-[80dvh] md:aspect-[1800/874]"
       style={{ backgroundColor: active.bg }}
       aria-roledescription="carousel"
       aria-label="Homepage banners"
     >
-      <div className="relative h-full w-full">
+      <div className="absolute inset-0 flex items-center justify-center">
         {heroBanners.map((banner, slideIndex) => {
           const isActive = slideIndex === index
           const image = (
@@ -110,7 +110,9 @@ export default function HomeHeroCarousel() {
                 height={banner.height}
                 decoding="async"
                 fetchPriority={slideIndex === 0 ? "high" : "low"}
-                className={`block h-full w-full max-w-full ${banner.imageClass}`}
+                className={`block h-full w-full max-w-full ${banner.imageClass} !object-cover ${
+                  banner.id === "banner-1" ? "max-md:!object-left" : "max-md:!object-right"
+                } md:!object-center`}
               />
             </picture>
           )
@@ -118,7 +120,7 @@ export default function HomeHeroCarousel() {
           return (
             <div
               key={banner.id}
-              className={isActive ? "relative h-full w-full" : "absolute inset-0 h-full w-full"}
+              className={isActive ? "relative h-full w-full flex items-center justify-center" : "absolute inset-0 h-full w-full flex items-center justify-center"}
               aria-hidden={!isActive}
             >
               {image}
@@ -135,36 +137,40 @@ export default function HomeHeroCarousel() {
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(to_top,rgba(28,8,12,0.92)_0%,rgba(28,8,12,0.5)_36%,transparent_68%)] md:hidden"
+          className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(to_top,rgba(28,8,12,0.96)_0%,rgba(28,8,12,0.72)_32%,rgba(28,8,12,0.25)_58%,transparent_78%)] md:hidden"
           aria-hidden
         />
 
         <div
-          className={`absolute inset-0 z-[3] flex items-end pb-10 md:items-center md:pb-0 ${
+          className={`absolute inset-0 z-[3] flex items-end max-md:justify-start max-md:pb-[max(5.75rem,calc(4.75rem+env(safe-area-inset-bottom)))] md:items-center md:pb-0 ${
             alignRight ? "md:justify-end" : "md:justify-start"
           }`}
         >
-          <div className="site-container min-w-0">
+          <div className="site-container min-w-0 max-md:px-17">
             <div
-              className={`w-full min-w-0 max-w-xl text-left text-[#f6efe4] ${
-                alignRight ? "md:ml-auto md:max-w-lg lg:max-w-xl" : "md:max-w-lg lg:max-w-xl"
-              }`}
+              className={`w-full min-w-0 text-left text-[#f6efe4] max-md:max-w-[17.25rem] sm:max-w-xs md:max-w-xl ${
+                alignRight
+                  ? "md:ml-auto md:max-w-lg lg:max-w-xl"
+                  : "md:max-w-lg lg:max-w-xl"
+              } ${copy.contentClass ?? ""}`}
             >
-              <p className="text-[11px] tracking-[0.28em] text-[#e8d5b5] uppercase">{copy.eyebrow}</p>
-              <Heading className="mt-3 font-display text-3xl leading-[1.08] text-[#faf6f0] drop-shadow-sm sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl">
+              <p className="text-[10px] tracking-[0.22em] text-[#e8d5b5] uppercase sm:text-[11px] sm:tracking-[0.28em]">
+                {copy.eyebrow}
+              </p>
+              <Heading className="mt-2 font-display text-[1.65rem] leading-[1.1] text-[#faf6f0] drop-shadow-sm sm:mt-3 sm:text-3xl md:mt-4 md:text-6xl lg:text-7xl">
                 {copy.title.map((line, lineIndex) => (
                   <span key={line} className={lineIndex > 0 ? "mt-1 block" : "block"}>
                     {line}
                   </span>
                 ))}
               </Heading>
-              <p className="mt-4 max-w-md text-sm font-medium leading-7 text-[#f6efe4] md:mt-5 md:text-base">
+              <p className="mt-2 max-w-md text-xs font-medium leading-6 text-[#f6efe4] max-md:line-clamp-3 sm:mt-4 sm:text-sm sm:leading-7 md:mt-5 md:text-base md:line-clamp-none">
                 {copy.body}
               </p>
-              <div className="mt-6 md:mt-8">
+              <div className="mt-4 max-md:max-w-[14.5rem] md:mt-8">
                 <Link
                   to={copy.primaryCta.to}
-                  className="motion-btn motion-gold inline-flex w-full max-w-[16rem] items-center justify-center gap-2 bg-secondary px-4 py-2.5 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase sm:w-auto md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
+                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-2 bg-secondary px-4 py-2.5 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase sm:w-auto sm:max-w-[16rem] md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
                 >
                   {copy.primaryCta.label}
                   <span aria-hidden="true">→</span>
@@ -174,11 +180,11 @@ export default function HomeHeroCarousel() {
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 z-[5] flex items-center justify-between px-3 sm:px-5 md:px-8 lg:px-10">
+        <div className="pointer-events-none absolute inset-0 z-[5] flex items-center justify-between px-2 sm:px-5 md:px-8 lg:px-10">
           <button
             type="button"
             onClick={() => goTo(index - 1)}
-            className="pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/50 bg-[#210a0c]/55 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#210a0c]/80 md:h-12 md:w-12"
+            className="pointer-events-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/50 bg-[#210a0c]/55 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#210a0c]/80 sm:h-10 sm:w-10 md:h-12 md:w-12"
             aria-label="Previous banner"
           >
             <HeroArrow direction="prev" />
@@ -186,14 +192,14 @@ export default function HomeHeroCarousel() {
           <button
             type="button"
             onClick={() => goTo(index + 1)}
-            className="pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/50 bg-[#210a0c]/55 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#210a0c]/80 md:h-12 md:w-12"
+            className="pointer-events-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/50 bg-[#210a0c]/55 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#210a0c]/80 sm:h-10 sm:w-10 md:h-12 md:w-12"
             aria-label="Next banner"
           >
             <HeroArrow direction="next" />
           </button>
         </div>
 
-        <div className="absolute bottom-3 left-1/2 z-[4] flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/30 bg-[#210a0c]/40 px-2.5 py-1.5 backdrop-blur-sm sm:bottom-4">
+        <div className="absolute bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] left-1/2 z-[4] flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/30 bg-[#210a0c]/40 px-2.5 py-1.5 backdrop-blur-sm md:bottom-4">
           {heroBanners.map((banner, dotIndex) => (
             <button
               key={banner.id}

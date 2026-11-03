@@ -16,7 +16,7 @@ const storyParagraphs = [
 const founder = {
   name: "Karnan",
   role: "Founder, Karnan Pattu Centre",
-  image: "/hero/Founder-Karnan.jpg",
+  image: "/hero/Karnan Pattu Owner.jpg",
   tagline: "Weaving a legacy of elegant silks",
   quote: "Honesty in daylight, honor in the loom.",
   bio: [

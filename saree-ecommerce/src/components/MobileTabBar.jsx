@@ -5,7 +5,7 @@ import { useMobileShopDrawer } from "../context/MobileShopDrawerContext"
 
 function HomeIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
       <path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 19v-8.5z" />
       <path d="M9.5 20.5V14h5v6.5" />
     </svg>
@@ -14,7 +14,7 @@ function HomeIcon() {
 
 function GridIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
       <rect x="5" y="5" width="6" height="6" rx="0.5" />
       <rect x="13" y="5" width="6" height="6" rx="0.5" />
       <rect x="5" y="13" width="6" height="6" rx="0.5" />
@@ -25,7 +25,7 @@ function GridIcon() {
 
 function BagIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
       <path d="M7 9V7a5 5 0 0 1 10 0v2" />
       <path d="M6 9h12l-1 12H7L6 9z" />
     </svg>
@@ -34,7 +34,7 @@ function BagIcon() {
 
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
       <circle cx="11" cy="11" r="6" />
       <path d="M16.5 16.5 20 20" />
     </svg>
@@ -44,7 +44,7 @@ function SearchIcon() {
 function TabCell({ children, className = "" }) {
   return (
     <div
-      className={`flex flex-1 items-center justify-center border-r border-black/10 py-3 last:border-r-0 ${className}`}
+      className={`flex flex-1 items-center justify-center border-r border-black/10 last:border-r-0 ${className}`}
     >
       {children}
     </div>
@@ -85,7 +85,7 @@ export default function MobileTabBar() {
       {searchOpen && (
         <div
           className="fixed inset-x-0 z-[75] border-b border-black/10 bg-white px-4 py-3 lg:hidden"
-          style={{ bottom: "calc(3.25rem + env(safe-area-inset-bottom, 0px))" }}
+          style={{ bottom: "calc(3.5rem + env(safe-area-inset-bottom, 0px))" }}
         >
           <form onSubmit={submitSearch} className="flex items-center gap-2">
             <input
@@ -121,7 +121,7 @@ export default function MobileTabBar() {
             to="/"
             aria-label="Home"
             aria-current={homeActive ? "page" : undefined}
-            className={`flex items-center justify-center ${homeActive ? "text-primary" : "text-ink"}`}
+            className={`flex h-14 w-full items-center justify-center ${homeActive ? "text-primary" : "text-ink"}`}
           >
             <HomeIcon />
           </Link>
@@ -132,7 +132,7 @@ export default function MobileTabBar() {
             aria-label="Categories and filters"
             aria-expanded={open}
             onClick={openShopFilters}
-            className={`flex items-center justify-center ${shopActive ? "text-primary" : "text-ink"}`}
+            className={`flex h-14 w-full items-center justify-center ${shopActive ? "text-primary" : "text-ink"}`}
           >
             <GridIcon />
           </button>
@@ -142,7 +142,7 @@ export default function MobileTabBar() {
             to="/cart"
             aria-label={`Cart, ${count} items`}
             aria-current={cartActive ? "page" : undefined}
-            className={`relative flex items-center justify-center ${cartActive ? "text-primary" : "text-ink"}`}
+            className={`relative flex h-14 w-full items-center justify-center ${cartActive ? "text-primary" : "text-ink"}`}
           >
             <BagIcon />
             {count > 0 && (
@@ -158,7 +158,7 @@ export default function MobileTabBar() {
             aria-label="Search"
             aria-expanded={searchOpen}
             onClick={() => setSearchOpen((open) => !open)}
-            className={`flex items-center justify-center ${searchOpen ? "text-primary" : "text-ink"}`}
+            className={`flex h-14 w-full items-center justify-center ${searchOpen ? "text-primary" : "text-ink"}`}
           >
             <SearchIcon />
           </button>
