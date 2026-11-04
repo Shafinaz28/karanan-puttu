@@ -165,7 +165,7 @@ export default function HomeHeroCarousel() {
         />
 
         <div
-          className={`absolute inset-0 z-[3] flex items-end max-md:justify-start max-md:pt-8 max-md:pb-[max(5.5rem,calc(4.5rem+env(safe-area-inset-bottom)))] md:items-center md:pb-0 ${
+          className={`absolute inset-0 z-[3] flex items-end max-md:justify-start max-md:pt-8 max-md:pb-[max(3.75rem,calc(3rem+env(safe-area-inset-bottom)))] md:items-center md:pb-0 ${
             alignRight ? "md:justify-end" : "md:justify-start"
           }`}
         >
@@ -175,18 +175,18 @@ export default function HomeHeroCarousel() {
                 alignRight
                   ? "md:ml-auto md:max-w-lg lg:max-w-xl"
                   : "md:max-w-lg lg:max-w-xl"
-              } ${copy.contentClass ?? ""}`}
+              } ${index > 0 ? "max-md:ml-6 md:ml-10 lg:ml-14" : ""} ${copy.contentClass ?? ""}`}
             >
               <p className="text-[10px] tracking-[0.22em] text-[#e8d5b5] uppercase sm:text-[11px] sm:tracking-[0.28em]">
                 {copy.eyebrow}
               </p>
-              <Heading className="mt-2 font-display text-[1.65rem] leading-[1.1] text-[#faf6f0] drop-shadow-sm sm:mt-3 sm:text-3xl md:mt-4 md:text-6xl lg:text-7xl">
+              <Heading className="mt-2 font-display text-[1.4rem] leading-[1.1] text-[#faf6f0] drop-shadow-sm sm:mt-3 sm:text-3xl md:mt-4 md:text-6xl lg:text-7xl">
                 {copy.title.map((line, lineIndex) => (
                   <span
                     key={line}
                     className={`block ${lineIndex > 0 ? "mt-1" : ""} ${
-                      active.id === "banner-1" && lineIndex === 0
-                        ? "max-md:whitespace-nowrap max-md:text-[1rem] max-md:tracking-[-0.03em]"
+                      active.id === "banner-1"
+                        ? "max-md:whitespace-nowrap max-md:tracking-normal"
                         : ""
                     }`}
                   >
@@ -194,14 +194,14 @@ export default function HomeHeroCarousel() {
                   </span>
                 ))}
               </Heading>
-              <p className="mt-2 max-w-md text-xs font-medium leading-5 text-[#f6efe4] sm:mt-4 sm:text-sm sm:leading-7 md:mt-5 md:text-base md:line-clamp-none">
+              <p className="mt-2 hidden max-w-md text-xs font-medium leading-5 text-[#f6efe4] sm:mt-4 sm:text-sm sm:leading-7 md:mt-5 md:block md:text-base md:line-clamp-none">
                 {copy.body}
               </p>
 
-              <div className="mt-4 max-md:max-w-[14.5rem] md:mt-8">
+              <div className="mt-4 max-md:max-w-[11.5rem] md:mt-8">
                 <Link
                   to={copy.primaryCta.to}
-                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-2 bg-secondary px-4 py-2.5 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase sm:w-auto sm:max-w-[16rem] md:px-5 md:py-3 md:text-[11px] md:tracking-[0.16em]"
+                  className="motion-btn motion-gold inline-flex w-full items-center justify-center gap-1.5 bg-secondary px-2.5 py-1.5 text-[8px] font-semibold tracking-[0.1em] text-ink uppercase sm:w-auto sm:max-w-[14rem] md:px-3.5 md:py-2 md:text-[9px] md:tracking-[0.12em]"
                 >
                   {copy.primaryCta.label}
                   <span aria-hidden="true">→</span>
