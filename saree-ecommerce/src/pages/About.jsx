@@ -1,52 +1,53 @@
 import { Link } from "react-router-dom"
 import PageDamaskHero, { ZariOrnament } from "../components/PageDamaskHero"
 
-const stats = [
-  ["1985", "Founded", "The first counter in Jayanagar"],
-  ["450+", "Weaver families", "Partners across South India"],
-  ["100%", "Zari tested", "Checked before we quote"],
+const storyParagraphs = [
+  "Welcome to Karnan Pattu Centre, your destination in Jayanagar, Bengaluru, for enquiries about buying and selling traditional silk and Zari sarees.",
+  "Traditional sarees are more than clothing. They often represent family memories, weddings, celebrations and cultural traditions. Many households have beautiful silk sarees stored away for years. We offer families an opportunity to enquire about selling unused traditional sarees through an individual assessment process.",
 ]
 
-const storyParagraphs = [
-  "Karnan Pattu Centre sells new soft silks and buys the soft silk you no longer wear. Both are looked at in daylight before a price is named. A new drape leaves with a blouse piece; an old one is welcome in any condition—the rate is told first, and the money is paid the same day.",
-  "Founded in 1985 in Bengaluru, the house grew around three promises: name the silk honestly, quote a fair price before anyone agrees, and treat every customer—buying or selling—the same way at the counter.",
-  "Whether you are choosing a drape for a wedding or turning old soft silk into cash, you hear the amount first. Nothing is settled until you accept, and payment is made the same day when we buy from you.",
+const sareeTypes = [
+  "Old Kanchipuram silk sarees",
+  "Traditional Pattu sarees",
+  "Mysore silk sarees",
+  "Banarasi silk sarees",
+  "Gold and silver Zari sarees",
+  "Wedding and bridal sarees",
+  "Antique and vintage sarees",
 ]
 
 const founder = {
   name: "Karnan",
   role: "Founder, Karnan Pattu Centre",
   image: "/hero/Karnan Pattu Owner.jpg",
-  tagline: "Weaving a legacy of elegant silks",
-  quote: "Honesty in daylight, honor in the loom.",
+  tagline: "BUY • SELL • TRUST",
+  quote: "Every traditional saree carries a story worth valuing.",
   bio: [
-    "Karnan Pattu Centre began in 1985 with a simple counter rule: name the silk in daylight, quote a fair price before anyone agrees, and pay the same day when we buy old soft silk.",
-    "From Jayanagar in Bengaluru, the house still sells new soft silks for every occasion and welcomes old, used, torn, and faded drapes at the desk.",
-    "Karnan grew the business by listening at the counter—what brides needed for muhurtham, what families wanted for daily wear, and what sellers expected when they brought inherited soft silk to sell.",
-    "He still believes a pattu house earns trust one conversation at a time: show the zari in natural light, explain the weave without hurry, and never press a customer once the price is on the table.",
+    "Karnan Pattu Centre helps preserve the value of traditional Indian silk sarees through quality, personal service and trusted customer relationships.",
+    "From old Zari sarees to traditional Pattu collections, we value every saree and its story. Our approach is built around clear communication, individual assessment and your choice.",
   ],
 }
 
 const whyChoose = [
   {
     icon: "quality",
-    title: "Unmatched quality",
-    text: "Every soft silk is checked in daylight before it reaches the counter.",
+    title: "Clear Communication",
+    text: "We explain the assessment process and the factors considered when reviewing each saree.",
   },
   {
     icon: "heritage",
-    title: "Handpicked heritage",
-    text: "Temple borders, korvai, and zari work chosen with the house rule since 1985.",
+    title: "Convenient Enquiries",
+    text: "Share saree photographs through WhatsApp before visiting our centre.",
   },
   {
     icon: "trust",
-    title: "Trust & transparency",
-    text: "We name the price first—for new silks and old silk we buy the same day.",
+    title: "Individual Assessment",
+    text: "We consider each saree's fabric, weaving, Zari work and overall condition before discussing its value.",
   },
   {
     icon: "reach",
-    title: "Across Karnataka",
-    text: "Showrooms in Bengaluru with doorstep pickup when you sell old soft silk.",
+    title: "Your Decision Matters",
+    text: "The sale proceeds only when both parties agree on the value and terms.",
   },
 ]
 
@@ -55,8 +56,8 @@ export default function About() {
     <>
       <PageDamaskHero
         breadcrumb="About Us"
-        title="About Us"
-        subtitle="“A house that sells soft silk, and buys old soft silk, with the same care.”"
+        title="About Karnan Pattu Centre"
+        subtitle="Your Jayanagar destination for enquiries about buying and selling traditional silk and Zari sarees."
       />
 
       {/* Our story */}
@@ -74,36 +75,32 @@ export default function About() {
                 data-motion-item
                 className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl"
               >
-                Rooted in tradition
+                About Karnan Pattu Centre
               </h2>
               <div data-motion-item className="mt-2 h-0.5 w-20 bg-secondary" aria-hidden />
             </div>
             <div className="space-y-4 font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
               {storyParagraphs.map((paragraph, index) => (
-                <p
-                  key={index}
-                  data-motion-item
-                  className={index === 2 ? "text-stone-700" : undefined}
-                >
+                <p key={index} data-motion-item>
                   {paragraph}
                 </p>
               ))}
             </div>
-            <ul className="grid grid-cols-3 gap-2 pt-2 sm:gap-4 sm:pt-4">
-              {stats.map(([value, label, note]) => (
-                <li
-                  key={label}
-                  data-motion-item
-                  className="rounded-xl border border-secondary/40 bg-white/80 p-2.5 text-center shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-secondary sm:p-4"
-                >
-                  <span className="block font-display text-xl font-bold text-primary sm:text-3xl">{value}</span>
-                  <span className="mt-1 block text-[9px] font-semibold text-[#8a6626] uppercase sm:text-xs">
-                    {label}
-                  </span>
-                  <span className="mt-0.5 block text-[8px] leading-tight text-stone-500 sm:text-[10px]">{note}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-4 pt-2" data-motion-item>
+              <h3 className="font-display text-2xl font-semibold text-primary">BUY • SELL • TRUST</h3>
+              <h3 className="font-display text-2xl font-semibold text-primary">What We Do</h3>
+              <p className="font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
+                We welcome enquiries for a range of traditional saree collections:
+              </p>
+              <ul className="grid gap-2 font-sans text-base text-ink/85 sm:grid-cols-2 sm:text-lg">
+                {sareeTypes.map((type) => (
+                  <li key={type} className="flex items-start gap-2">
+                    <span className="text-secondary" aria-hidden="true">•</span>
+                    {type}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <figure className="relative lg:col-span-5" data-motion-image>
@@ -214,13 +211,13 @@ export default function About() {
               data-motion-item
               className="mb-2 block font-sans text-xs font-bold tracking-[0.3em] text-[#8a6626] uppercase"
             >
-              Why choose us
+              Our approach
             </span>
             <h2
               data-motion-item
               className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl md:text-5xl"
             >
-              The Karnan Pattu promise
+              How We Work
             </h2>
             <ZariOrnament data-motion-item className="mt-4" dark />
           </div>
@@ -254,8 +251,7 @@ export default function About() {
             </span>
             <h2 className="font-display text-3xl font-bold text-primary sm:text-4xl">Looking ahead</h2>
             <p className="mt-6 font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
-              To be the trusted house of South India for soft silk—a place where new soft silk is chosen with care, and
-              old soft silk is turned into honest cash.
+              Indian silk sarees carry generations of craftsmanship and cultural heritage. From Kanchipuram Pattu to Mysore silk and Banarasi designs, each variety has distinctive weaving traditions. We welcome enquiries from families who want their unused traditional sarees to be considered for purchase.
             </p>
           </article>
           <article
@@ -267,8 +263,7 @@ export default function About() {
             </span>
             <h2 className="font-display text-3xl font-bold sm:text-4xl">What we keep</h2>
             <p className="mt-6 font-sans text-base leading-relaxed text-stone-200 sm:text-lg">
-              We sell soft silk that can be named, and we buy old, used, and damaged soft silk at a fair price. Every
-              piece is checked before a rate is offered, and the amount is paid the same day.
+              We explain our process, accept photo enquiries through WhatsApp and individually assess each saree. We consider its fabric, weaving, Zari work and condition. The sale proceeds only when both parties agree on the value and terms.
             </p>
           </article>
         </div>
@@ -282,14 +277,23 @@ export default function About() {
             data-motion-item
             className="font-display text-3xl font-normal tracking-wide sm:text-4xl md:text-5xl"
           >
-            Discover the elegance of Karnan Pattu Centre
+            Visit Karnan Pattu Centre
           </h2>
+          <div data-motion-item className="space-y-2 text-sm leading-relaxed text-stone-200 sm:text-base">
+            <p>#70, 27th Cross, 9th Main, 4th Block, Jayanagar, Bengaluru – 560011, Karnataka.</p>
+            <p>
+              Phone / WhatsApp:{" "}
+              <a className="underline underline-offset-4" href="tel:+919894441500">
+                +91 98944 41500
+              </a>
+            </p>
+          </div>
           <div data-motion-item>
             <Link
               to="/shop"
               className="motion-btn inline-flex items-center justify-center rounded-md bg-gradient-to-r from-secondary via-[#e5c378] to-secondary px-10 py-4 font-sans text-sm font-bold tracking-widest text-primary uppercase shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-secondary/25"
             >
-              Shop now
+              Explore sarees
               <span className="ml-2" aria-hidden="true">
                 →
               </span>

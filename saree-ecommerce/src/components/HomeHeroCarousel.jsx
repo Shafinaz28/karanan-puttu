@@ -4,58 +4,71 @@ import { Link } from "react-router-dom"
 const heroBanners = [
   {
     id: "banner-1",
-    avif: "/hero/slides/banner-1.avif?v=3",
-    webp: "/hero/slides/banner-1.webp?v=3",
-    alt: "Karnan Pattu Centre founder at the silk showroom",
-    width: 1024,
-    height: 768,
+    // Desktop images
+    avif: "/hero/slides/Bannerr-1.avif?v=3",
+    webp: "/hero/slides/Bannerr-1.webp?v=3",
+    alt: "Traditional silk sarees at Karnan Pattu Centre",
+    width: 1086,
+    height: 1900,
+    // Separate Mobile images (Update these paths with your mobile assets)
+    mobileAvif: "/hero/mobileimg/Bannerr-1-mobile.avif?v=3",
+    mobileWebp: "/hero/mobileimg/Bannerr-1-mobile.webp?v=3",
+    mobileWidth: 768,
+    mobileHeight: 1024,
     bg: "#b1121a",
     imageClass: "object-contain object-center",
-    displayAspect: "1024/768",
+    displayAspect: "1086/1900",
     copy: {
       align: "right",
       eyebrow: "Karnan Pattu Centre",
-      title: ["Four decades of silk.", "Still face to face."],
-      body: "From our founder’s counter in Jayanagar — handpicked soft silks, honest prices, and the same welcome every time you walk in.",
-      primaryCta: { label: "Our story", to: "/about" },
+      title: ["BEAUTIFUL TRADITIONAL", "SILK SAREES"],
+      body: "Explore Pattu, Kanchipuram, Mysore, Banarasi and wedding silk sarees, woven with tradition and care.",
+      primaryCta: { label: "EXPLORE SAREES", to: "/shop" },
     },
   },
   {
     id: "banner-2",
-    avif: "/hero/slides/banner-2.avif",
-    webp: "/hero/slides/banner-2.webp",
-    alt: "Cash for old silk sarees at Karnan Pattu Centre",
+    avif: "/hero/slides/bannerr-2.avif",
+    webp: "/hero/slides/bannerr-2.webp",
+    alt: "Sell old silk and Zari sarees at Karnan Pattu Centre in Bangalore",
     width: 1800,
     height: 874,
+    mobileAvif: "/hero/mobileimg/Bannerr-2-mobile.avif?v=3",
+    mobileWebp: "/hero/mobileimg/Bannerr-2-mobile.webp?v=3",
+    mobileWidth: 768,
+    mobileHeight: 1024,
     bg: "#2c1814",
     imageClass: "object-contain object-center",
     displayAspect: "1800/874",
     copy: {
       align: "left",
-      contentClass: "md:ml-6 lg:ml-12 xl:ml-16",
-      eyebrow: "Old silk buyers",
-      title: ["Old sarees.", "Cash today."],
-      body: "We buy all types of used and old sarees — soft silk, Kanjivaram, Banarasi, cotton silk, and more. Fair valuation and payment at the counter.",
-      primaryCta: { label: "Sell old sarees", to: "/old-silk" },
+      eyebrow: "Old Saree Buyers in Bangalore",
+      title: ["WE BUY OLD SILK", "& ZARI SAREES"],
+      body: "Enquire about selling old Pattu, Kanchipuram, Mysore silk, Banarasi and wedding sarees.",
+      contact: "+91 98944 41500",
+      primaryCta: { label: "SELL YOUR OLD SAREES", to: "/old-silk" },
     },
   },
   {
     id: "banner-3",
     avif: "/hero/slides/banner-3.avif",
     webp: "/hero/slides/banner-3.webp",
-    alt: "Heritage silk saree — special offer",
+    alt: "Traditional silk saree at Karnan Pattu Centre",
     width: 1800,
     height: 874,
+    mobileAvif: "/hero/mobileimg/Bannerr-3-mobile.avif?v=3",
+    mobileWebp: "/hero/mobileimg/Bannerr-3-mobile.webp?v=3",
+    mobileWidth: 768,
+    mobileHeight: 1024,
     bg: "#e8dcc8",
     imageClass: "object-contain object-center",
     displayAspect: "1800/874",
     copy: {
       align: "left",
-      contentClass: "md:ml-8 lg:ml-16 xl:ml-24",
-      eyebrow: "Limited time",
-      title: ["50% off", "select sarees."],
-      body: "Celebration-ready soft silks and classic weaves at half price — shop the offer while stocks last.",
-      primaryCta: { label: "Shop the sale", to: "/shop" },
+      eyebrow: "Karnan Pattu Centre",
+      title: ["A TRUST BUILT", "ON TRADITION"],
+      body: "We value every traditional saree through personal service, individual assessment and trusted relationships.",
+      primaryCta: { label: "ABOUT US", to: "/about" },
     },
   },
 ]
@@ -101,8 +114,18 @@ export default function HomeHeroCarousel() {
                   : "pointer-events-none absolute inset-0 z-0 opacity-0"
               }`}
             >
+              {/* Mobile screen sources (screens <= 767px) */}
+              {banner.mobileAvif && (
+                <source media="(max-width: 767px)" srcSet={banner.mobileAvif} type="image/avif" />
+              )}
+              {banner.mobileWebp && (
+                <source media="(max-width: 767px)" srcSet={banner.mobileWebp} type="image/webp" />
+              )}
+
+              {/* Desktop screen sources */}
               <source srcSet={banner.avif} type="image/avif" />
               <source srcSet={banner.webp} type="image/webp" />
+
               <img
                 src={banner.webp}
                 alt={banner.alt}
@@ -142,7 +165,7 @@ export default function HomeHeroCarousel() {
         />
 
         <div
-          className={`absolute inset-0 z-[3] flex items-end max-md:justify-start max-md:pb-[max(5.75rem,calc(4.75rem+env(safe-area-inset-bottom)))] md:items-center md:pb-0 ${
+          className={`absolute inset-0 z-[3] flex items-end max-md:justify-start max-md:pt-8 max-md:pb-[max(5.5rem,calc(4.5rem+env(safe-area-inset-bottom)))] md:items-center md:pb-0 ${
             alignRight ? "md:justify-end" : "md:justify-start"
           }`}
         >
@@ -159,14 +182,22 @@ export default function HomeHeroCarousel() {
               </p>
               <Heading className="mt-2 font-display text-[1.65rem] leading-[1.1] text-[#faf6f0] drop-shadow-sm sm:mt-3 sm:text-3xl md:mt-4 md:text-6xl lg:text-7xl">
                 {copy.title.map((line, lineIndex) => (
-                  <span key={line} className={lineIndex > 0 ? "mt-1 block" : "block"}>
+                  <span
+                    key={line}
+                    className={`block ${lineIndex > 0 ? "mt-1" : ""} ${
+                      active.id === "banner-1" && lineIndex === 0
+                        ? "max-md:whitespace-nowrap max-md:text-[1rem] max-md:tracking-[-0.03em]"
+                        : ""
+                    }`}
+                  >
                     {line}
                   </span>
                 ))}
               </Heading>
-              <p className="mt-2 max-w-md text-xs font-medium leading-6 text-[#f6efe4] max-md:line-clamp-3 sm:mt-4 sm:text-sm sm:leading-7 md:mt-5 md:text-base md:line-clamp-none">
+              <p className="mt-2 max-w-md text-xs font-medium leading-5 text-[#f6efe4] sm:mt-4 sm:text-sm sm:leading-7 md:mt-5 md:text-base md:line-clamp-none">
                 {copy.body}
               </p>
+
               <div className="mt-4 max-md:max-w-[14.5rem] md:mt-8">
                 <Link
                   to={copy.primaryCta.to}
@@ -176,6 +207,12 @@ export default function HomeHeroCarousel() {
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
+
+              {copy.brandLine && (
+                <p className="mt-3 text-[9px] font-semibold tracking-[0.12em] text-[#e8d5b5] uppercase sm:text-[10px]">
+                  {copy.brandLine}
+                </p>
+              )}
             </div>
           </div>
         </div>

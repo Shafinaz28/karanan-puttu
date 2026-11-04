@@ -85,6 +85,34 @@ const oldSilks = [
   },
 ];
 
+const oldSareeFaqs = [
+  {
+    question: "Where can I sell old silk sarees in Bangalore?",
+    answer: "Enquire at Karnan Pattu Centre in Jayanagar 4th Block, Bengaluru. Call or WhatsApp +91 98944 41500 and share photographs of your old silk sarees.",
+  },
+  {
+    question: "Who buys old Zari sarees in Bangalore?",
+    answer: "Karnan Pattu Centre welcomes enquiries for old Zari sarees, including gold-toned and silver-toned varieties. Share clear photographs of the border and pallu for an initial review.",
+  },
+  {
+    question: "Does Karnan Pattu Centre buy Kanchipuram silk sarees?",
+    answer: "Enquire about selling your old Kanchipuram silk and Pattu sarees. Send photographs of the saree, border and pallu for assessment.",
+  },
+  {
+    question: "Can I sell old Mysore silk sarees?",
+    answer: "Contact Karnan Pattu Centre to enquire about selling old Mysore silk sarees. Share photographs and details about their condition.",
+  },
+  {
+    question: "Do you buy Banarasi silk sarees?",
+    answer: "Enquire about selling old Banarasi silk sarees. Share photographs showing the fabric, woven designs and pallu.",
+  },
+  {
+    question: "Can I sell old wedding and bridal sarees?",
+    answer: "You can enquire about selling traditional wedding and bridal silk sarees. Each saree is assessed individually.",
+  },
+  
+];
+
 const promoHeroBackground = {
   src: "/hero/bgbannar.png",
   alt: "Silk sarees collection banner with model and folded weaves",
@@ -385,6 +413,40 @@ export default function Home() {
       </section>
 
       <GoogleReviewsSection />
+
+      <section className="site-section bg-[#f6efe4]" aria-labelledby="old-saree-faq-heading">
+        <div className="site-section-inner">
+          <div className="mx-auto max-w-3xl">
+            <p className="text-center text-[11px] tracking-[0.28em] text-[#3a2a24]/70 uppercase">
+              Karnan Pattu Centre
+            </p>
+            <h2
+              id="old-saree-faq-heading"
+              className="mt-3 text-center font-display text-4xl leading-tight text-[#2c1814] md:text-5xl"
+            >
+              FAQs
+            </h2>
+            <div className="mt-8 divide-y divide-[#2c1814]/15 border-y border-[#2c1814]/15">
+              {oldSareeFaqs.map(({ question, answer }) => (
+                <details key={question} className="group py-4">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-[#2c1814] marker:hidden">
+                    {question}
+                    <span
+                      aria-hidden="true"
+                      className="shrink-0 text-xl text-[#8b6914] transition-transform group-open:rotate-45"
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-3 max-w-2xl pr-8 text-sm leading-6 text-[#3a2a24]/80">
+                    {answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
     </>
   )

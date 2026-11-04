@@ -1278,13 +1278,33 @@ function ContactMessagesPanel({ messages, loading, onStatus }) {
                 <a className="text-primary underline-offset-2 hover:underline" href={`tel:${message.mobile}`}>
                   {message.mobile}
                 </a>
-                <a className="break-all text-primary underline-offset-2 hover:underline" href={`mailto:${message.email}`}>
-                  {message.email}
-                </a>
+                {message.email && (
+                  <a className="break-all text-primary underline-offset-2 hover:underline" href={`mailto:${message.email}`}>
+                    {message.email}
+                  </a>
+                )}
               </div>
+              <p className="mt-3 text-sm text-ink/75">
+                Saree type: {message.saree_type || "Not specified"} · Quantity: {message.saree_count || 1}
+              </p>
               <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6 text-ink/75">
                 {message.message}
               </p>
+              {message.photos?.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {message.photos.map((photo, index) => (
+                    <a
+                      key={photo}
+                      href={photo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-lg border border-secondary/30 px-3 py-2 text-xs font-medium text-primary underline-offset-2 hover:underline"
+                    >
+                      View saree photo {index + 1}
+                    </a>
+                  ))}
+                </div>
+              )}
             </li>
           ))}
         </ul>

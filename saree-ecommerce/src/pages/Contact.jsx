@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
 import PageDamaskHero from "../components/PageDamaskHero"
 import { submitContactMessage } from "../lib/contactMessages"
 
@@ -20,9 +19,9 @@ export default function Contact() {
 
   async function handleSubmit(event) {
     event.preventDefault()
-    const missing = Object.values(form).some((value) => value.trim() === "")
+    const missing = [form.name, form.mobile].some((value) => value.trim() === "")
     if (missing) {
-      setError("Please fill in every field.")
+      setError("Please fill in your name and phone number.")
       return
     }
     setError("")
@@ -37,6 +36,7 @@ export default function Contact() {
       await submitContactMessage({
         ...form,
         mobile: `+91 ${form.mobile.trim()}`,
+        message: form.message.trim() || "No additional message provided.",
       })
       setSent(true)
     } catch (submitError) {
@@ -50,24 +50,23 @@ export default function Contact() {
     <>
       <PageDamaskHero
         breadcrumb="Contact"
-        title="Contact"
-        subtitle="“Tell us about an old silk saree, or ask about a new drape.”"
+        title="Contact Karnan Pattu Centre"
+        subtitle="Have old silk, Zari or traditional Pattu sarees to sell? Contact us and share photographs for an enquiry."
       />
     <section id="write" className="bg-[#f6efe4] py-16">
       <div className="site-container grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
         <div>
-          <p className="text-[11px] tracking-[0.22em] text-[#c59b27] uppercase">The desk</p>
-          <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Write to the desk</h2>
+          <p className="text-[11px] tracking-[0.22em] text-[#c59b27] uppercase">Get in touch</p>
+          <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Send Your Saree Enquiry</h2>
           <p className="mt-4 max-w-md text-sm leading-7 text-ink/75">
-            Tell us about an old, used, or damaged silk saree, or ask about a new drape.
+            We are here to help you understand the enquiry and assessment process. Contact us by phone or WhatsApp and share your saree photographs.
           </p>
+          <h3 className="mt-6 font-display text-2xl text-primary">Karnan Pattu Centre</h3>
           <ul className="mt-8 space-y-4">
             {[
-              ["phone", "Call the desk", "tel:+917200015300", "+91 72000 15300", false],
-              ["phone", "Store phone", "tel:+919944055900", "+91 99440 55900", false],
-              ["chat", "WhatsApp", "https://wa.me/917200015300", "Message the showroom", true],
-              ["mail", "Email", "mailto:karnanpattucenter@gmail.com", "karnanpattucenter@gmail.com", false],
-              ["pin", "Showrooms", "/locations", "V.V. Puram and Jayanagar", false],
+              ["pin", "Address", "https://maps.google.com/?q=%2370,+27th+Cross,+9th+Main,+4th+Block,+Jayanagar,+Bengaluru+560011", "#70, 27th Cross, 9th Main, 4th Block, Jayanagar, Bengaluru – 560011, Karnataka", true],
+              ["phone", "Phone", "tel:+919894441500", "+91 98944 41500", false],
+              ["chat", "WhatsApp", "https://wa.me/919894441500", "+91 98944 41500", true],
             ].map(([icon, label, href, value, external]) => (
               <li key={label}>
                 <a
@@ -108,11 +107,12 @@ export default function Contact() {
 
         {sent ? (
           <p className="rounded-2xl border border-[#c59b27]/50 bg-white px-6 py-8 text-primary">
-            Thank you, {form.name.trim()}. We received your note.
+            Thank you, {form.name.trim()}. We received your saree enquiry.
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="rounded-2xl border border-[#ead9bf] bg-white p-6 shadow-sm md:p-8">
-            <Field icon="user" label="Name">
+            <h2 className="mb-5 font-display text-3xl text-primary">Send Your Saree Enquiry</h2>
+            <Field icon="user" label="Full Name">
               <input
                 name="name"
                 required
@@ -137,33 +137,31 @@ export default function Contact() {
                 className="w-full bg-transparent py-3 pr-3 text-sm outline-none"
               />
             </Field>
-            <Field icon="mail" label="Email">
+            <Field icon="mail" label="Email (optional)">
               <input
                 name="email"
                 type="email"
-                required
                 maxLength={254}
                 value={form.email}
                 onChange={updateField}
-                placeholder="you@email.com"
+                placeholder="you@email.com (optional)"
                 className="w-full bg-transparent py-3 pr-3 text-sm outline-none"
               />
             </Field>
-            <Field icon="note" label="Message" tall>
+            <Field icon="note" label="Additional Message (optional)" tall>
               <textarea
                 name="message"
                 rows="5"
-                required
                 maxLength={5000}
                 value={form.message}
                 onChange={updateField}
-                placeholder="The saree, its condition, and how we can help"
+                placeholder="Share details about the sarees or any questions"
                 className="w-full resize-none bg-transparent py-3 pr-3 text-sm outline-none"
               />
             </Field>
             {error && <p className="mt-3 text-sm text-primary">{error}</p>}
             <button type="submit" disabled={submitting} className="motion-btn motion-fill mt-5 w-full bg-primary px-6 py-3 text-sm text-cream disabled:cursor-not-allowed disabled:opacity-60">
-              {submitting ? "Sending…" : "Send message"}
+              {submitting ? "Submitting…" : "Submit Enquiry"}
             </button>
           </form>
         )}
@@ -172,29 +170,31 @@ export default function Contact() {
     <section className="bg-shell py-12">
       <div className="site-container grid gap-6 md:grid-cols-2">
         <article className="rounded-2xl border border-ink/10 bg-paper p-8">
-          <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Buy</p>
-          <h2 className="mt-3 font-display text-3xl text-primary">Buy a soft silk</h2>
+          <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Find Us in Jayanagar</p>
+          <h2 className="mt-3 font-display text-3xl text-primary">Visit Karnan Pattu Centre</h2>
           <p className="mt-3 text-sm leading-7 text-ink/75">
-            Soft silks for weddings, temples, and the week. Every drape includes a blouse piece.
+            #70, 27th Cross, 9th Main, 4th Block, Jayanagar, Bengaluru – 560011, Karnataka. We welcome enquiries about selling old silk, Zari, Kanchipuram, Mysore silk, Banarasi and traditional Pattu sarees.
           </p>
-          <Link
-            to="/shop"
+          <a
+            href="https://maps.google.com/?q=%2370,+27th+Cross,+9th+Main,+4th+Block,+Jayanagar,+Bengaluru+560011"
+            target="_blank"
+            rel="noreferrer"
             className="motion-btn motion-fill mt-6 inline-block bg-primary px-5 py-3 text-[11px] tracking-[0.14em] text-cream uppercase"
           >
-            Buy soft silks
-          </Link>
+            Get Directions
+          </a>
         </article>
         <article className="rounded-2xl bg-primary p-8 text-cream">
           <p className="text-[11px] tracking-[0.22em] text-secondary uppercase">Sell</p>
-          <h2 className="mt-3 font-display text-3xl">Sell your old soft silk</h2>
+          <h2 className="mt-3 font-display text-3xl">Sell Your Old Sarees</h2>
           <p className="mt-3 text-sm leading-7 text-cream/80">
-            We buy old, used, and damaged soft silk at the best price. Send a photo or visit a showroom and get paid the same day.
+            We welcome enquiries about selling old silk, Zari, Kanchipuram, Mysore silk, Banarasi and traditional Pattu sarees. Contact us to understand the enquiry and assessment process.
           </p>
           <a
             href="#write"
             className="motion-btn motion-gold mt-6 inline-block bg-secondary px-5 py-3 text-[11px] tracking-[0.14em] text-ink uppercase"
           >
-            Sell old silk
+            Send an Enquiry
           </a>
         </article>
       </div>

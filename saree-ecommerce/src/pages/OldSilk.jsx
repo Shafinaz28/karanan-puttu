@@ -3,35 +3,49 @@ import useOldSilkMotion from "../hooks/useOldSilkMotion"
 
 const bought = [
   {
-    name: "kanjipuram",
-    text: "Worn silk is welcome. The body and the border are checked before a price is named.",
+    name: "Old Zari Saree Buying",
+    text: "We welcome enquiries for old Zari sarees featuring traditional gold-toned and silver-toned work.",
     image: "/sarees/worn/old-kanchipuram-silk.avif",
   },
   {
-    name: "mysore silk",
-    text: "Faded or still bright worn silk. The border is part of the rate.",
+    name: "Kanchipuram Silk Saree Buying",
+    text: "Kanchipuram silk sarees are valued for their traditional craftsmanship, rich colours and intricate borders. Contact us and share photographs of unused sarees for assessment.",
+    image: "/sarees/worn/old-kanchipuram-silk.avif",
+  },
+  {
+    name: "Mysore Silk Saree Buying",
+    text: "We welcome enquiries for old Mysore silk sarees, including traditional designs with Zari borders. Share photographs of the fabric and border to help us understand your saree.",
     image: "/sarees/worn/old-mysore-silk.avif",
   },
   {
-    name: "Nalli",
-    text: "Torn borders and split pallus are taken in. The weave is looked at in daylight.",
-    image: "/sarees/worn/old-nalli-silk.avif",
-  },
-  {
-    name: "tissue",
-    text: "Worn silk folded away or never worn, including pieces with tired zari.",
-    image: "/sarees/worn/old-tissue-silk.avif",
-  },
-  {
-    name: "Banarsee",
-    text: "Older worn silk drapes are checked for the handwork that is still on the cloth.",
+    name: "Banarasi Silk Saree Buying",
+    text: "Have old Banarasi silk sarees stored away? Contact Karnan Pattu Centre to enquire about selling your traditional Banarasi sarees.",
     image: "/sarees/worn/old-banarasi-silk.avif",
   },
   {
-    name: "Soft Silk",
-    text: "Plain worn silk, light or heavy, folded away or already worn.",
+    name: "Wedding and Bridal Saree Buying",
+    text: "We welcome enquiries for old bridal silk sarees, wedding Pattu sarees and traditional occasion-wear collections.",
+    image: "/sarees/worn/worn-crimson.avif",
+  },
+  {
+    name: "Antique and Vintage Saree Buying",
+    text: "Share photographs and any details you know about your vintage or inherited saree, such as its age, origin and weaving.",
+    image: "/sarees/worn/old-tissue-silk.avif",
+  },
+  {
+    name: "Bulk Saree Buying Enquiries",
+    text: "If you have several old sarees, enquire about selling the collection together. Share the approximate number of sarees and photographs of different varieties.",
     image: "/sarees/worn/old-soft-silk.avif",
   },
+]
+
+const assessmentDetails = [
+  { label: "Full saree photos", icon: "saree" },
+  { label: "Border photos", icon: "border" },
+  { label: "Pallu photos", icon: "pallu" },
+  { label: "Zari work close-ups", icon: "zari" },
+  { label: "Damage or stain photos", icon: "condition" },
+  { label: "Number of sarees", icon: "quantity" },
 ]
 
 const youtubeShorts = [
@@ -56,34 +70,47 @@ export default function OldSilk() {
     <>
       <PageDamaskHero
         breadcrumb="Old silk"
-        title="We buy all kind of zari & soft silk sarees in any condition"
-        subtitle="“Old, used, torn, and faded soft silk. The weave and the border are checked in daylight, then a cash price is named and paid the same day.”"
+        title="Old Saree Buying Services in Bangalore"
+        subtitle="Enquire about selling traditional silk, Zari, Pattu and wedding sarees at Karnan Pattu Centre."
       />
 
-      <section className="bg-[#f6efe4] py-16" data-old-silk-section>
+      {/* Saree Categories Section */}
+      <section className="bg-[#f6efe4] py-16 md:py-20" data-old-silk-section>
         <div className="site-container">
           <div data-old-silk-intro className="mx-auto max-w-2xl text-center">
-            <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">What we take</p>
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Soft silk in any condition</h2>
+            <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Old saree buying services</p>
+            <h2 className="mt-3 font-display text-3xl text-primary md:text-5xl">Enquire about your saree</h2>
             <p className="mt-4 text-sm leading-7 text-ink/70">
-              Soft silk only. A blouse piece is not required. Small tears and tired borders are still priced.
+              Are you searching for a place to sell your old silk sarees in Bangalore? We review each saree individually based on its fabric, weaving, Zari work, design and overall condition. Our aim is to make the enquiry and assessment process simple and clear.
             </p>
           </div>
 
-          <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6" data-old-silk-grid>
+          <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" data-old-silk-grid>
             {bought.map((item) => (
-              <li key={item.name}>
-                <article data-old-silk-card className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216]">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    decoding="async"
-                    fetchPriority="high"
-                    className="aspect-[5/4] w-full object-cover object-center"
-                  />
-                  <div className="px-3 py-3 text-center text-[#f7f1e8] md:px-4 md:py-4">
-                    <h3 className="font-display text-sm leading-tight md:text-lg">{item.name}</h3>
-                    <p className="mt-1 text-[11px] leading-5 text-[#f7f1e8]/75 md:text-xs">{item.text}</p>
+              <li key={item.name} className="h-full">
+                <article data-old-silk-card className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216] shadow-sm transition-transform duration-300 hover:-translate-y-1">
+                  <div className="aspect-[5/4] w-full overflow-hidden bg-black/10">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-5 text-left text-[#f7f1e8] md:p-6">
+                    <h3 className="font-display text-xl leading-tight tracking-wide md:text-2xl">{item.name}</h3>
+                    <p className="mt-3 text-sm leading-6 text-[#f7f1e8]/80">{item.text}</p>
+                    {item.items && (
+                      <ul className="mt-4 space-y-2 border-t border-[#c59b27]/30 pt-4 text-sm text-[#f7f1e8]/85">
+                        {item.items.map((detail) => (
+                          <li key={detail} className="flex items-start gap-2">
+                            <span className="text-[#c59b27]" aria-hidden="true">•</span>
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </article>
               </li>
@@ -92,8 +119,35 @@ export default function OldSilk() {
         </div>
       </section>
 
+      {/* Detailed Services & Info Section */}
+      <section className="bg-white py-16 md:py-20" data-old-silk-section>
+        <div className="site-container">
+          {/* Assessment Checklist */}
+          <div className="mt-10 w-full rounded-xl bg-[#f6efe4] p-6 sm:p-8">
+            <h2 className="font-display text-2xl text-primary md:text-3xl">What Information Should You Share?</h2>
+            <p className="mt-3 text-sm leading-7 text-ink/75">
+              To help us understand your saree quickly and accurately, please share:
+            </p>
+            <ul className="mt-6 flex w-full gap-4 overflow-x-auto pb-3 sm:gap-5 lg:justify-between">
+              {assessmentDetails.map(({ label, icon }) => (
+                <li
+                  key={label}
+                  className="flex min-w-[8.5rem] flex-1 flex-col items-center gap-3 rounded-xl border border-[#c59b27]/25 bg-white/70 px-4 py-4 text-center text-sm font-medium text-ink/75 sm:min-w-[9rem]"
+                >
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#3a1216] text-[#c59b27]">
+                    <AssessmentIcon name={icon} />
+                  </span>
+                  <span>{label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* YouTube Shorts / Videos Section */}
       <section
-        className="border-t border-[#c59b27]/20 bg-[#efe7db] py-16"
+        className="border-t border-[#c59b27]/20 bg-[#efe7db] py-16 md:py-20"
         data-old-silk-section
       >
         <div className="site-container">
@@ -101,13 +155,13 @@ export default function OldSilk() {
             <p className="text-[11px] tracking-[0.24em] text-[#8a6230] uppercase">Watch & Learn</p>
             <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">See How We Value Your Sarees</h2>
             <p className="mt-3 text-sm text-ink/70">
-              Watch our customer visits and on-the-spot evaluation process in Bengaluru.
+              Watch videos and customer visits from Karnan Pattu Centre.
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3" data-old-silk-videos>
+          <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" data-old-silk-videos>
             {youtubeShorts.map((video) => (
-              <div
+              <li
                 key={video.embedUrl}
                 data-old-silk-video
                 className="flex flex-col overflow-hidden rounded-xl border-2 border-[#c59b27] bg-[#3a1216] shadow-md"
@@ -121,14 +175,63 @@ export default function OldSilk() {
                     allowFullScreen
                   />
                 </div>
-                <div className="p-3 text-center text-[#f7f1e8]">
-                  <h3 className="line-clamp-2 font-display text-xs md:text-sm">{video.title}</h3>
+                <div className="p-4 text-center text-[#f7f1e8]">
+                  <h3 className="line-clamp-2 font-display text-sm">{video.title}</h3>
                 </div>
-              </div>
+              </li>
             ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="bg-[#3a1216] px-6 py-10 text-center text-[#f7f1e8] shadow-lg sm:px-10" data-old-silk-section>
+        <div className="site-container">
+          <h2 className="font-display text-3xl sm:text-4xl">Contact Us for Old Saree Assessment</h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[#f7f1e8]/80">
+            Have old silk or Zari sarees to sell? Contact Karnan Pattu Centre today for honest valuations and spot cash.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <a
+              href="tel:+919894441500"
+              className="inline-flex items-center justify-center rounded-md bg-[#c59b27] px-6 py-3 text-xs font-semibold tracking-wider text-[#2c1814] uppercase transition-colors hover:bg-[#b08822]"
+            >
+              Call +91 98944 41500
+            </a>
+            <a
+              href="https://wa.me/919894441500"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-md border border-[#c59b27] px-6 py-3 text-xs font-semibold tracking-wider text-[#f7f1e8] uppercase transition-colors hover:bg-white/10"
+            >
+              WhatsApp Us
+            </a>
           </div>
         </div>
       </section>
     </>
   )
+}
+
+function AssessmentIcon({ name }) {
+  const common = {
+    viewBox: "0 0 24 24",
+    className: "h-6 w-6",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.7,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+  }
+
+  const paths = {
+    saree: <><path d="M7 3h10l-2 5 4 13H5L9 8 7 3z" /><path d="M9 8h6M7 17h10" /></>,
+    border: <><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M8 4v16M12 4v16M16 4v16" /></>,
+    pallu: <><path d="M4 5h16v14H4z" /><path d="m4 15 5-5 3 3 3-4 5 6" /><circle cx="9" cy="8" r="1" /></>,
+    zari: <><path d="m12 2 2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2z" /><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" /></>,
+    condition: <><path d="M12 3 22 20H2L12 3z" /><path d="M12 9v5M12 17h.01" /></>,
+    quantity: <><path d="M8 4h8l1 3H7l1-3zM6 7h12l1 13H5L6 7z" /><path d="M9 11h6M9 15h6" /></>,
+  }
+
+  return <svg {...common}>{paths[name]}</svg>
 }
