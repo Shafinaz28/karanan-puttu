@@ -279,21 +279,13 @@ export default function About() {
           >
             Visit Karnan Pattu Centre
           </h2>
-          <div data-motion-item className="space-y-2 text-sm leading-relaxed text-stone-200 sm:text-base">
-            <p>#70, 27th Cross, 9th Main, 4th Block, Jayanagar, Bengaluru – 560011, Karnataka.</p>
-            <p>
-              Phone / WhatsApp:{" "}
-              <a className="underline underline-offset-4" href="tel:+919894441500">
-                +91 98944 41500
-              </a>
-            </p>
-          </div>
+          
           <div data-motion-item>
             <Link
-              to="/shop"
+              to="/location"
               className="motion-btn inline-flex items-center justify-center rounded-md bg-gradient-to-r from-secondary via-[#e5c378] to-secondary px-10 py-4 font-sans text-sm font-bold tracking-widest text-primary uppercase shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-secondary/25"
             >
-              Explore sarees
+              Explore
               <span className="ml-2" aria-hidden="true">
                 →
               </span>

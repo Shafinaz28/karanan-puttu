@@ -1,32 +1,6 @@
 import { Link } from "react-router-dom"
 import { sareeImages } from "../data/products"
-
-const phone = "+917200015300"
-const phoneLabel = "+91 72000 15300"
-
-const stores = [
-  {
-    city: "Bengaluru",
-    name: "V.V. Puram",
-    address:
-      "Sri Chakravarthy Complex, No. 55 & 56, A2, Ground Floor, Sajjan Rao Circle, V.V. Puram, Bangalore 560004",
-    image: sareeImages[0],
-  },
-  {
-    city: "Bengaluru",
-    name: "Jayanagar 4th Block",
-    address:
-      "67, 29th C Cross, Geetha Colony, 4th Block, Jayanagar, Bengaluru 560011",
-    image: sareeImages[1],
-  },
-  {
-    city: "Bengaluru",
-    name: "Jayanagar 9th Block",
-    address:
-      "#1329/B2, Tulasi Plaza, 24th A Main, 41st Cross, Jayanagar 9th Block, Bangalore 560069",
-    image: sareeImages[3],
-  },
-]
+import { storePhone, storePhoneLabel, stores } from "../data/locations"
 
 export default function VisitStores({ preview = false }) {
   return (
@@ -37,7 +11,7 @@ export default function VisitStores({ preview = false }) {
       </p>
       <h2 className="mt-4 font-display text-4xl text-primary md:text-5xl">Visit Our Stores</h2>
       <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-ink/60">
-        V.V. Puram and Jayanagar. Call the desk on {phoneLabel}.
+        V.V. Puram and Jayanagar. Call the desk on {storePhoneLabel}.
       </p>
       <ul className="mt-10 grid items-stretch gap-6 text-left md:grid-cols-2">
         {stores.map((store, index) => (
@@ -49,7 +23,7 @@ export default function VisitStores({ preview = false }) {
           >
             <div className="relative overflow-hidden rounded-xl">
               <img
-                src={store.image}
+                src={sareeImages[store.imageIndex]}
                 alt={`${store.name} showroom`}
                 className="motion-zoom aspect-[16/10] w-full object-cover"
               />
@@ -69,7 +43,7 @@ export default function VisitStores({ preview = false }) {
                 Get Directions
               </a>
               <a
-                href={`tel:${phone}`}
+                href={`tel:${storePhone}`}
                 className="motion-btn motion-line flex items-center justify-center gap-2 border border-primary px-4 py-2.5 text-xs text-primary"
               >
                 Call

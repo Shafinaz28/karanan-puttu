@@ -285,6 +285,48 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="site-section bg-[#f6efe4]">
+        <div className="site-section-inner">
+          <div className="grid items-center gap-8 md:gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="order-2 space-y-5 lg:order-1" data-slide="left">
+              <p className="text-[11px] font-semibold tracking-[0.24em] text-[#8a6230] uppercase">
+                Karnan Pattu Centre – BUY • SELL • TRUST
+              </p>
+              <h2 className="font-display text-3xl leading-tight text-primary sm:text-4xl md:text-5xl">
+                A tradition established in 1985
+              </h2>
+              <p className="text-sm leading-7 text-ink/75 sm:text-base">
+                Karnan Pattu Centre is a traditional saree business with a legacy dating back to 1985. Located in Jayanagar, Bengaluru, the centre focuses on preserving the value and beauty of traditional Indian silk sarees.
+              </p>
+              <p className="text-sm leading-7 text-ink/75 sm:text-base">
+                With a passion for Indian textiles and a commitment to customer trust, Karnan Pattu Centre provides opportunities to buy and sell traditional silk sarees, including Kanchipuram, Mysore silk, Banarasi and other varieties of Pattu and Zari sarees.
+              </p>
+              <div className="border-l-2 border-secondary pl-4">
+                <h3 className="font-display text-2xl text-primary">Our Legacy – A Tradition Since 1985</h3>
+                <p className="mt-2 text-sm leading-7 text-ink/75 sm:text-base">
+                  With three generations of experience in the silk saree business, we help give old and cherished sarees new value while maintaining trust and transparency in every transaction.
+                </p>
+              </div>
+              <Link
+                to="/about"
+                className="motion-btn motion-fill inline-flex items-center gap-2 bg-primary px-5 py-3 text-[11px] font-semibold tracking-[0.14em] text-cream uppercase"
+              >
+                About us <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+            <figure className="order-1 lg:order-2" data-slide="right">
+              <img
+                src="/hero/Founder-Karnan.jpg"
+                alt="Founder of Karnan Pattu Centre in the Jayanagar silk showroom"
+                loading="lazy"
+                decoding="async"
+                className="mx-auto aspect-[4/5] w-full max-w-lg rounded-2xl object-cover object-[center_30%] shadow-xl"
+              />
+            </figure>
+          </div>
+        </div>
+      </section>
+
       <section className="site-section bg-[#f7f1e8]">
         <div className="site-section-inner">
           <div data-slide="up" className="mx-auto max-w-xl text-center">

@@ -8,6 +8,11 @@ const bought = [
     image: "/sarees/worn/old-kanchipuram-silk.avif",
   },
   {
+    name: "Zari Dhoti Buying",
+    text: "Enquire about selling traditional dhotis with gold or silver Zari borders. Share clear photos of the fabric and border for review.",
+    image: "/sarees/worn/zari-dhoti.svg",
+  },
+  {
     name: "Kanchipuram Silk Saree Buying",
     text: "Kanchipuram silk sarees are valued for their traditional craftsmanship, rich colours and intricate borders. Contact us and share photographs of unused sarees for assessment.",
     image: "/sarees/worn/old-kanchipuram-silk.avif",
@@ -36,6 +41,11 @@ const bought = [
     name: "Bulk Saree Buying Enquiries",
     text: "If you have several old sarees, enquire about selling the collection together. Share the approximate number of sarees and photographs of different varieties.",
     image: "/sarees/worn/old-soft-silk.avif",
+  },
+  {
+    name: "Torn Sarees",
+    text: "Enquire about selling torn or damaged sarees. Share clear photos of the tear, fabric and Zari border for an individual review.",
+    image: "/sarees/worn/torn-saree.svg",
   },
 ]
 
@@ -128,11 +138,11 @@ export default function OldSilk() {
             <p className="mt-3 text-sm leading-7 text-ink/75">
               To help us understand your saree quickly and accurately, please share:
             </p>
-            <ul className="mt-6 flex w-full gap-4 overflow-x-auto pb-3 sm:gap-5 lg:justify-between">
+            <ul className="mt-6 grid w-full grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
               {assessmentDetails.map(({ label, icon }) => (
                 <li
                   key={label}
-                  className="flex min-w-[8.5rem] flex-1 flex-col items-center gap-3 rounded-xl border border-[#c59b27]/25 bg-white/70 px-4 py-4 text-center text-sm font-medium text-ink/75 sm:min-w-[9rem]"
+                  className="flex min-w-0 flex-col items-center gap-3 rounded-xl border border-[#c59b27]/25 bg-white/70 px-3 py-4 text-center text-sm font-medium text-ink/75 sm:px-4"
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#3a1216] text-[#c59b27]">
                     <AssessmentIcon name={icon} />
