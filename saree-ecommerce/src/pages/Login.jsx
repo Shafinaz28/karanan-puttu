@@ -36,6 +36,7 @@ export default function Login() {
   const location = useLocation()
   const [isSignUp, setIsSignUp] = useState(false)
   const [fullName, setFullName] = useState("")
+  const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -50,8 +51,11 @@ export default function Login() {
     event.preventDefault()
     const address = email.trim()
     const name = fullName.trim()
-    if (!address || !password || (isSignUp && !name)) {
-      setError(isSignUp ? "Enter your name, email, and password." : "Enter your email and password.")
+    const contactNumber = phone.trim()
+    if (!address || !password || (isSignUp && (!name || !contactNumber))) {
+      setError(isSignUp
+        ? "Enter your name, contact number, email, and password."
+        : "Enter your email and password.")
       return
     }
 
@@ -69,11 +73,19 @@ export default function Login() {
           email: address,
           password,
           options: {
-            data: { full_name: name },
+            data: { full_name: name, phone: contactNumber },
             emailRedirectTo: new URL("/", window.location.origin).toString(),
           },
         })
         if (signUpError) {
+          if (
+            signUpError.code === "user_already_exists"
+            || /user already registered|already registered/i.test(signUpError.message)
+          ) {
+            setIsSignUp(false)
+            setError("An account with this email already exists. Sign in with your existing password.")
+            return
+          }
           setError(authErrorMessage(signUpError))
           return
         }
@@ -87,11 +99,25 @@ export default function Login() {
           }
         }
 
+        if (!data.session) {
+          const accountAlreadyExists = data.user?.identities?.length === 0
+          setIsSignUp(false)
+          if (accountAlreadyExists) {
+            setError("An account with this email already exists. Sign in with your existing password.")
+          } else {
+            navigate("/", {
+              replace: true,
+              state: { accountCreated: true },
+            })
+          }
+          return
+        }
+
         navigate("/", {
           replace: true,
           state: {
             accountCreated: true,
-            confirmationRequired: !data.session,
+            confirmationRequired: false,
           },
         })
         return
@@ -102,7 +128,11 @@ export default function Login() {
         password,
       })
       if (signInError) {
-        setError(signInError.message)
+        const unconfirmed = signInError.code === "email_not_confirmed"
+          || /email not confirmed/i.test(signInError.message)
+        setError(unconfirmed
+          ? "We couldn't sign you in. Please check your email and password, then try again."
+          : signInError.message)
         return
       }
 
@@ -150,6 +180,19 @@ export default function Login() {
               value={fullName}
               onChange={(event) => setFullName(event.target.value)}
               placeholder="Your name"
+              className="mt-2 w-full border border-primary/15 bg-transparent px-3 py-3 text-sm outline-none"
+            />
+            <label className="mt-5 block text-[11px] tracking-[0.16em] text-ink/50 uppercase" htmlFor="signup-phone">
+              Contact number
+            </label>
+            <input
+              id="signup-phone"
+              type="tel"
+              autoComplete="tel"
+              required
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              placeholder="Your contact number"
               className="mt-2 w-full border border-primary/15 bg-transparent px-3 py-3 text-sm outline-none"
             />
           </>

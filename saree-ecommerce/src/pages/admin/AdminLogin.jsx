@@ -11,7 +11,10 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
+  const [canResendConfirmation, setCanResendConfirmation] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [resending, setResending] = useState(false)
   const [sessionReady, setSessionReady] = useState(false)
   const [hasSession, setHasSession] = useState(false)
 
@@ -35,6 +38,8 @@ export default function AdminLogin() {
   async function onSubmit(event) {
     event.preventDefault()
     setError("")
+    setMessage("")
+    setCanResendConfirmation(false)
     if (!supabaseConfigured || !supabase) {
       setError("Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env, then restart the app.")
       return
@@ -46,7 +51,12 @@ export default function AdminLogin() {
         password,
       })
       if (signError) {
-        setError(signError.message)
+        const unconfirmed = signError.code === "email_not_confirmed"
+          || /email not confirmed/i.test(signError.message)
+        setError(unconfirmed
+          ? "This email address has not been confirmed. Resend the confirmation email before signing in."
+          : signError.message)
+        setCanResendConfirmation(unconfirmed)
         return
       }
       if (!isAdmin(data.user)) {
@@ -61,6 +71,37 @@ export default function AdminLogin() {
       setError(signError instanceof Error ? signError.message : "Unable to sign in. Please try again.")
     } finally {
       setBusy(false)
+    }
+  }
+
+  async function resendConfirmation() {
+    const address = email.trim()
+    if (!address || !supabase) {
+      setError("Enter your email address first.")
+      return
+    }
+
+    setError("")
+    setMessage("")
+    setResending(true)
+    try {
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email: address,
+        options: {
+          emailRedirectTo: new URL("/", window.location.origin).toString(),
+        },
+      })
+      if (resendError) {
+        setError(resendError.message)
+        return
+      }
+      setMessage("Confirmation email sent. Check your inbox and spam folder, then open the link before signing in.")
+      setCanResendConfirmation(false)
+    } catch (resendError) {
+      setError(resendError instanceof Error ? resendError.message : "Unable to resend the confirmation email. Please try again.")
+    } finally {
+      setResending(false)
     }
   }
 
@@ -102,6 +143,17 @@ export default function AdminLogin() {
         </label>
 
         {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
+        {message && <p className="mt-4 text-sm text-ink/70">{message}</p>}
+        {canResendConfirmation && (
+          <button
+            type="button"
+            onClick={resendConfirmation}
+            disabled={busy || resending}
+            className="mt-3 text-sm text-primary underline disabled:opacity-60"
+          >
+            {resending ? "Sending confirmation email…" : "Resend confirmation email"}
+          </button>
+        )}
 
         <button
           type="submit"

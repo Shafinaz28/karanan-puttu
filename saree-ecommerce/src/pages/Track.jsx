@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { findOrder, updateOrderStatus } from "../lib/orders"
+import { cancelCustomerOrder, findOrder } from "../lib/orders"
 import OrderConfirmed from "../components/OrderConfirmed"
 
 export default function Track() {
@@ -58,8 +58,8 @@ export default function Track() {
         <div className="mt-8">
           <OrderConfirmed
             order={order}
-            onCancel={(details) => {
-              updateOrderStatus(order.id, "Cancelled", details)
+            onCancel={async (details) => {
+              await cancelCustomerOrder(order.id, phone, details)
               setOrder({ ...order, status: "Cancelled", ...details })
             }}
           />

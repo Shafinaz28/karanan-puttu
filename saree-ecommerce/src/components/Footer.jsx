@@ -109,7 +109,7 @@ export default function Footer() {
             {joined ? (
               <p className="mt-4 text-sm font-medium text-[#d7c4a2]">You are on the list.</p>
             ) : (
-              <form onSubmit={joinList} className="mt-4 flex w-full max-w-[240px] sm:max-w-xs flex-col gap-2">
+              <form onSubmit={joinList} className="mt-4 flex w-full max-w-[280px] flex-col gap-2">
                 <input
                   type="email"
                   required
@@ -117,11 +117,11 @@ export default function Footer() {
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="Enter email address"
                   aria-label="Email address"
-                  className="w-full rounded-lg bg-white px-3 py-1.5 text-xs text-[#3a0c14] outline-none placeholder:text-[#3a0c14]/50"
+                  className="h-7 w-full rounded-lg bg-white px-3 text-xs text-[#3a0c14] outline-none placeholder:text-[#3a0c14]/50"
                 />
                 <button
                   type="submit"
-                  className="w-full rounded-md bg-[#d7c4a2] py-1 text-[11px] font-semibold tracking-wider text-[#3a0c14] uppercase transition-colors hover:bg-[#e6c55c]"
+                  className="h-5 w-1/2 max-w-[140px] rounded-md bg-[#d7c4a2] text-[9px] font-semibold tracking-wider text-[#3a0c14] uppercase transition-colors hover:bg-[#e6c55c]"
                 >
                   Join
                 </button>

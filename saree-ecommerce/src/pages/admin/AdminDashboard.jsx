@@ -12,7 +12,7 @@ import {
 } from "../../lib/adminProducts"
 import { mapDbProduct, productImageSrc } from "../../lib/productMap"
 import { uploadProductImage } from "../../lib/uploadProductImage"
-import { loadOrders, readOrders, updateOrderStatus } from "../../lib/orders"
+import { loadCustomerProfiles, loadCustomers, loadOrders, readOrders, updateOrderStatus } from "../../lib/orders"
 import {
   loadContactMessages,
   updateContactMessageStatus,
@@ -65,6 +65,7 @@ const statusTone = Object.fromEntries(
 const navItems = [
   ["overview", "Dashboard"],
   ["orders", "Orders"],
+  ["cancelled-orders", "Cancelled orders"],
   ["messages", "Messages"],
   ["products", "Products"],
   ["customers", "Customers"],
@@ -80,6 +81,7 @@ const footItems = [
 const tabMeta = {
   overview: { title: "Dashboard", subtitle: "Store overview and quick actions" },
   orders: { title: "Orders", subtitle: "Track and update customer orders" },
+  "cancelled-orders": { title: "Cancelled orders", subtitle: "Orders cancelled by customers or staff" },
   messages: { title: "Messages", subtitle: "Contact form enquiries" },
   products: { title: "Products", subtitle: "Add, edit, and hide sarees in the shop" },
   customers: { title: "Customers", subtitle: "Buyers from saved orders" },
@@ -122,6 +124,8 @@ export default function AdminDashboard() {
   const [query, setQuery] = useState("")
   const [rows, setRows] = useState([])
   const [orders, setOrders] = useState(() => readOrders())
+  const [customers, setCustomers] = useState([])
+  const [customerProfiles, setCustomerProfiles] = useState([])
   const [contactMessages, setContactMessages] = useState([])
   const [messagesLoading, setMessagesLoading] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -161,20 +165,57 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!authed) return undefined
+    let active = true
     const refreshOrders = () => {
-      setOrders(readOrders())
-      loadOrders().then(setOrders).catch((loadError) => {
-        setError(loadError instanceof Error ? loadError.message : "Unable to load saved orders.")
+      loadOrders().then(({ orders: loadedOrders, warning }) => {
+        if (active) {
+          setOrders(loadedOrders)
+          setError(warning)
+        }
+      }).catch((loadError) => {
+        if (active) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load saved orders.")
+        }
+      })
+      refreshCustomers()
+    }
+    const refreshCustomers = () => {
+      loadCustomers().then((loadedCustomers) => {
+        if (active) setCustomers(loadedCustomers)
+      }).catch((loadError) => {
+        if (active) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load saved customers.")
+        }
+      })
+      loadCustomerProfiles().then((loadedProfiles) => {
+        if (active) setCustomerProfiles(loadedProfiles)
+      }).catch((loadError) => {
+        if (active) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load customer profiles.")
+        }
       })
     }
     refreshOrders()
     window.addEventListener("focus", refreshOrders)
     window.addEventListener("storage", refreshOrders)
     window.addEventListener("karanan-orders", refreshOrders)
+    const channel = supabase
+      ?.channel("admin-orders")
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, refreshOrders)
+      .on("postgres_changes", { event: "*", schema: "public", table: "cancelled_orders" }, refreshOrders)
+      .on("postgres_changes", { event: "*", schema: "public", table: "customers" }, refreshCustomers)
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, refreshCustomers)
+      .subscribe((status, channelError) => {
+        if (active && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")) {
+          setError(channelError?.message || "Live order updates are unavailable. The dashboard will refresh when reopened.")
+        }
+      })
     return () => {
+      active = false
       window.removeEventListener("focus", refreshOrders)
       window.removeEventListener("storage", refreshOrders)
       window.removeEventListener("karanan-orders", refreshOrders)
+      if (channel) supabase.removeChannel(channel)
     }
   }, [authed])
 
@@ -218,8 +259,16 @@ export default function AdminDashboard() {
     }
   }
 
-  function changeStatus(id, status) {
-    setOrders(updateOrderStatus(id, status))
+  async function changeStatus(id, status) {
+    setError("")
+    try {
+      await updateOrderStatus(id, status)
+      const { orders: loadedOrders, warning } = await loadOrders()
+      setOrders(loadedOrders)
+      setError(warning)
+    } catch (statusError) {
+      setError(statusError instanceof Error ? statusError.message : "Unable to update this order.")
+    }
   }
 
   const filteredRows = useMemo(() => {
@@ -245,6 +294,14 @@ export default function AdminDashboard() {
       `${message.name} ${message.mobile} ${message.email} ${message.message}`.toLowerCase().includes(text),
     )
   }, [contactMessages, query])
+
+  const filteredCustomers = useMemo(() => {
+    const text = query.trim().toLowerCase()
+    if (!text) return customers
+    return customers.filter((customer) =>
+      `${customer.customer} ${customer.email} ${customer.phone} ${customer.city}`.toLowerCase().includes(text),
+    )
+  }, [customers, query])
 
   const visibleProductCount = useMemo(() => rows.filter((product) => product.active !== false).length, [rows])
   const hiddenProductCount = rows.length - visibleProductCount
@@ -424,7 +481,6 @@ export default function AdminDashboard() {
                   setMessagesLoading(true)
                   setError("")
                 }
-                if (id === "orders" || id === "overview" || id === "customers") setOrders(readOrders())
               }}
               className={`flex min-w-fit items-center justify-between rounded-2xl px-3 py-2.5 text-left text-sm lg:w-full ${
                 tab === id ? "bg-white text-primary shadow-sm" : "text-slate-600 hover:bg-white/70"
@@ -433,12 +489,22 @@ export default function AdminDashboard() {
               <span className="flex items-center gap-2.5"><NavGlyph id={id} />{label}</span>
               {id === "orders" && orders.length > 0 && (
                 <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
-                  {orders.length}
+                  {orders.filter((order) => order.status !== "Cancelled").length}
+                </span>
+              )}
+              {id === "cancelled-orders" && orders.some((order) => order.status === "Cancelled") && (
+                <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
+                  {orders.filter((order) => order.status === "Cancelled").length}
                 </span>
               )}
               {id === "products" && rows.length > 0 && (
                 <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
                   {rows.length}
+                </span>
+              )}
+              {id === "customers" && customers.length + customerProfiles.length > 0 && (
+                <span className="ml-3 rounded-full bg-secondary/25 px-2 py-0.5 text-[11px] text-primary">
+                  {customerProfiles.length + customers.length}
                 </span>
               )}
               {id === "messages" && newMessageCount > 0 && (
@@ -521,7 +587,6 @@ export default function AdminDashboard() {
               visibleProductCount={visibleProductCount}
               hiddenProductCount={hiddenProductCount}
               newMessageCount={newMessageCount}
-              supabaseReady={supabaseConfigured}
               orders={orders}
               onOpenProducts={() => setTab("products")}
               onOpenOrders={() => setTab("orders")}
@@ -555,7 +620,22 @@ export default function AdminDashboard() {
           {tab === "orders" && (
             <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
               <h3 className="text-lg font-semibold">Orders</h3>
-              <OrdersTable orders={filteredOrders} onStatus={changeStatus} />
+              <OrdersTable
+                orders={filteredOrders.filter((order) => order.status !== "Cancelled")}
+                onStatus={changeStatus}
+                emptyMessage="No active orders."
+              />
+            </section>
+          )}
+          {tab === "cancelled-orders" && (
+            <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
+              <h3 className="text-lg font-semibold">Cancelled orders</h3>
+              <OrdersTable
+                orders={filteredOrders.filter((order) => order.status === "Cancelled")}
+                onStatus={changeStatus}
+                readOnly
+                emptyMessage="No cancelled orders."
+              />
             </section>
           )}
           {tab === "messages" && (
@@ -565,7 +645,7 @@ export default function AdminDashboard() {
               onStatus={changeContactMessageStatus}
             />
           )}
-          {tab === "customers" && <Customers orders={filteredOrders} />}
+          {tab === "customers" && <Customers customers={filteredCustomers} profiles={customerProfiles} />}
           {tab === "coupons" && <CouponsPanel />}
           {tab === "analytics" && <AnalyticsPanel orders={orders} />}
           {tab === "settings" && (
@@ -664,7 +744,6 @@ function Overview({
   visibleProductCount,
   hiddenProductCount,
   newMessageCount,
-  supabaseReady,
   orders,
   onOpenProducts,
   onOpenOrders,
@@ -778,12 +857,10 @@ function Overview({
           </div>
         </div>
       </div>
-      <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <ul className="grid gap-3 sm:grid-cols-2">
         {[
           ["In shop", String(visibleProductCount), "Visible on website", onOpenProducts],
-          ["Hidden", String(hiddenProductCount), "Not shown in shop", onOpenProducts],
           ["New messages", String(newMessageCount), "Contact form", onOpenMessages],
-          ["Catalogue", supabaseReady ? "Live" : "Offline", supabaseReady ? "Supabase connected" : "Add .env keys", onOpenProducts],
         ].map(([label, value, hint, onClick]) => (
           <li key={label}>
             <button
@@ -1189,10 +1266,15 @@ function BarChart({ items, valueSuffix = "" }) {
   )
 }
 
-function OrdersTable({ orders, onStatus }) {
+function OrdersTable({
+  orders,
+  onStatus,
+  readOnly = false,
+  emptyMessage = "No orders yet. Place one from checkout and it will show here.",
+}) {
   const [openId, setOpenId] = useState(null)
   if (!orders.length) {
-    return <p className="py-6 text-sm text-ink/50">No orders yet. Place one from checkout and it will show here.</p>
+    return <p className="py-6 text-sm text-ink/50">{emptyMessage}</p>
   }
   return (
     <div className="overflow-x-auto">
@@ -1219,6 +1301,7 @@ function OrdersTable({ orders, onStatus }) {
                   <select
                     value={order.status}
                     onChange={(event) => onStatus(order.id, event.target.value)}
+                    disabled={readOnly}
                     className={`rounded-full px-2.5 py-1 text-[11px] font-medium outline-none ${statusTone[order.status] || orderStatusPillClass(order.status)}`}
                   >
                     {["Pending", "Processing", "Shipped", "Out for delivery", "Delivered", "Cancelled"].map((status) => (
@@ -1237,7 +1320,10 @@ function OrdersTable({ orders, onStatus }) {
                   <td colSpan={6} className="px-2 py-3 text-xs leading-5 text-ink/70">
                     {order.phone} · {order.address}, {order.city} {order.state} {order.pincode}
                     {order.payment ? ` · ${order.payment}` : ""}
+                    {order.cancelledAt ? ` · Cancelled ${new Date(order.cancelledAt).toLocaleString()}` : ""}
                     <br />
+                    {order.cancelReason ? `Reason: ${order.cancelReason}${order.cancelNote ? ` — ${order.cancelNote}` : ""}` : null}
+                    {order.cancelReason && <br />}
                     {(order.items || []).map((item) => `${item.name} × ${item.qty}`).join(", ")}
                   </td>
                 </tr>
@@ -1333,27 +1419,41 @@ function formatContactTimestamp(timestamp) {
   return date ? `${date} ${time.slice(0, 5)} UTC` : "Date unavailable"
 }
 
-function Customers({ orders }) {
-  const people = []
-  const seen = new Set()
-  for (const order of orders) {
-    const key = customerIdentity(order)
-    if (seen.has(key)) continue
-    seen.add(key)
-    people.push(order)
-  }
+function Customers({ customers, profiles }) {
   return (
     <section className="rounded-3xl border border-white/80 bg-white/75 p-5 shadow-sm">
       <h3 className="text-lg font-semibold">Customers</h3>
-      {!people.length && <p className="mt-4 text-sm text-ink/50">Customers appear here after an order is placed.</p>}
-      <ul className="mt-4 divide-y divide-black/5">
-        {people.map((order) => (
-          <li key={customerIdentity(order)} className="flex items-center justify-between py-3 text-sm">
-            <span>{order.customer}</span>
-            <span className="text-right text-ink/45">{order.email || order.phone}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-5 grid gap-6 lg:grid-cols-2">
+        <div>
+          <h4 className="font-medium">Registered accounts ({profiles.length})</h4>
+          {!profiles.length && <p className="mt-3 text-sm text-ink/50">Registered accounts appear here after running supabase/profiles.sql.</p>}
+          <ul className="mt-3 divide-y divide-black/5">
+            {profiles.map((profile) => (
+              <li key={profile.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
+                <span className="font-medium">{profile.customer}</span>
+                <span className="text-right text-ink/45">{profile.email || profile.phone}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-medium">Customers with orders ({customers.length})</h4>
+          {!customers.length && <p className="mt-3 text-sm text-ink/50">Order customers will appear here after checkout.</p>}
+          <ul className="mt-3 divide-y divide-black/5">
+            {customers.map((customer) => (
+              <li key={customer.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
+                <span>
+                  <span className="block font-medium">{customer.customer}</span>
+                  <span className="text-xs text-ink/45">
+                    {customer.ordersCount} {customer.ordersCount === 1 ? "order" : "orders"} · {formatPrice(customer.totalSpent)} spent
+                  </span>
+                </span>
+                <span className="text-right text-ink/45">{customer.email || customer.phone}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   )
 }

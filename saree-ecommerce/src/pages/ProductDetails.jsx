@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import ProductCard from "../components/ProductCard"
 import { useCart } from "../context/CartContext"
@@ -23,7 +23,9 @@ export default function ProductDetails() {
   const product = products.find((item) => Number(item.id) === Number(id))
 
   const [activeImage, setActiveImage] = useState(0)
-  const [imageZoom, setImageZoom] = useState(1)
+  const imageSwipeStart = useRef(null)
+  const [imageDragOffset, setImageDragOffset] = useState(0)
+  const [isDraggingImage, setIsDraggingImage] = useState(false)
   const [qty, setQty] = useState(0)
   const [agreed, setAgreed] = useState(false)
   const [added, setAdded] = useState(false)
@@ -52,25 +54,22 @@ export default function ProductDetails() {
   }, [id])
 
   useEffect(() => {
-    setImageZoom(1)
-  }, [activeImage])
-
-  useEffect(() => {
     if (!added) return undefined
     const timer = window.setTimeout(() => setAdded(false), 1800)
     return () => window.clearTimeout(timer)
   }, [added])
 
-  const minZoom = 1
-  const maxZoom = 2.5
-  const zoomStep = 0.25
-
-  function zoomIn() {
-    setImageZoom((value) => Math.min(maxZoom, Math.round((value + zoomStep) * 100) / 100))
+  function moveImage(direction) {
+    setActiveImage((current) => (current + direction + gallery.length) % gallery.length)
   }
 
-  function zoomOut() {
-    setImageZoom((value) => Math.max(minZoom, Math.round((value - zoomStep) * 100) / 100))
+  function finishImageSwipe(event) {
+    if (imageSwipeStart.current === null) return
+    const distance = event.clientX - imageSwipeStart.current
+    imageSwipeStart.current = null
+    setImageDragOffset(0)
+    setIsDraggingImage(false)
+    if (Math.abs(distance) >= 40) moveImage(distance < 0 ? 1 : -1)
   }
 
   useEffect(() => {
@@ -232,38 +231,69 @@ export default function ProductDetails() {
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
           <div>
-            <div className="relative overflow-hidden rounded-lg bg-[#f0e6d8]">
+            <div
+              className={`relative overflow-hidden rounded-lg bg-[#f0e6d8] ${
+                isDraggingImage ? "cursor-grabbing" : "cursor-grab"
+              }`}
+              onPointerDown={(event) => {
+                if (event.pointerType === "mouse" && event.button !== 0) return
+                if (event.target.closest("button")) return
+                imageSwipeStart.current = event.clientX
+                event.currentTarget.setPointerCapture(event.pointerId)
+              }}
+              onPointerMove={(event) => {
+                if (imageSwipeStart.current === null) return
+                setImageDragOffset(event.clientX - imageSwipeStart.current)
+                setIsDraggingImage(true)
+              }}
+              onPointerUp={finishImageSwipe}
+              onPointerCancel={() => {
+                imageSwipeStart.current = null
+                setImageDragOffset(0)
+                setIsDraggingImage(false)
+              }}
+              style={{ touchAction: "pan-y" }}
+            >
               <div className="aspect-[3/4] w-full overflow-hidden">
-                <img
-                  src={gallery[activeImage] || product.image}
-                  alt={product.name}
-                  fetchPriority="high"
-                  decoding="async"
-                  draggable={false}
-                  className="h-full w-full origin-top object-cover object-top transition-transform duration-200 ease-out"
-                  style={{ transform: `scale(${imageZoom})` }}
-                />
-              </div>
-              <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={zoomOut}
-                  disabled={imageZoom <= minZoom}
-                  aria-label="Zoom out"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/15 bg-white/95 text-lg text-ink shadow-sm disabled:opacity-35"
+                <div
+                  className="flex h-full w-full"
+                  style={{
+                    transform: `translateX(calc(-${activeImage * 100}% + ${imageDragOffset}px))`,
+                    transition: isDraggingImage ? "none" : "transform 300ms ease-out",
+                  }}
                 >
-                  −
-                </button>
-                <button
-                  type="button"
-                  onClick={zoomIn}
-                  disabled={imageZoom >= maxZoom}
-                  aria-label="Zoom in"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/15 bg-white/95 text-lg text-ink shadow-sm disabled:opacity-35"
-                >
-                  +
-                </button>
+                  {gallery.map((src, index) => (
+                    <div key={`${src}-${index}`} className="h-full min-w-full">
+                      <img
+                        src={src}
+                        alt={index === activeImage ? product.name : ""}
+                        fetchPriority={index === 0 ? "high" : "auto"}
+                        decoding="async"
+                        draggable={false}
+                        className="h-full w-full object-cover object-top"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              {/* Carousel Bottom Dot Pointers */}
+              {gallery.length > 1 && (
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10" aria-hidden="true">
+                  {gallery.map((_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setActiveImage(index)}
+                      aria-label={`Go to slide ${index + 1}`}
+                      className={`h-2 w-2 rounded-full transition-all ${
+                        activeImage === index ? "bg-primary w-5" : "bg-ink/30 hover:bg-ink/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+
               <button
                 type="button"
                 aria-label={saved ? "Remove from wishlist" : "Save to wishlist"}
@@ -283,33 +313,21 @@ export default function ProductDetails() {
               </button>
             </div>
             {gallery.length > 1 && (
-              <>
-                <ul className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:mt-4 lg:grid lg:grid-cols-4 lg:overflow-visible">
-                  {gallery.map((src, index) => (
-                    <li key={`${src}-${index}`} className="w-[4.25rem] shrink-0 lg:w-auto">
-                      <button
-                        type="button"
-                        onClick={() => setActiveImage(index)}
-                        className={`block w-full overflow-hidden rounded-md border-2 transition ${
-                          activeImage === index ? "border-ink" : "border-transparent hover:border-ink/25"
-                        }`}
-                      >
-                        <img src={src} alt="" className="aspect-[3/4] w-full object-cover object-top" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-3 flex justify-center gap-2 lg:hidden" aria-hidden="true">
-                  {gallery.map((_, index) => (
-                    <span
-                      key={index}
-                      className={`h-2 w-2 rounded-full ${
-                        activeImage === index ? "border border-ink bg-transparent" : "bg-ink/20"
+              <ul className="mt-3 hidden gap-2 overflow-x-auto pb-1 lg:mt-4 lg:grid lg:grid-cols-4 lg:overflow-visible">
+                {gallery.map((src, index) => (
+                  <li key={`${src}-${index}`} className="w-[4.25rem] shrink-0 lg:w-auto">
+                    <button
+                      type="button"
+                      onClick={() => setActiveImage(index)}
+                      className={`block w-full overflow-hidden rounded-md border-2 transition ${
+                        activeImage === index ? "border-ink" : "border-transparent hover:border-ink/25"
                       }`}
-                    />
-                  ))}
-                </div>
-              </>
+                    >
+                      <img src={src} alt="" className="aspect-[3/4] w-full object-cover object-top" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
             )}
 
             <div className="mt-5 lg:hidden">
@@ -415,7 +433,6 @@ export default function ProductDetails() {
               Secure checkout · UPI · Cards
             </p>
 
-            {/* Product description successfully shifted to the right column */}
             {descriptionBlock}
           </div>
         </div>

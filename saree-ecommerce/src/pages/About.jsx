@@ -16,6 +16,7 @@ const sareeTypes = [
   { label: "Gold and silver Zari sarees", icon: "sparkle" },
   { label: "Wedding and bridal sarees", icon: "bridal" },
   { label: "Antique and vintage sarees", icon: "heritage" },
+  { label: "Handloom silk sarees", icon: "weave" },
 ]
 
 const founder = {

@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { useProducts } from "../context/ProductsContext"
 import { formatPrice, productDisplayTitle } from "../data/products"
-import { saveOrder, updateOrderStatus } from "../lib/orders"
+import { cancelCustomerOrder, saveOrder } from "../lib/orders"
 import { supabase } from "../lib/supabase"
 import OrderConfirmed from "../components/OrderConfirmed"
 
@@ -65,6 +65,7 @@ export default function Checkout() {
   const [buyQty] = useState(location.state?.qty || 1)
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState("")
+  const [savingOrder, setSavingOrder] = useState(false)
   const [order, setOrder] = useState(null)
   const [code, setCode] = useState("")
   const [discount, setDiscount] = useState(0)
@@ -203,9 +204,9 @@ export default function Checkout() {
     return true
   }
 
-  function finishOrder() {
+  async function finishOrder() {
     const address = [form.address, form.apartment].map((part) => part.trim()).filter(Boolean).join(", ")
-    const saved = saveOrder({
+    const saved = await saveOrder({
       customer: `${form.firstName.trim()} ${form.lastName.trim()}`.trim() || form.lastName.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
@@ -229,11 +230,19 @@ export default function Checkout() {
     setOrder(saved)
   }
 
-  function payNow(event) {
+  async function payNow(event) {
     event.preventDefault()
+    if (savingOrder) return
     if (!validateContactAndDelivery()) return
     setError("")
-    finishOrder()
+    setSavingOrder(true)
+    try {
+      await finishOrder()
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Unable to save your order. Please try again.")
+    } finally {
+      setSavingOrder(false)
+    }
   }
 
   if (order) {
@@ -243,8 +252,8 @@ export default function Checkout() {
         <div className="mt-8">
           <OrderConfirmed
             order={order}
-            onCancel={(details) => {
-              updateOrderStatus(order.id, "Cancelled", details)
+            onCancel={async (details) => {
+              await cancelCustomerOrder(order.id, order.phone, details)
               setOrder({ ...order, status: "Cancelled", ...details })
             }}
           />
@@ -450,9 +459,10 @@ export default function Checkout() {
 
             <button
               type="submit"
-              className="w-full rounded-lg bg-primary py-3.5 text-sm font-semibold tracking-wide text-cream uppercase transition hover:bg-primary-soft"
+              disabled={savingOrder}
+              className="w-full rounded-lg bg-primary py-3.5 text-sm font-semibold tracking-wide text-cream uppercase transition hover:bg-primary-soft disabled:cursor-wait disabled:opacity-70"
             >
-              Pay now
+              {savingOrder ? "Saving order..." : "Pay now"}
             </button>
 
             <p className="text-xs text-ink/50">

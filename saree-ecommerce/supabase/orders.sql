@@ -1,4 +1,4 @@
--- Run once in Supabase SQL Editor. Does not touch the products table.
+-- Run this idempotent setup/update script in Supabase SQL Editor. Does not touch the products table.
 
 create table if not exists public.orders (
   id text primary key,

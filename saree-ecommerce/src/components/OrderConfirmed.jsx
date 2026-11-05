@@ -40,17 +40,28 @@ export default function OrderConfirmed({ order, onCancel }) {
   const current = stepIndex(order.status)
   const canCancel = order.status === "Pending" || order.status === "Processing"
   const [asking, setAsking] = useState(false)
+  const [cancelling, setCancelling] = useState(false)
+  const [cancelError, setCancelError] = useState("")
   const [reason, setReason] = useState("")
   const [note, setNote] = useState("")
 
-  function confirmCancel(event) {
+  async function confirmCancel(event) {
     event.preventDefault()
-    if (!reason) return
-    onCancel({
-      cancelReason: reason,
-      cancelNote: note.trim(),
-      cancelledAt: new Date().toISOString(),
-    })
+    if (!reason || cancelling) return
+    setCancelError("")
+    setCancelling(true)
+    try {
+      await onCancel({
+        cancelReason: reason,
+        cancelNote: note.trim(),
+        cancelledAt: new Date().toISOString(),
+      })
+      setAsking(false)
+    } catch (error) {
+      setCancelError(error instanceof Error ? error.message : "Unable to cancel this order. Please try again.")
+    } finally {
+      setCancelling(false)
+    }
   }
 
   return (
@@ -139,11 +150,12 @@ export default function OrderConfirmed({ order, onCancel }) {
               className="rounded-md border border-black/15 bg-white px-3 py-2.5 outline-none"
             />
           </label>
+          {cancelError && <p className="mt-3 text-sm text-primary">{cancelError}</p>}
           <div className="mt-4 flex flex-wrap gap-3">
-            <button type="submit" className="bg-[#3a1216] px-5 py-2.5 text-sm text-[#f6efe4]">
-              Cancel order
+            <button type="submit" disabled={cancelling} className="bg-[#3a1216] px-5 py-2.5 text-sm text-[#f6efe4] disabled:opacity-60">
+              {cancelling ? "Cancelling…" : "Cancel order"}
             </button>
-            <button type="button" onClick={() => setAsking(false)} className="border border-primary/30 px-5 py-2.5 text-sm text-primary">
+            <button type="button" disabled={cancelling} onClick={() => setAsking(false)} className="border border-primary/30 px-5 py-2.5 text-sm text-primary disabled:opacity-60">
               Keep order
             </button>
           </div>

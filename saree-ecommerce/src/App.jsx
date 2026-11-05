@@ -31,9 +31,15 @@ function AppRoutes() {
       <CartProvider>
         {isAdmin ? (
           <Routes>
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-          </Routes>
+  {/* Public Login Route */}
+  <Route path="/admin/login" element={<AdminLogin />} />
+
+  {/* Admin Dashboard Route */}
+  <Route path="/admin" element={<AdminDashboard />} />
+
+  {/* Optional: Add a wildcard redirect for nested admin pages */}
+  {/* <Route path="/admin/*" element={<AdminDashboard />} /> */}
+</Routes>
         ) : (
           <MobileShopDrawerProvider>
             <Layout>
