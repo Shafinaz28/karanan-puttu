@@ -209,14 +209,14 @@ export default function About() {
               We welcome enquiries for a range of traditional saree collections:
             </p>
           </div>
-          <ul className="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" data-motion-stagger>
+          <ul className="mx-auto mt-10 grid max-w-6xl grid-cols-2 gap-3 lg:grid-cols-4" data-motion-stagger>
             {sareeTypes.map(({ label, icon }) => (
               <li
                 key={label}
                 data-motion-item
-                className="flex min-h-24 items-center gap-3 rounded-lg border border-secondary/25 bg-white px-4 py-4 text-sm text-ink/85 shadow-sm sm:text-base"
+                className="flex min-h-24 items-center gap-2 rounded-lg border border-secondary/25 bg-white px-3 py-4 text-xs text-ink/85 shadow-sm sm:gap-3 sm:px-4 sm:text-base"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/5 text-secondary" aria-hidden="true">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/5 text-secondary sm:h-11 sm:w-11" aria-hidden="true">
                   <SareeTypeIcon name={icon} />
                 </span>
                 <span>{label}</span>
