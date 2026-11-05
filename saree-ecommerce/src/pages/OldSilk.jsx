@@ -5,12 +5,12 @@ const bought = [
   {
     name: "Old Zari Saree Buying",
     text: "We welcome enquiries for old Zari sarees featuring traditional gold-toned and silver-toned work.",
-    image: "/sarees/worn/old-kanchipuram-silk.avif",
+    image: "/sarees/worn/old-zari-silk.avif",
   },
   {
     name: "Zari Dhoti Buying",
     text: "Enquire about selling traditional dhotis with gold or silver Zari borders. Share clear photos of the fabric and border for review.",
-    image: "/sarees/worn/zari-dhoti.svg",
+    image: "/sarees/worn/zari-dhoti.avif",
   },
   {
     name: "Kanchipuram Silk Saree Buying",
@@ -30,22 +30,22 @@ const bought = [
   {
     name: "Wedding and Bridal Saree Buying",
     text: "We welcome enquiries for old bridal silk sarees, wedding Pattu sarees and traditional occasion-wear collections.",
-    image: "/sarees/worn/worn-crimson.avif",
+    image: "/sarees/worn/crimson.avif",
   },
   {
     name: "Antique and Vintage Saree Buying",
     text: "Share photographs and any details you know about your vintage or inherited saree, such as its age, origin and weaving.",
-    image: "/sarees/worn/old-tissue-silk.avif",
+    image: "/sarees/worn/antique-silk.avif",
   },
   {
     name: "Bulk Saree Buying Enquiries",
     text: "If you have several old sarees, enquire about selling the collection together. Share the approximate number of sarees and photographs of different varieties.",
-    image: "/sarees/worn/old-soft-silk.avif",
+    image: "/sarees/worn/old-bulk-sarees.avif",
   },
   {
     name: "Torn Sarees",
     text: "Enquire about selling torn or damaged sarees. Share clear photos of the tear, fabric and Zari border for an individual review.",
-    image: "/sarees/worn/torn-saree.svg",
+    image: "/sarees/worn/torn-saree.avif",
   },
 ]
 

@@ -28,7 +28,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full min-w-0 bg-[#3a0c14] text-cream">
+    <footer className="w-full min-w-0 bg-[#3a0c14] text-cream [background-image:radial-gradient(#c59b27_0.8px,transparent_0.8px)] [background-size:30px_30px]">
       <div className="site-section-inner !py-14 lg:!py-16">
         {/* Main Footer Grid with Tighter Spacing */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 items-start">

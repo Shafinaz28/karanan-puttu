@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ProductImagePanel from "../components/ProductImagePanel"
 import HomeHeroCarousel from "../components/HomeHeroCarousel"
+import TrustBar from "../components/TrustBar"
 import ShopCategoriesSection from "../components/ShopCategoriesSection"
 import GoogleReviewsSection from "../components/GoogleReviewsSection"
 import { useCart } from "../context/CartContext"
@@ -154,7 +155,7 @@ export default function Home() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
     const timer = window.setInterval(() => {
       setShopLookIndex((current) => (current >= shopLookMaxIndex ? 0 : current + 1))
-    }, 5500)
+    }, 4000)
     return () => window.clearInterval(timer)
   }, [shopLookMaxIndex])
 
@@ -489,6 +490,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <TrustBar />
 
     </>
   )

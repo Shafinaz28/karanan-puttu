@@ -4,16 +4,18 @@ import PageDamaskHero, { ZariOrnament } from "../components/PageDamaskHero"
 const storyParagraphs = [
   "Welcome to Karnan Pattu Centre, your destination in Jayanagar, Bengaluru, for enquiries about buying and selling traditional silk and Zari sarees.",
   "Traditional sarees are more than clothing. They often represent family memories, weddings, celebrations and cultural traditions. Many households have beautiful silk sarees stored away for years. We offer families an opportunity to enquire about selling unused traditional sarees through an individual assessment process.",
+  "Established in 1985, Karnan Pattu Centre brings three generations of experience with traditional sarees. We welcome people looking to explore silk and Pattu collections, as well as families considering what to do with sarees they already own.",
+  "For a selling enquiry, we consider each saree individually, including its fabric, weaving, Zari work, design and condition. You can share photographs with us before visiting; we explain our assessment clearly, and any sale goes ahead only when you agree to the value and terms.",
 ]
 
 const sareeTypes = [
-  "Old Kanchipuram silk sarees",
-  "Traditional Pattu sarees",
-  "Mysore silk sarees",
-  "Banarasi silk sarees",
-  "Gold and silver Zari sarees",
-  "Wedding and bridal sarees",
-  "Antique and vintage sarees",
+  { label: "Old Kanchipuram silk sarees", icon: "temple" },
+  { label: "Traditional Pattu sarees", icon: "weave" },
+  { label: "Mysore silk sarees", icon: "diamond" },
+  { label: "Banarasi silk sarees", icon: "flower" },
+  { label: "Gold and silver Zari sarees", icon: "sparkle" },
+  { label: "Wedding and bridal sarees", icon: "bridal" },
+  { label: "Antique and vintage sarees", icon: "heritage" },
 ]
 
 const founder = {
@@ -25,6 +27,9 @@ const founder = {
   bio: [
     "Karnan Pattu Centre helps preserve the value of traditional Indian silk sarees through quality, personal service and trusted customer relationships.",
     "From old Zari sarees to traditional Pattu collections, we value every saree and its story. Our approach is built around clear communication, individual assessment and your choice.",
+    "Based in Jayanagar, Bengaluru, we welcome enquiries about Kanchipuram, Mysore silk, Banarasi, Pattu and Zari sarees.",
+    "You can share photographs to begin an enquiry before visiting the centre.",
+    "We explain how each saree is assessed, and leave the decision to you once the value and terms are discussed.",
   ],
 }
 
@@ -85,21 +90,6 @@ export default function About() {
                   {paragraph}
                 </p>
               ))}
-            </div>
-            <div className="space-y-4 pt-2" data-motion-item>
-              <h3 className="font-display text-2xl font-semibold text-primary">BUY • SELL • TRUST</h3>
-              <h3 className="font-display text-2xl font-semibold text-primary">What We Do</h3>
-              <p className="font-sans text-base leading-relaxed text-ink/85 sm:text-lg">
-                We welcome enquiries for a range of traditional saree collections:
-              </p>
-              <ul className="grid gap-2 font-sans text-base text-ink/85 sm:grid-cols-2 sm:text-lg">
-                {sareeTypes.map((type) => (
-                  <li key={type} className="flex items-start gap-2">
-                    <span className="text-secondary" aria-hidden="true">•</span>
-                    {type}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
 
@@ -203,6 +193,39 @@ export default function About() {
         </div>
       </section>
 
+      {/* What we do */}
+      <section className="border-b border-secondary/20 bg-[#fcfaf6] py-16 md:py-20">
+        <div className="site-container">
+          <div className="mx-auto max-w-2xl text-center" data-motion-text>
+            
+            <h2
+              data-motion-item
+              className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl md:text-5xl"
+            >
+              What We Do
+            </h2>
+            <ZariOrnament data-motion-item className="mt-4" dark />
+            <p data-motion-item className="mt-5 text-base leading-relaxed text-ink/75 sm:text-lg">
+              We welcome enquiries for a range of traditional saree collections:
+            </p>
+          </div>
+          <ul className="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" data-motion-stagger>
+            {sareeTypes.map(({ label, icon }) => (
+              <li
+                key={label}
+                data-motion-item
+                className="flex min-h-24 items-center gap-3 rounded-lg border border-secondary/25 bg-white px-4 py-4 text-sm text-ink/85 shadow-sm sm:text-base"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/5 text-secondary" aria-hidden="true">
+                  <SareeTypeIcon name={icon} />
+                </span>
+                <span>{label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Promise cards */}
       <section className="border-b border-secondary/20 bg-[#fcfaf6] py-20 md:py-28">
         <div className="site-container">
@@ -295,6 +318,66 @@ export default function About() {
       </section>
     </>
   )
+}
+
+function SareeTypeIcon({ name }) {
+  const common = {
+    viewBox: "0 0 24 24",
+    className: "h-6 w-6",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+  }
+
+  const paths = {
+    temple: (
+      <>
+        <path d="M3 10h18L12 3 3 10z" />
+        <path d="M5 10v9m4-9v9m6-9v9m4-9v9M3 21h18M7 14h2m6 0h2" />
+      </>
+    ),
+    weave: (
+      <>
+        <path d="M4 5h16M4 9h16M4 13h16M4 17h16M4 21h16" />
+        <path d="M7 5v4m5 0v4m5 0v4m-7 0v4" />
+      </>
+    ),
+    diamond: (
+      <>
+        <path d="m12 3 8 9-8 9-8-9 8-9z" />
+        <path d="m4 12 16 0M12 3l-3 9 3 9 3-9-3-9z" />
+      </>
+    ),
+    flower: (
+      <>
+        <path d="M12 12c-4-1-5-5-2-7 2-1 3 1 2 7zm0 0c1-4 5-5 7-2 1 2-1 3-7 2zm0 0c4 1 5 5 2 7-2 1-3-1-2-7zm0 0c-1 4-5 5-7 2-1-2 1-3 7-2z" />
+        <circle cx="12" cy="12" r="1.5" />
+      </>
+    ),
+    sparkle: (
+      <>
+        <path d="m12 2 2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z" />
+        <path d="m19 2 .8 2.2L22 5l-2.2.8L19 8l-.8-2.2L16 5l2.2-.8L19 2z" />
+      </>
+    ),
+    bridal: (
+      <>
+        <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
+        <path d="M8 11h2l1-2 2 5 1-3h2" />
+      </>
+    ),
+    heritage: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2M8 3.8 6.5 6M16 3.8 17.5 6" />
+      </>
+    ),
+  }
+
+  return <svg {...common}>{paths[name] ?? paths.weave}</svg>
 }
 
 function ChooseIcon({ name }) {

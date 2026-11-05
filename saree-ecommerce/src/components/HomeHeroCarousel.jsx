@@ -15,7 +15,7 @@ const heroBanners = [
     mobileWebp: "/hero/mobileimg/Bannerr-1-mobile.webp?v=3",
     mobileWidth: 768,
     mobileHeight: 1024,
-    bg: "#b1121a",
+
     imageClass: "object-contain object-center",
     displayAspect: "1086/1900",
     copy: {
@@ -37,7 +37,7 @@ const heroBanners = [
     mobileWebp: "/hero/mobileimg/Bannerr-2-mobile.webp?v=3",
     mobileWidth: 768,
     mobileHeight: 1024,
-    bg: "#2c1814",
+
     imageClass: "object-contain object-center",
     displayAspect: "1800/874",
     copy: {
@@ -60,7 +60,7 @@ const heroBanners = [
     mobileWebp: "/hero/mobileimg/Bannerr-3-mobile.webp?v=3",
     mobileWidth: 768,
     mobileHeight: 1024,
-    bg: "#e8dcc8",
+
     imageClass: "object-contain object-center",
     displayAspect: "1800/874",
     copy: {
@@ -73,7 +73,7 @@ const heroBanners = [
   },
 ]
 
-const AUTO_MS = 6500
+const AUTO_MS = 4000
 
 export default function HomeHeroCarousel() {
   const [index, setIndex] = useState(0)
@@ -98,8 +98,7 @@ export default function HomeHeroCarousel() {
   return (
     <section
       data-page-hero
-      className="relative w-full max-w-full overflow-hidden bg-black max-md:h-[80dvh] md:aspect-[1800/874]"
-      style={{ backgroundColor: active.bg }}
+      className="group relative w-full max-w-full overflow-hidden max-md:h-[80dvh] md:aspect-[1800/874]"
       aria-roledescription="carousel"
       aria-label="Homepage banners"
     >
@@ -131,9 +130,10 @@ export default function HomeHeroCarousel() {
                 alt={banner.alt}
                 width={banner.width}
                 height={banner.height}
+                loading={slideIndex === 0 ? "eager" : "lazy"}
                 decoding="async"
                 fetchPriority={slideIndex === 0 ? "high" : "low"}
-                className={`block h-full w-full max-w-full ${banner.imageClass} !object-cover ${
+                className={`block h-full w-full max-w-full transition-transform duration-700 ease-out group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 ${banner.imageClass} !object-cover ${
                   banner.id === "banner-1" ? "max-md:!object-left" : "max-md:!object-right"
                 } md:!object-center`}
               />
@@ -171,7 +171,8 @@ export default function HomeHeroCarousel() {
         >
           <div className="site-container min-w-0 max-md:px-17">
             <div
-              className={`w-full min-w-0 text-left text-[#f6efe4] max-md:max-w-[17.25rem] sm:max-w-xs md:max-w-xl ${
+              key={active.id}
+              className={`hero-copy-enter w-full min-w-0 text-left text-[#f6efe4] max-md:max-w-[17.25rem] sm:max-w-xs md:max-w-xl ${
                 alignRight
                   ? "md:ml-auto md:max-w-lg lg:max-w-xl"
                   : "md:max-w-lg lg:max-w-xl"

@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-const HERO_IMAGE = "/hero/slides/banner-1.webp?v=3"
 const LOADER_SLIDE_MS = 1200
 const LOADER_MIN_MS = 380
 const LOADER_MAX_MS = 3200
@@ -23,16 +22,6 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
-
-function preloadImage(src) {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.decoding = "async"
-    img.onload = () => resolve()
-    img.onerror = () => resolve()
-    img.src = src
-  })
-}
 
 function waitForPaint() {
   return new Promise((resolve) => {
@@ -56,9 +45,7 @@ function waitForHomeHero() {
 
       const findHero = () => {
         const section = document.querySelector("[data-page-hero]")
-        const img =
-          section?.querySelector("[data-page-hero] picture img") ??
-          section?.querySelector(`img[src*="${HERO_IMAGE.slice(1)}"]`)
+        const img = section?.querySelector("picture img")
         if (img) {
           finish(img)
           return true
@@ -113,7 +100,6 @@ if (loader) {
     withTimeout(LOADER_MAX_MS),
     Promise.all([domReady, minimumDisplayTime, waitForPaint(), waitForHomeHero()]),
   ]).then(() => {
-    preloadImage(HERO_IMAGE)
     dismissLoader(loader)
   })
 }

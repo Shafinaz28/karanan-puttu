@@ -107,7 +107,7 @@ export default function GoogleReviewsSection() {
     if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined
     const timer = window.setInterval(() => {
       setActiveIndex((current) => (current >= maxIndex ? 0 : current + 1))
-    }, 6000)
+    }, 4000)
     return () => window.clearInterval(timer)
   }, [maxIndex, paused])
 

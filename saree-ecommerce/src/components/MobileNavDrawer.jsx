@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { mainNavLinks } from "./navLinks"
+import LocationPinIcon from "./LocationPinIcon"
 import logo from "../assets/images/kpc-logo.avif"
 
 export default function MobileNavDrawer({
@@ -80,8 +81,9 @@ export default function MobileNavDrawer({
         )}
 
         <nav className="min-h-0 flex-1 overflow-y-auto px-5 py-2">
-          {mainNavLinks.map(({ to, label }) => (
+          {mainNavLinks.map(({ to, label, icon }) => (
             <MobileNavLink key={to} to={to} onNavigate={closeAndReset}>
+              {icon === "location" && <LocationPinIcon />}
               {label}
             </MobileNavLink>
           ))}
@@ -115,7 +117,7 @@ function MobileNavLink({ to, onNavigate, children }) {
     <Link
       to={to}
       onClick={onNavigate}
-      className="block border-b border-black/8 py-4 text-[15px] text-ink hover:text-primary"
+      className="flex items-center gap-2 border-b border-black/8 py-4 text-[15px] text-ink hover:text-primary"
     >
       {children}
     </Link>

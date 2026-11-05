@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import MobileNavDrawer from "./MobileNavDrawer"
 import { mainNavLinks } from "./navLinks"
+import LocationPinIcon from "./LocationPinIcon"
 import logo from "../assets/images/kpc-logo.avif"
 
 export default function Navbar() {
@@ -111,6 +112,10 @@ export default function Navbar() {
               <YouTubeIcon />
             </a>
           </div>
+          <Link to="/locations" className="inline-flex items-center gap-1.5 whitespace-nowrap hover:text-secondary">
+            <LocationPinIcon />
+           
+          </Link>
         </div>
         </div>
       </div>
@@ -134,8 +139,9 @@ export default function Navbar() {
           </span>
         </Link>
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 text-base whitespace-nowrap text-primary xl:gap-7 lg:flex">
-          {mainNavLinks.map(({ to, label }) => (
-            <Link key={to} to={to} className="transition-colors duration-200 hover:text-secondary">
+          {mainNavLinks.map(({ to, label, icon }) => (
+            <Link key={to} to={to} className="inline-flex items-center gap-1.5 transition-colors duration-200 hover:text-secondary">
+              {icon === "location" && <LocationPinIcon />}
               {label}
             </Link>
           ))}
