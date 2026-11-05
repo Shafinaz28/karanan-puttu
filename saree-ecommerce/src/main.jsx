@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-const LOADER_SLIDE_MS = 1200
-const LOADER_MIN_MS = 380
+const LOADER_SLIDE_MS = 300
+const LOADER_MIN_MS = 0
 const LOADER_MAX_MS = 3200
 const HOME_HERO_MAX_MS = 2200
 
@@ -45,7 +45,7 @@ function waitForHomeHero() {
 
       const findHero = () => {
         const section = document.querySelector("[data-page-hero]")
-        const img = section?.querySelector("picture img")
+        const img = section?.querySelector('[aria-hidden="false"] picture img')
         if (img) {
           finish(img)
           return true

@@ -30,17 +30,17 @@ export default function Layout({ children }) {
         <>
           <Link
             to="/old-silk"
-            className="fixed top-[65%] right-0 z-[80] rounded-l-md bg-secondary px-2.5 py-4 text-xs font-semibold tracking-wide text-primary shadow-lg transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="fixed top-[55%] right-0 z-[80] rounded-l-md bg-secondary px-2 py-3 text-[10px] font-semibold tracking-wide text-primary shadow-lg transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-2.5 sm:py-4 sm:text-xs"
             style={{ writingMode: "vertical-rl", transform: "translateY(-50%)" }}
           >
-            Buy Old Sarees
+            Sell Old Sarees
           </Link>
           <a
             href="https://wa.me/917200015300"
             target="_blank"
             rel="noreferrer"
             aria-label="WhatsApp"
-            className="fixed z-[80] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#1ebe5d] max-lg:bottom-[max(72px,calc(4.25rem+env(safe-area-inset-bottom)))] lg:bottom-[max(16px,env(safe-area-inset-bottom))]"
+            className="fixed z-[80] hidden h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#1ebe5d] lg:flex lg:bottom-[max(16px,env(safe-area-inset-bottom))]"
             style={{ right: "max(16px, env(safe-area-inset-right))" }}
           >
             <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden="true">

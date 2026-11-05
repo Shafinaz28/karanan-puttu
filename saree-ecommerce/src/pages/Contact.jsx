@@ -40,7 +40,12 @@ export default function Contact() {
       })
       setSent(true)
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "Unable to send your message. Please try again.")
+      const failureMessage = submitError && typeof submitError === "object" && "message" in submitError
+        ? String(submitError.message || "")
+        : typeof submitError === "string"
+          ? submitError.trim()
+          : ""
+      setError(failureMessage || "Unable to send your message. Please try again.")
     } finally {
       setSubmitting(false)
     }
