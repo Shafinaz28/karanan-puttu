@@ -54,6 +54,8 @@ const AUTO_MS = 6000
 
 export default function HomeHeroCarousel() {
   const [index, setIndex] = useState(0)
+  const [trackIndex, setTrackIndex] = useState(1)
+  const [transitionEnabled, setTransitionEnabled] = useState(true)
   const total = heroBanners.length
 
   const active = heroBanners[index]
@@ -62,17 +64,29 @@ export default function HomeHeroCarousel() {
   const Heading = index === 0 ? "h1" : "h2"
 
   const goTo = (next) => {
-    setIndex((next + total) % total)
+    const nextIndex = (next + total) % total
+    setIndex(nextIndex)
+    setTrackIndex(index === total - 1 && nextIndex === 0 ? total + 1 : nextIndex + 1)
   }
 
-  // Automatic slide movement
   useEffect(() => {
     const timer = window.setInterval(() => {
       setIndex((current) => (current + 1) % total)
+      setTrackIndex((current) => current + 1)
     }, AUTO_MS)
 
     return () => window.clearInterval(timer)
   }, [total])
+
+  const finishTrackTransition = (event) => {
+    if (event.target !== event.currentTarget || trackIndex !== total + 1) return
+
+    setTransitionEnabled(false)
+    setTrackIndex(1)
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setTransitionEnabled(true))
+    })
+  }
 
   return (
     <section
@@ -83,61 +97,55 @@ export default function HomeHeroCarousel() {
     >
       {/* SLIDES */}
       <div className="absolute inset-0 overflow-hidden">
-        {heroBanners.map((banner, slideIndex) => {
-          const isActive = index === slideIndex
+        <div
+          className={`flex h-full ${
+            transitionEnabled ? "transition-transform duration-[1200ms] ease-in-out" : ""
+          } motion-reduce:transition-none`}
+          style={{
+            width: `${(total + 2) * 100}%`,
+            transform: `translateX(-${(trackIndex * 100) / (total + 2)}%)`,
+          }}
+          onTransitionEnd={finishTrackTransition}
+        >
+          {[heroBanners[total - 1], ...heroBanners, heroBanners[0]].map((banner, trackSlideIndex) => {
+            const slideIndex = (trackSlideIndex - 1 + total) % total
+            const isActive = trackIndex === trackSlideIndex
+            return (
+              <div
+                key={`${banner.id}-${trackSlideIndex}`}
+                className="h-full w-full shrink-0"
+                style={{ flexBasis: `${100 / (total + 2)}%` }}
+                aria-hidden={!isActive}
+              >
+                <picture className="block h-full w-full">
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={banner.mobileAvif}
+                    type="image/avif"
+                  />
 
-          const slideDistance =
-            (slideIndex - index + total) % total
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={banner.mobileWebp}
+                    type="image/webp"
+                  />
 
-          const offset =
-            slideDistance > total / 2
-              ? slideDistance - total
-              : slideDistance
+                  <source srcSet={banner.avif} type="image/avif" />
 
-          return (
-            <div
-              key={banner.id}
-              className="absolute inset-0 h-full w-full transition-transform duration-[1200ms] ease-in-out"
-              style={{
-                transform: `translateX(${offset * 100}%)`,
-                zIndex: isActive ? 1 : 0,
-              }}
-              aria-hidden={!isActive}
-            >
-              <picture className="block h-full w-full">
-                <source
-                  media="(max-width: 767px)"
-                  srcSet={banner.mobileAvif}
-                  type="image/avif"
-                />
+                  <source srcSet={banner.webp} type="image/webp" />
 
-                <source
-                  media="(max-width: 767px)"
-                  srcSet={banner.mobileWebp}
-                  type="image/webp"
-                />
-
-                <source
-                  srcSet={banner.avif}
-                  type="image/avif"
-                />
-
-                <source
-                  srcSet={banner.webp}
-                  type="image/webp"
-                />
-
-                <img
-                  src={banner.webp}
-                  alt={banner.alt}
-                  className="block h-full w-full object-cover object-center"
-                  loading={slideIndex === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                />
-              </picture>
-            </div>
-          )
-        })}
+                  <img
+                    src={banner.webp}
+                    alt={banner.alt}
+                    className="block h-full w-full object-cover object-center"
+                    loading={slideIndex === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                </picture>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       {/* DESKTOP BACKGROUND OVERLAY */}
@@ -194,27 +202,6 @@ export default function HomeHeroCarousel() {
         </div>
       </div>
 
-      {/* PREVIOUS AND NEXT BUTTONS */}
-      <div className="pointer-events-none absolute inset-0 z-[5] flex items-center justify-between px-3 sm:px-6 md:px-10">
-        <button
-          type="button"
-          onClick={() => goTo(index - 1)}
-          aria-label="Previous banner"
-          className="pointer-events-auto flex h-9 w-9 md:h-12 md:w-12 items-center justify-center rounded-full border border-white/50 bg-[#210a0c]/55 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#210a0c]/85"
-        >
-          <HeroArrow direction="prev" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => goTo(index + 1)}
-          aria-label="Next banner"
-          className="pointer-events-auto flex h-9 w-9 md:h-12 md:w-12 items-center justify-center rounded-full border border-white/50 bg-[#210a0c]/55 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#210a0c]/85"
-        >
-          <HeroArrow direction="next" />
-        </button>
-      </div>
-
       {/* SLIDE INDICATORS */}
       <div className="absolute bottom-10 left-1/2 z-[6] flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/20 bg-[#210a0c]/50 px-4 py-2 backdrop-blur-sm md:bottom-5">
         {heroBanners.map((banner, dotIndex) => (
@@ -233,24 +220,5 @@ export default function HomeHeroCarousel() {
         ))}
       </div>
     </section>
-  )
-}
-
-function HeroArrow({ direction }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-5 w-5 md:h-6 md:w-6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
-      {direction === "prev" ? (
-        <path d="M15 6l-6 6 6 6" />
-      ) : (
-        <path d="M9 6l6 6-6 6" />
-      )}
-    </svg>
   )
 }

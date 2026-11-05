@@ -43,7 +43,7 @@ export default function Blog() {
       <PageDamaskHero
         breadcrumb="Journal"
         title="The Saree Journal"
-        subtitle="“Thoughtful guides to choosing, caring for, and enjoying sarees, from the team at Karnan Pattu Centre.”"
+        subtitle="“Thoughtful Guides To Choosing, Caring For, And Enjoying Sarees, From The Team At Karnan Pattu Centre.”"
       />
 
       <section className="about-subtle-linen border-b border-secondary/20 py-16 md:pb-24 md:pt-20">

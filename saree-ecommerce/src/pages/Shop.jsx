@@ -410,7 +410,7 @@ export default function Shop() {
       <PageDamaskHero
         breadcrumb="Shop"
         title={collection ? pageTitle : "Browse the collection"}
-        subtitle="“Soft silks with zari work and blouse pieces included—from everyday drapes to tissue weaves and occasion edits. Prices include tax; shipping at checkout.”"
+        subtitle="“Soft Silks With Zari Work And Blouse Pieces Included—From Everyday Drapes To Tissue Weaves And Occasion Edits. Prices Include Tax; Shipping At Checkout.”"
       />
     <section className="bg-white" data-shop-section aria-label="Shop catalogue">
       {drawerMounted && (

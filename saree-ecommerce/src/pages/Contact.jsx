@@ -51,13 +51,13 @@ export default function Contact() {
       <PageDamaskHero
         breadcrumb="Contact"
         title="Contact Karnan Pattu Centre"
-        subtitle="Have old silk, Zari or traditional Pattu sarees to sell? Contact us and share photographs for an enquiry."
+        subtitle="Have Old Silk, Zari or Traditional Pattu Sarees To Sell? Contact Us and Share Photographs For An Enquiry."
       />
     <section id="write" className="bg-[#f6efe4] py-16">
       <div className="site-container grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
         <div>
           <p className="text-[11px] tracking-[0.22em] text-[#c59b27] uppercase">Get in touch</p>
-          <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Send Your Saree Enquiry</h2>
+          <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">Send Your Enquiry</h2>
           <p className="mt-4 max-w-md text-sm leading-7 text-ink/75">
             We are here to help you understand the enquiry and assessment process. Contact us by phone or WhatsApp and share your saree photographs.
           </p>
@@ -137,14 +137,14 @@ export default function Contact() {
                 className="w-full bg-transparent py-3 pr-3 text-sm outline-none"
               />
             </Field>
-            <Field icon="mail" label="Email (optional)">
+            <Field icon="mail" label="Email ">
               <input
                 name="email"
                 type="email"
                 maxLength={254}
                 value={form.email}
                 onChange={updateField}
-                placeholder="you@email.com (optional)"
+                placeholder="you@email.com "
                 className="w-full bg-transparent py-3 pr-3 text-sm outline-none"
               />
             </Field>

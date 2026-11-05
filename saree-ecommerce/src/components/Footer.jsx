@@ -28,43 +28,61 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full min-w-0 bg-[#3a0c14] text-cream [background-image:radial-gradient(#c59b27_0.8px,transparent_0.8px)] [background-size:30px_30px]">
-      <div className="site-section-inner !py-14 lg:!py-16">
-        {/* Main Footer Grid with Tighter Spacing */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 items-start">
+    <footer className="w-full bg-[#3a0c14] text-[#f7f1e8] bg-[radial-gradient(#c59b27_0.8px,transparent_0.8px)] [background-size:30px_30px]">
+      <div className="mx-auto max-w-7xl px-6 pt-12 pb-24 md:py-16">
+        
+        {/* Main Columns Container */}
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-8 xl:gap-x-12">
           
           {/* Column 1: Brand & Bio */}
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start text-left">
             <img
               src={logo}
               alt="Karnan Pattu Centre"
-              className="h-24 w-24 object-contain"
+              className="h-16 w-16 object-contain"
             />
-            <p className="mt-4 max-w-xs text-sm leading-6 text-cream/75">
+            <p className="mt-4 text-sm leading-6 text-[#f7f1e8]/80">
               We buy old, used and damaged soft silk at the best price, and we sell new soft silks for the next occasion.
             </p>
-            <div className="mt-4">
-              <p className="text-xs font-semibold tracking-[0.18em] text-secondary uppercase">Contact</p>
-              <div className="mt-2 flex flex-col gap-1.5 text-sm text-cream/85">
-                <a href="tel:+917200015300" className="transition-colors hover:text-secondary">
-                  +91 72000 15300
-                </a>
-                <a href="tel:+919944055900" className="transition-colors hover:text-secondary">
-                  +91 99440 55900
-                </a>
+
+            {/* Contact Details with Icons */}
+            <div className="mt-6 w-full">
+              <p className="text-xs font-semibold tracking-[0.18em] text-[#d7c4a2] uppercase">Contact</p>
+              
+              <div className="mt-3 flex flex-col gap-2.5 text-sm text-[#f7f1e8]/90">
+                {/* Phone Numbers */}
+                <div className="flex items-start gap-2.5">
+                  <svg className="mt-0.5 h-4 w-4 shrink-0 text-[#d7c4a2]" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.828-1.427-5.127-3.726-6.554-6.554l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                  </svg>
+                  <div className="flex flex-col gap-1">
+                    <a href="tel:+917200015300" className="transition-colors hover:text-[#d7c4a2]">
+                      +91 72000 15300
+                    </a>
+                    <a href="tel:+919944055900" className="transition-colors hover:text-[#d7c4a2]">
+                      +91 99440 55900
+                    </a>
+                  </div>
+                </div>
+
+                {/* Location Link */}
+                <div className="flex items-center gap-2.5">
+                  <svg className="h-4 w-4 shrink-0 text-[#d7c4a2]" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                  <Link to="/branches" className="transition-colors hover:text-[#d7c4a2]">
+                    Our Branches in Bengaluru
+                  </Link>
+                </div>
               </div>
-            </div>
-            <div className="mt-5 flex gap-3">
-              <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
-              <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
-              <FooterSocial href="https://wa.me/917200015300" label="WhatsApp" name="whatsapp" />
             </div>
           </div>
 
           {/* Column 2: Collections */}
           <FooterColumn title="Collections">
             {collections.map((item) => (
-              <Link key={item.label} to={item.to} className="transition-colors duration-300 hover:text-secondary">
+              <Link key={item.label} to={item.to} className="transition-colors duration-300 hover:text-[#d7c4a2]">
                 {item.label}
               </Link>
             ))}
@@ -73,24 +91,25 @@ export default function Footer() {
           {/* Column 3: Old Saree Services */}
           <FooterColumn title="Old saree services">
             {services.map((item) => (
-              <Link key={item} to="/old-silk" className="transition-colors duration-300 hover:text-secondary">
+              <Link key={item} to="/old-silk" className="transition-colors duration-300 hover:text-[#d7c4a2]">
                 {item}
               </Link>
             ))}
           </FooterColumn>
 
           {/* Column 4: Newsletter Signup */}
-          <div className="flex flex-col items-start">
-            <p className="text-xs font-semibold tracking-[0.18em] text-secondary uppercase">
-              VIP newsletter
+          <div className="flex flex-col items-start text-left">
+            <p className="text-xs font-semibold tracking-[0.18em] text-[#d7c4a2] uppercase">
+              VIP Newsletter
             </p>
-            <p className="mt-3 text-sm leading-6 text-cream/75">
+            <p className="mt-4 text-sm leading-6 text-[#f7f1e8]/80">
               Subscribe to get privileged previews of soft silk launches and seasonal handloom drops.
             </p>
+            
             {joined ? (
-              <p className="mt-4 text-sm font-medium text-secondary">You are on the list.</p>
+              <p className="mt-4 text-sm font-medium text-[#d7c4a2]">You are on the list.</p>
             ) : (
-              <form onSubmit={joinList} className="mt-4 flex w-full max-w-sm gap-2">
+              <form onSubmit={joinList} className="mt-4 flex w-full max-w-[240px] sm:max-w-xs flex-col gap-2">
                 <input
                   type="email"
                   required
@@ -98,38 +117,41 @@ export default function Footer() {
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="Enter email address"
                   aria-label="Email address"
-                  className="min-w-0 flex-1 rounded-lg bg-white px-3 py-2.5 text-sm text-ink outline-none"
+                  className="w-full rounded-lg bg-white px-3 py-1.5 text-xs text-[#3a0c14] outline-none placeholder:text-[#3a0c14]/50"
                 />
                 <button
                   type="submit"
-                  className="motion-btn motion-gold bg-secondary px-4 text-xs tracking-[0.14em] text-ink uppercase transition-colors hover:bg-[#e6c55c]"
+                  className="w-full rounded-md bg-[#d7c4a2] py-1 text-[11px] font-semibold tracking-wider text-[#3a0c14] uppercase transition-colors hover:bg-[#e6c55c]"
                 >
                   Join
                 </button>
               </form>
             )}
-            <p className="mt-3 text-xs text-cream/55">
-              Strictly no spam. We cherish your privacy.
-            </p>
+
+            <div className="mt-6 flex gap-3">
+              <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
+              <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
+              <FooterSocial href="https://wa.me/917200015300" label="WhatsApp" name="whatsapp" />
+            </div>
           </div>
 
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 border-t border-cream/10 pt-6">
-          <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-cream/70 lg:flex-row lg:text-left">
+        <div className="mt-12 border-t border-[#f7f1e8]/15 pt-6">
+          <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-[#f7f1e8]/75 lg:flex-row lg:text-left">
             <p>© 2026 Karnan Pattu Centre. All rights reserved. Handcrafted in India.</p>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-end">
-              <Link to="/terms" className="transition-colors hover:text-cream">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 lg:justify-end">
+              <Link to="/terms" className="transition-colors hover:text-[#d7c4a2]">
                 Terms & conditions
               </Link>
-              <Link to="/privacy" className="transition-colors hover:text-cream">
+              <Link to="/privacy" className="transition-colors hover:text-[#d7c4a2]">
                 Privacy policy
               </Link>
-              <Link to="/contact" className="transition-colors hover:text-cream">
+              <Link to="/contact" className="transition-colors hover:text-[#d7c4a2]">
                 Shipping & payout policy
               </Link>
-              <Link to="/track" className="transition-colors hover:text-cream">
+              <Link to="/track" className="transition-colors hover:text-[#d7c4a2]">
                 Track order
               </Link>
             </div>
@@ -143,9 +165,9 @@ export default function Footer() {
 
 function FooterColumn({ title, children }) {
   return (
-    <div className="flex flex-col items-start">
-      <p className="text-xs font-semibold tracking-[0.18em] text-secondary uppercase">{title}</p>
-      <div className="mt-3 flex flex-col space-y-2.5 text-sm text-cream/80">
+    <div className="flex flex-col items-start text-left">
+      <p className="text-xs font-semibold tracking-[0.18em] text-[#d7c4a2] uppercase">{title}</p>
+      <div className="mt-4 flex flex-col space-y-2.5 text-sm text-[#f7f1e8]/85">
         {children}
       </div>
     </div>
@@ -159,7 +181,7 @@ function FooterSocial({ href, label, name }) {
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d7c4a2]/50 text-[#d7c4a2] transition-colors duration-300 hover:bg-[#d7c4a2] hover:text-[#3a0c14]"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d7c4a2]/50 text-[#d7c4a2] transition-colors duration-300 hover:bg-[#d7c4a2] hover:text-[#3a0c14]"
     >
       <SocialGlyph name={name} />
     </a>

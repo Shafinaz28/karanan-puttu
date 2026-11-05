@@ -10,7 +10,6 @@ export default function ShopCategoriesSection({ variant = "home", activeCollecti
       <div className={compact ? "" : "flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12"}>
         {!compact && (
           <div data-slide="left" className="min-w-0 text-center lg:max-w-sm lg:text-left">
-            <p className="text-[11px] tracking-[0.28em] text-primary/80 uppercase">Shop by category</p>
             <h2 className="mt-3 font-display text-4xl leading-tight text-primary md:text-5xl">Explore our collections</h2>
             <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-ink/65 max-md:px-1">
               Discover sarees for every mood, occasion, and style.

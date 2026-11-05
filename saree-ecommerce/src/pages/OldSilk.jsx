@@ -81,7 +81,7 @@ export default function OldSilk() {
       <PageDamaskHero
         breadcrumb="Old silk"
         title="Old Saree Buying Services in Bangalore"
-        subtitle="Enquire about selling traditional silk, Zari, Pattu and wedding sarees at Karnan Pattu Centre."
+        subtitle="Enquire About Selling Traditional Silk, Zari, Pattu And Wedding Sarees At Karnan Pattu Centre."
       />
 
       {/* Saree Categories Section */}

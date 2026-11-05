@@ -3,8 +3,8 @@ export const mainNavLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "Our Story" },
   { to: "/shop", label: "Shop" },
- 
   { to: "/old-silk", label: "Old silk" },
+  { to: "/locations", label: "Our Branches" },
   { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },
 ]

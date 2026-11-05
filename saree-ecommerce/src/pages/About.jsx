@@ -62,7 +62,7 @@ export default function About() {
       <PageDamaskHero
         breadcrumb="About Us"
         title="About Karnan Pattu Centre"
-        subtitle="Your Jayanagar destination for enquiries about buying and selling traditional silk and Zari sarees."
+        subtitle="Your Jayanagar Destination For Enquiries About Buying and Selling Traditional Silk and Zari Sarees."
       />
 
       {/* Our story */}

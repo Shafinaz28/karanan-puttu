@@ -291,7 +291,7 @@ export default function Home() {
           <div className="grid items-center gap-8 md:gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="order-2 space-y-5 lg:order-1" data-slide="left">
               <p className="text-[11px] font-semibold tracking-[0.24em] text-[#8a6230] uppercase">
-                Karnan Pattu Centre – BUY • SELL • TRUST
+                Karnan Pattu Centre 
               </p>
               <h2 className="font-display text-3xl leading-tight text-primary sm:text-4xl md:text-5xl">
                 A tradition established in 1985
@@ -458,35 +458,36 @@ export default function Home() {
       <GoogleReviewsSection />
 
       <section className="site-section bg-[#f6efe4]" aria-labelledby="old-saree-faq-heading">
-        <div className="site-section-inner">
-          <div className="mx-auto max-w-3xl">
-            <p className="text-center text-[11px] tracking-[0.28em] text-[#3a2a24]/70 uppercase">
-              Karnan Pattu Centre
-            </p>
+        <div className="site-section-inner mx-auto max-w-4xl !py-8 px-6 md:!py-12">
+          <div className="text-center">
             <h2
               id="old-saree-faq-heading"
-              className="mt-3 text-center font-display text-4xl leading-tight text-[#2c1814] md:text-5xl"
+              className="mt-2 font-display text-4xl font-bold tracking-wide text-[#2c1814] md:text-5xl"
             >
-              FAQs
+              Frequently Asked Questions
             </h2>
-            <div className="mt-8 divide-y divide-[#2c1814]/15 border-y border-[#2c1814]/15">
-              {oldSareeFaqs.map(({ question, answer }) => (
-                <details key={question} className="group py-4">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-[#2c1814] marker:hidden">
-                    {question}
-                    <span
-                      aria-hidden="true"
-                      className="shrink-0 text-xl text-[#8b6914] transition-transform group-open:rotate-45"
-                    >
-                      +
-                    </span>
-                  </summary>
-                  <p className="mt-3 max-w-2xl pr-8 text-sm leading-6 text-[#3a2a24]/80">
-                    {answer}
-                  </p>
-                </details>
-              ))}
-            </div>
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {oldSareeFaqs.map(({ question, answer }) => (
+              <details
+                key={question}
+                className="group rounded-xl border border-[#2c1814]/10 bg-[#faf6f0] p-4 shadow-sm transition-all duration-300 open:border-[#8b6914]/40 open:shadow-md sm:p-6"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-semibold text-[#2c1814] marker:hidden">
+                  <span>{question}</span>
+                  <span
+                    aria-hidden="true"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2c1814]/5 text-[#8b6914] transition-transform duration-300 group-open:rotate-45 group-open:bg-[#8b6914] group-open:text-[#faf6f0]"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="mt-4 border-t border-[#2c1814]/10 pt-4 text-sm leading-7 text-[#3a2a24]/80">
+                  {answer}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

@@ -114,7 +114,7 @@ export default function Navbar() {
           </div>
           <Link to="/locations" className="inline-flex items-center gap-1.5 whitespace-nowrap hover:text-secondary">
             <LocationPinIcon />
-           
+            
           </Link>
         </div>
         </div>

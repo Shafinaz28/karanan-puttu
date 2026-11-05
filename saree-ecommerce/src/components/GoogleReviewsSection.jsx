@@ -121,7 +121,6 @@ export default function GoogleReviewsSection() {
     <section className="site-section overflow-x-hidden bg-white">
       <div className="site-section-inner">
         <div className="text-center">
-          <p className="text-[11px] font-semibold tracking-[0.2em] text-[#8a6230] uppercase">Google reviews</p>
           <h2 className="mt-2 font-display text-3xl text-primary md:text-4xl">What customers say</h2>
         </div>
 
