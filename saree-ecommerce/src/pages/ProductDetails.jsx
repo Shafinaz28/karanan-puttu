@@ -15,7 +15,6 @@ function formatPriceDetailed(amount) {
   }).format(amount)
 }
 
-
 export default function ProductDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -25,20 +24,23 @@ export default function ProductDetails() {
 
   const [activeImage, setActiveImage] = useState(0)
   const [imageZoom, setImageZoom] = useState(1)
-  const [qty, setQty] = useState(1)
+  const [qty, setQty] = useState(0)
   const [agreed, setAgreed] = useState(false)
+  const [added, setAdded] = useState(false)
   const [saved, setSaved] = useState(false)
   const [shareNote, setShareNote] = useState("")
+  const [termsError, setTermsError] = useState(false)
+  const [qtyError, setQtyError] = useState(false)
 
   const gallery = useMemo(() => {
     if (!product) return []
-    if (product.images?.length) return product.images
+    if (product.images?.length) return product.images.slice(0, 4)
     const extras = sareeImages.slice(
       Number(product.id) % sareeImages.length,
-      (Number(product.id) % sareeImages.length) + 4,
+      (Number(product.id) % sareeImages.length) + 3,
     )
     const merged = [product.image, ...extras.filter((src) => src !== product.image)]
-    return merged.slice(0, 5)
+    return merged.slice(0, 4)
   }, [product])
 
   useEffect(() => {
@@ -52,6 +54,12 @@ export default function ProductDetails() {
   useEffect(() => {
     setImageZoom(1)
   }, [activeImage])
+
+  useEffect(() => {
+    if (!added) return undefined
+    const timer = window.setTimeout(() => setAdded(false), 1800)
+    return () => window.clearTimeout(timer)
+  }, [added])
 
   const minZoom = 1
   const maxZoom = 2.5
@@ -85,7 +93,6 @@ export default function ProductDetails() {
   const similar = products.filter((item) => Number(item.id) !== Number(product.id)).slice(0, 8)
   const title = productDisplayTitle(product, { includeLine: false })
   const categoryLabel = product.category || "Shop"
-  const canPurchase = qty >= 1 && agreed
 
   const priceBlock = (
     <>
@@ -98,26 +105,32 @@ export default function ProductDetails() {
   )
 
   const quantityBlock = (
-    <div className="mt-6 flex items-center justify-between gap-4 lg:block">
-      <p className="text-sm font-semibold text-ink lg:mb-2">Quantity</p>
+    <div className="mt-5 flex items-center justify-between gap-4">
+      <span className="text-sm font-semibold text-ink">Quantity</span>
       <div className="inline-flex items-stretch rounded-md border border-ink/20 bg-white">
         <button
           type="button"
-          className="px-3 py-2 text-lg disabled:opacity-35"
-          disabled={qty <= 1}
+          disabled={qty <= 0}
           aria-label="Decrease quantity"
-          onClick={() => setQty((value) => Math.max(1, value - 1))}
+          onClick={() => {
+            setQty((value) => Math.max(0, value - 1))
+            if (qty - 1 >= 1) setQtyError(false)
+          }}
+          className="px-3 py-1.5 text-base text-ink disabled:opacity-35"
         >
           −
         </button>
-        <span className="flex min-w-[3rem] items-center justify-center border-x border-ink/20 px-2 text-sm font-medium">
+        <span className="flex min-w-[2.5rem] items-center justify-center border-x border-ink/25 px-2 text-sm font-medium">
           {qty}
         </span>
         <button
           type="button"
-          className="px-3 py-2 text-lg"
           aria-label="Increase quantity"
-          onClick={() => setQty((value) => value + 1)}
+          onClick={() => {
+            setQty((value) => value + 1)
+            setQtyError(false)
+          }}
+          className="px-3 py-1.5 text-base text-ink hover:bg-ink/5"
         >
           +
         </button>
@@ -154,12 +167,31 @@ export default function ProductDetails() {
   }
 
   function addToBag() {
-    if (!canPurchase) return
+    if (qty < 1) {
+      setQtyError(true)
+      return
+    }
+    setQtyError(false)
+    if (!agreed) {
+      setTermsError(true)
+      return
+    }
+    setTermsError(false)
     addToCart(Number(product.id), qty)
+    setAdded(true)
   }
 
   function buyNow() {
-    if (!canPurchase) return
+    if (qty < 1) {
+      setQtyError(true)
+      return
+    }
+    setQtyError(false)
+    if (!agreed) {
+      setTermsError(true)
+      return
+    }
+    setTermsError(false)
     addToCart(Number(product.id), qty)
     navigate("/checkout", {
       state: {
@@ -170,16 +202,15 @@ export default function ProductDetails() {
   }
 
   const descriptionBlock = (
-    <div className="space-y-4 text-sm leading-7 text-ink/75">
-      <p>{product.description}</p>
-      <p>{product.line}</p>
-      <ul className="list-disc space-y-1 pl-5">
-        <li>
-          {product.fabric} · {product.length}
-        </li>
-        <li>Colour: {product.color}</li>
+    <div className="mt-8 border-t border-ink/10 pt-5 text-sm text-ink/80">
+      <h3 className="font-semibold uppercase tracking-wider text-ink mb-2">Product Description</h3>
+      <p className="leading-snug">{product.description || "A fuchsia soft silk with gold buttas and a broad gold border."}</p>
+      <p className="mt-1 leading-snug">{product.line || "Fuchsia body with a gold temple border"}</p>
+      <ul className="mt-2 list-disc space-y-0.5 pl-5">
+        <li>{product.fabric || "Soft silk"} · {product.length || "6.3 metres"}</li>
+        <li>Colour: {product.color || "Fuchsia and gold"}</li>
         <li>Blouse piece included</li>
-        {product.badge && <li>{product.badge}</li>}
+        <li>{product.badge || "New arrival"}</li>
       </ul>
     </div>
   )
@@ -253,7 +284,7 @@ export default function ProductDetails() {
             </div>
             {gallery.length > 1 && (
               <>
-                <ul className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:mt-4 lg:grid lg:grid-cols-5 lg:overflow-visible">
+                <ul className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:mt-4 lg:grid lg:grid-cols-4 lg:overflow-visible">
                   {gallery.map((src, index) => (
                     <li key={`${src}-${index}`} className="w-[4.25rem] shrink-0 lg:w-auto">
                       <button
@@ -282,9 +313,14 @@ export default function ProductDetails() {
             )}
 
             <div className="mt-5 lg:hidden">
-              <h1 className="text-lg font-medium leading-snug text-ink">{title}</h1>
+              <h1 className="text-xl font-medium leading-snug text-ink">{title}</h1>
               <div className="mt-3">{priceBlock}</div>
               {quantityBlock}
+              {qtyError && (
+                <p className="mt-1 text-right text-xs font-medium text-red-600">
+                  Please select at least 1 item.
+                </p>
+              )}
             </div>
           </div>
 
@@ -304,16 +340,27 @@ export default function ProductDetails() {
             <div className="hidden lg:block">
               <div className="mt-4">{priceBlock}</div>
               {quantityBlock}
+              {qtyError && (
+                <p className="mt-1 text-right text-xs font-medium text-red-600">
+                  Please select at least 1 item.
+                </p>
+              )}
             </div>
 
-            <div className="mt-4 lg:mt-8">
+            <div className="mt-6 lg:mt-8">
               <button
                 type="button"
-                disabled={!canPurchase}
                 onClick={addToBag}
-                className="motion-btn w-full border border-primary bg-white py-3.5 text-sm font-semibold tracking-wide text-primary uppercase disabled:opacity-45"
+                aria-live="polite"
+                className={`motion-btn w-full border py-3.5 text-sm font-semibold tracking-wide uppercase transition-colors ${
+                  added
+                    ? "border-secondary bg-secondary text-primary"
+                    : qty > 0
+                    ? "border-primary bg-primary text-cream hover:bg-primary/90"
+                    : "border-ink/20 bg-ink/10 text-ink/40"
+                }`}
               >
-                Add to cart
+                {added ? "Added to cart" : "Add to cart"}
               </button>
             </div>
 
@@ -321,7 +368,10 @@ export default function ProductDetails() {
               <input
                 type="checkbox"
                 checked={agreed}
-                onChange={(event) => setAgreed(event.target.checked)}
+                onChange={(event) => {
+                  setAgreed(event.target.checked)
+                  if (event.target.checked) setTermsError(false)
+                }}
                 className="mt-0.5 h-4 w-4 accent-primary"
               />
               <span>
@@ -331,12 +381,20 @@ export default function ProductDetails() {
                 </Link>
               </span>
             </label>
+            {termsError && (
+              <p className="mt-1.5 text-xs font-medium text-red-600">
+                Please agree to the Terms & conditions before proceeding.
+              </p>
+            )}
 
             <button
               type="button"
-              disabled={!canPurchase}
               onClick={buyNow}
-              className="motion-btn mt-3 w-full bg-primary py-3.5 text-sm font-semibold tracking-wide text-cream uppercase disabled:opacity-45"
+              className={`motion-btn mt-3 w-full py-3.5 text-sm font-semibold tracking-wide uppercase transition-colors ${
+                qty > 0 && agreed
+                  ? "bg-primary text-cream hover:bg-primary/90"
+                  : "bg-ink/10 text-ink/40"
+              }`}
             >
               Buy it now
             </button>
@@ -356,14 +414,10 @@ export default function ProductDetails() {
             <p className="mt-5 text-[11px] tracking-wide text-ink/45 uppercase">
               Secure checkout · UPI · Cards
             </p>
-          </div>
-        </div>
-      </section>
 
-      <section className="border-t border-ink/10 bg-white">
-        <div className="site-container py-10">
-          <h2 className="border-b border-ink/15 pb-3 text-sm font-medium text-ink">Product description</h2>
-          <div className="pt-8">{descriptionBlock}</div>
+            {/* Product description successfully shifted to the right column */}
+            {descriptionBlock}
+          </div>
         </div>
       </section>
 

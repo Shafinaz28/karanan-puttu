@@ -10,7 +10,7 @@ import {
   updateProduct,
   validateProductForm,
 } from "../../lib/adminProducts"
-import { mapDbProduct } from "../../lib/productMap"
+import { mapDbProduct, productImageSrc } from "../../lib/productMap"
 import { uploadProductImage } from "../../lib/uploadProductImage"
 import { loadOrders, readOrders, updateOrderStatus } from "../../lib/orders"
 import {
@@ -672,7 +672,7 @@ function Overview({
   onAddProduct,
   onStatus,
 }) {
-  const [range, setRange] = useState("month")
+  const [range, setRange] = useState("all")
   const [rangeOpen, setRangeOpen] = useState(false)
   const bounds = boundsFor(range)
   const shown = orders.filter((order) => withinBounds(order, bounds))
@@ -932,7 +932,7 @@ function Overview({
             <h3 className="font-semibold">Recent orders</h3>
             <button type="button" onClick={onOpenOrders} className="text-xs text-primary">View all</button>
           </div>
-          <RecentOrders orders={orders.slice(0, 5)} onStatus={onStatus} />
+          <RecentOrders orders={orders} onStatus={onStatus} />
         </section>
       </div>
     </div>
@@ -958,13 +958,28 @@ function RecentOrders({ orders, onStatus }) {
         <tbody>
           {orders.map((order) => {
             const item = order.items?.[0]
+            const image = productImageSrc(item)
             return (
               <tr key={order.id} className="border-t border-slate-100">
                 <td className="py-2.5 text-slate-400">{order.id}</td>
                 <td className="py-2.5">{order.customer}</td>
                 <td className="py-2.5">
                   <span className="flex items-center gap-2">
-                    {item?.image && <img src={item.image} alt="" className="h-8 w-6 rounded object-cover object-top" />}
+                    {image && (
+                      <img
+                        src={image}
+                        alt=""
+                        className="h-8 w-6 rounded object-cover object-top"
+                        onError={(event) => {
+                          const fallback = productImageSrc({ ...item, image: "" })
+                          if (fallback && fallback !== image) {
+                            event.currentTarget.src = fallback
+                          } else {
+                            event.currentTarget.hidden = true
+                          }
+                        }}
+                      />
+                    )}
                     {item?.name || "Saree"}
                   </span>
                 </td>
