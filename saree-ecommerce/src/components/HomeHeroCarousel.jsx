@@ -77,7 +77,7 @@ export default function HomeHeroCarousel() {
   return (
     <section
       data-page-hero
-      className="relative isolate w-full overflow-hidden bg-[#f5eee5] aspect-[1086/1900] md:aspect-[1800/874]"
+      className="relative isolate h-[85svh] w-full overflow-hidden bg-[#f5eee5] md:h-auto md:aspect-[1800/874]"
       aria-roledescription="carousel"
       aria-label="Homepage banners"
     >
@@ -130,7 +130,7 @@ export default function HomeHeroCarousel() {
                 <img
                   src={banner.webp}
                   alt={banner.alt}
-                  className="block h-full w-full object-contain object-center"
+                  className="block h-full w-full object-cover object-center"
                   loading={slideIndex === 0 ? "eager" : "lazy"}
                   decoding="async"
                 />
@@ -161,7 +161,7 @@ export default function HomeHeroCarousel() {
         <div className="site-container w-full px-6 md:px-12 lg:px-20 py-12 max-md:pb-24">
           <div
             key={active.id}
-            className={`hero-copy-enter max-w-xl text-[#faf6f0] ${
+            className={`hero-copy-enter max-w-xl text-[#faf6f0] max-md:mx-auto max-md:text-center ${
               alignRight ? "md:ml-auto" : ""
             }`}
           >
@@ -177,11 +177,11 @@ export default function HomeHeroCarousel() {
               ))}
             </Heading>
 
-            <p className="mt-4 max-w-md text-xs sm:text-sm md:text-base leading-7 text-[#f6efe4]">
+            <p className="mt-4 hidden max-w-md text-xs leading-7 text-[#f6efe4] md:block md:text-base">
               {copy.body}
             </p>
 
-            <div className="mt-6">
+            <div className="mt-6 max-md:flex max-md:justify-center">
               <Link
                 to={copy.primaryCta.to}
                 className="motion-btn motion-gold inline-flex items-center gap-3 bg-secondary px-5 py-3 text-[10px] sm:text-xs font-semibold tracking-widest text-ink uppercase transition hover:opacity-90"
@@ -216,7 +216,7 @@ export default function HomeHeroCarousel() {
       </div>
 
       {/* SLIDE INDICATORS */}
-      <div className="absolute bottom-5 left-1/2 z-[6] flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/20 bg-[#210a0c]/50 px-4 py-2 backdrop-blur-sm">
+      <div className="absolute bottom-10 left-1/2 z-[6] flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/20 bg-[#210a0c]/50 px-4 py-2 backdrop-blur-sm md:bottom-5">
         {heroBanners.map((banner, dotIndex) => (
           <button
             key={banner.id}
