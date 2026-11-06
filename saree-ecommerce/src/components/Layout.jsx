@@ -31,7 +31,7 @@ export default function Layout({ children }) {
           <Link
             to="/old-silk"
             className="fixed top-1/2 right-0 z-[80] rounded-l-md bg-secondary px-2 py-3 text-[10px] font-semibold tracking-wide text-primary shadow-lg transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-2.5 sm:py-4 sm:text-xs md:top-[55%]"
-            style={{ writingMode: "vertical-rl", transform: "translate3d(0, -50%, 0)" }}
+            style={{ writingMode: "vertical-rl", translate: "0 -50%" }}
           >
             Sell Old Sarees
           </Link>
