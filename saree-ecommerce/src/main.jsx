@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-const LOADER_SLIDE_MS = 300
+const LOADER_SLIDE_MS = 500
 const LOADER_MIN_MS = 0
-const LOADER_MAX_MS = 3200
-const HOME_HERO_MAX_MS = 2200
+const LOADER_MAX_MS = 2000
+const HOME_HERO_MAX_MS = 1400
 
 function isHomeRoute() {
   const path = window.location.pathname.replace(/\/+$/, "") || "/"
