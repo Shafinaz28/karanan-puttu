@@ -342,7 +342,7 @@ select {
 .product-media-icons {
   pointer-events: auto;
   position: absolute;
-  top: 3.25rem;
+  top: 0.25rem;
   right: 0.65rem;
   z-index: 4;
   display: flex;

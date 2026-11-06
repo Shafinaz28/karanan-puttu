@@ -35,11 +35,26 @@ function waitForHomeHero() {
   return Promise.race([
     new Promise((resolve) => {
       const finish = (img) => {
-        if (!img || (img.complete && img.naturalWidth > 0)) {
+        if (!img) {
           resolve()
           return
         }
-        img.addEventListener("load", () => resolve(), { once: true })
+
+        const waitForDecode = () => {
+          if (typeof img.decode === "function") {
+            img.decode().then(resolve, resolve)
+          } else {
+            resolve()
+          }
+        }
+
+        if (img.complete) {
+          if (img.naturalWidth > 0) waitForDecode()
+          else resolve()
+          return
+        }
+
+        img.addEventListener("load", waitForDecode, { once: true })
         img.addEventListener("error", () => resolve(), { once: true })
       }
 

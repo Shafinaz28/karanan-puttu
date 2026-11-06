@@ -138,7 +138,8 @@ export default function HomeHeroCarousel() {
                     src={banner.webp}
                     alt={banner.alt}
                     className="block h-full w-full object-cover object-center"
-                    loading={slideIndex === 0 ? "eager" : "lazy"}
+                    loading={isActive ? "eager" : "lazy"}
+                    fetchPriority={isActive ? "high" : "low"}
                     decoding="async"
                   />
                 </picture>

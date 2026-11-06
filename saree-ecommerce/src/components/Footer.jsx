@@ -106,27 +106,7 @@ export default function Footer() {
               Subscribe to get privileged previews of soft silk launches and seasonal handloom drops.
             </p>
             
-            {joined ? (
-              <p className="mt-4 text-sm font-medium text-[#d7c4a2]">You are on the list.</p>
-            ) : (
-              <form onSubmit={joinList} className="mt-4 flex w-full max-w-[280px] flex-col gap-2">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="Enter email address"
-                  aria-label="Email address"
-                  className="h-7 w-full rounded-lg bg-white px-3 text-xs text-[#3a0c14] outline-none placeholder:text-[#3a0c14]/50"
-                />
-                <button
-                  type="submit"
-                  className="h-5 w-1/2 max-w-[140px] rounded-md bg-[#d7c4a2] text-[9px] font-semibold tracking-wider text-[#3a0c14] uppercase transition-colors hover:bg-[#e6c55c]"
-                >
-                  Join
-                </button>
-              </form>
-            )}
+            
 
             <div className="mt-6 flex gap-3">
               <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
