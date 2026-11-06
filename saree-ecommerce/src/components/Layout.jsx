@@ -30,8 +30,8 @@ export default function Layout({ children }) {
         <>
           <Link
             to="/old-silk"
-            className="fixed top-[50svh] right-0 z-[80] rounded-l-md bg-secondary px-2 py-3 text-[10px] font-semibold tracking-wide text-primary shadow-lg transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-2.5 sm:py-4 sm:text-xs md:top-[55%]"
-            style={{ writingMode: "vertical-rl", transform: "translateY(-50%)" }}
+            className="fixed top-1/2 right-0 z-[80] rounded-l-md bg-secondary px-2 py-3 text-[10px] font-semibold tracking-wide text-primary shadow-lg transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-2.5 sm:py-4 sm:text-xs md:top-[55%]"
+            style={{ writingMode: "vertical-rl", transform: "translate3d(0, -50%, 0)" }}
           >
             Sell Old Sarees
           </Link>
@@ -45,8 +45,19 @@ export default function Layout({ children }) {
               right: "max(16px, env(safe-area-inset-right))",
             }}
           >
-            <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden="true">
-              <path d="M20.5 3.5A11 11 0 0 0 2.1 17.2L1 23l5.9-1.1A11 11 0 0 0 12 22a11 11 0 0 0 8.5-18.5zM12 20.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.5.6.7-3.4-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.7 6.7 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.1-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.3-.7-1.7s-.4-.4-.5-.4h-.4a.8.8 0 0 0-.6.3 2.5 2.5 0 0 0-.8 1.8 4.3 4.3 0 0 0 .9 2.3 9.8 9.8 0 0 0 3.8 3.3 4.3 4.3 0 0 0 2.6.7 2.4 2.4 0 0 0 1.6-.7 2 2 0 0 0 .4-1.4c-.1-.1-.1-.3-.2-.4z" />
+            <svg viewBox="0 0 24 24" className="h-12 w-12" aria-hidden="true">
+              <path
+                d="M12 3.25a8.75 8.75 0 0 0-7.5 13.25l-.85 3.25 3.35-.88A8.75 8.75 0 1 0 12 3.25Z"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.6"
+              />
+              <path
+                d="M16.58 13.93c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.57.12-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.57-1.38-.78-1.89-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.08s.89 2.41 1.02 2.58c.12.17 1.75 2.67 4.23 3.74.59.25 1.04.4 1.4.51.59.19 1.13.16 1.55.1.47-.07 1.48-.61 1.69-1.2.21-.59.21-1.09.15-1.2-.06-.1-.23-.17-.48-.29Z"
+                fill="currentColor"
+              />
             </svg>
           </a>
         </>,
