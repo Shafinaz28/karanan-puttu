@@ -22,4 +22,10 @@ export const stores = [
       "#1329/B2, Tulasi Plaza, 24th A Main, 41st Cross, Jayanagar 9th Block, Bangalore 560069",
     imageIndex: 3,
   },
+  {
+    city: "Bengaluru",
+    name: "Jayanagar Branch 4",
+    address: "12°55'08.4\"N 77°35'31.8\"E, Bengaluru, Karnataka",
+    imageIndex: 0,
+  },
 ]

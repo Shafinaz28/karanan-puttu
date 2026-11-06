@@ -5,7 +5,7 @@ const items = [
   { title: "Secure payments", note: "100% safe & trusted", icon: "secure" },
   { title: "Easy returns", note: "Hassle-free within 7 days", icon: "returns" },
   { title: "Dedicated support", note: "We're here to help", icon: "support" },
-  { title: "Visit our shops", note: "3 Bengaluru locations", icon: "location", to: "/locations" },
+  { title: "Visit our shops", note: "4 Bengaluru locations", icon: "location", to: "/locations" },
 ]
 
 export default function TrustBar() {

@@ -7,7 +7,7 @@ export default function VisitStores({ preview = false }) {
     <section className="bg-[#f7f1e8] py-16 text-center">
       <div className="site-container">
       <p className="mx-auto w-fit rounded-full bg-white px-4 py-1.5 text-[10px] tracking-[0.18em] text-primary uppercase shadow-sm">
-        3 shops in Bengaluru
+        4 shops in Bengaluru
       </p>
       <h2 className="mt-4 font-display text-4xl text-primary md:text-5xl">Visit Our Stores</h2>
       <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-ink/60">
