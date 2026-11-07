@@ -31,7 +31,7 @@ export default function Layout({ children }) {
           {/* Sell Old Sarees Button */}
           <Link
             to="/old-silk"
-            className="fixed top-1/2 right-0 z-[9999] rounded-l-md bg-secondary px-2 py-3 text-[10px] font-semibold tracking-wide text-primary shadow-2xl transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-2.5 sm:py-4 sm:text-xs md:top-[55%]"
+            className="fixed top-1/2 right-0 z-[9999] rounded-l-md bg-secondary px-3 py-4 text-xs font-semibold tracking-wide text-primary shadow-2xl transition-colors hover:bg-[#b08822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-3.5 sm:py-5 sm:text-sm md:top-[55%]"
             style={{ 
               writingMode: "vertical-rl", 
               transform: "translateY(-50%)",
@@ -50,7 +50,7 @@ export default function Layout({ children }) {
             className="fixed z-[9999] flex h-12 w-12 items-center justify-center transition-transform hover:scale-110 drop-shadow-lg"
             style={{
               right: "max(16px, env(safe-area-inset-right))",
-              bottom: "4.75rem",
+              bottom: "6.5rem",
               position: "fixed"
             }}
           >
