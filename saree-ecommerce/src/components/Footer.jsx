@@ -107,12 +107,12 @@ export default function Footer() {
             </p>
             
             
-
-            <div className="mt-6 flex gap-3">
-              <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
-              <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
-              <FooterSocial href="https://wa.me/917200015300" label="WhatsApp" name="whatsapp" />
-            </div>
+<div className="mt-6 flex gap-3">
+  <FooterSocial href="https://www.facebook.com/profile.php?id=61594353025213" label="Facebook" name="facebook" />
+  <FooterSocial href="https://www.instagram.com/karnan_pattu_centre_karnataka" label="Instagram" name="instagram" />
+  <FooterSocial href="https://youtube.com/@karnanpattucenterkarnataka" label="YouTube" name="youtube" />
+  <FooterSocial href="https://wa.me/917200015300" label="WhatsApp" name="whatsapp" />
+</div>
           </div>
 
         </div>
@@ -170,6 +170,13 @@ function FooterSocial({ href, label, name }) {
 
 function SocialGlyph({ name }) {
   const common = { viewBox: "0 0 24 24", className: "h-4 w-4", "aria-hidden": true }
+  if (name === "facebook") {
+    return (
+      <svg {...common} fill="currentColor">
+        <path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-2c0-.6.4-1 1-1z" />
+      </svg>
+    )
+  }
   if (name === "instagram") {
     return (
       <svg {...common} fill="none" stroke="currentColor" strokeWidth="1.6">

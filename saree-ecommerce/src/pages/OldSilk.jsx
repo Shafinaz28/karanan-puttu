@@ -32,6 +32,7 @@ const bought = [
     text: "We welcome enquiries for old bridal silk sarees, wedding Pattu sarees and traditional occasion-wear collections.",
     image: "/sarees/worn/crimson.avif",
   },
+
   {
     name: "Antique and Vintage Saree Buying",
     text: "Share photographs and any details you know about your vintage or inherited saree, such as its age, origin and weaving.",

@@ -94,6 +94,15 @@ export default function Navbar() {
         <div className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-1">
           <div className="flex items-center gap-3">
             <a
+              href="https://www.facebook.com/profile.php?id=61594353025213"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+              className="inline-flex items-center hover:text-secondary"
+            >
+              <FacebookIcon />
+            </a>
+            <a
               href="https://www.instagram.com/karnan_pattu_centre_karnataka"
               target="_blank"
               rel="noreferrer"

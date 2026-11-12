@@ -37,6 +37,15 @@ const storeLocations = [
   embedUrl:
     "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3888.8246922490716!2d77.58958127507553!3d12.91898638739158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTLCsDU1JzA4LjQiTiA3N8KwMzUnMzEuOCJF!5e0!3m2!1sen!2sin!4v1793946454309!5m2!1sen!2sin",
   mapUrl: "https://maps.google.com/?q=12.918986,77.589581",
+},
+{
+  id: 5,
+  name: "Karnan Pattu Centre - VV Puram", // Update branch name if needed
+  area: "Vishweshwarapura",
+  address: "55/56, 1st Floor Sri Chakravarthy Complex, Kavi Lakshmisa Road, Sajjan Rao Cir, Vishweshwarapura, Bengaluru, Karnataka 560004",
+  embedUrl:
+    "https://www.google.com/maps/embed?pb=!4v1794472317562!6m8!1m7!1sGhS9OiRE4QSZZ-9IlRlvVA!2m2!1d12.95249781569559!2d77.57715885918176!3f84.47!4f-8.540000000000006!5f0.7820865974627469",
+  mapUrl: "https://maps.google.com/?q=12.952498,77.577159",
 }
 ]
 
