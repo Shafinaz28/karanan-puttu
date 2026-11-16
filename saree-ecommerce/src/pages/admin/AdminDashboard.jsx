@@ -409,8 +409,10 @@ export default function AdminDashboard() {
         await updateProduct(editingId, form)
         setProductNotice("Product updated.")
       } else {
-        await createProduct(form)
-        setProductNotice("Product added.")
+        for (const [saleGroup, category] of shopCategoryOptions) {
+          await createProduct({ ...form, saleGroup, category })
+        }
+        setProductNotice("Added 4 products with this photo — one in each category.")
       }
       resetForm()
       await loadRows()
@@ -2014,21 +2016,27 @@ function ProductsPanel({
           )}
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
             Category
-            <select
-              value={form.saleGroup}
-              onChange={(event) => {
-                const saleGroup = event.target.value
-                const label = shopCategoryOptions.find(([value]) => value === saleGroup)?.[1] || "Silk collection"
-                setForm((current) => ({ ...current, saleGroup, category: label }))
-              }}
-              className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
-            >
-              {shopCategoryOptions.map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
+            {editingId ? (
+              <select
+                value={form.saleGroup}
+                onChange={(event) => {
+                  const saleGroup = event.target.value
+                  const label = shopCategoryOptions.find(([value]) => value === saleGroup)?.[1] || "Silk collection"
+                  setForm((current) => ({ ...current, saleGroup, category: label }))
+                }}
+                className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
+              >
+                {shopCategoryOptions.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p className="mt-1 text-sm normal-case text-ink/70">
+                This photo is saved as 4 products: Silk collection, Tissue, Party wear, and Traditional wear.
+              </p>
+            )}
           </label>
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
             Occasion
@@ -2076,7 +2084,7 @@ function ProductsPanel({
             disabled={saving || !supabaseReady}
             className="w-full rounded-lg bg-primary py-2.5 text-xs font-semibold tracking-wide text-cream uppercase disabled:opacity-50"
           >
-            {saving ? "Saving…" : editingId ? "Update product" : "Add product"}
+            {saving ? "Saving…" : editingId ? "Update product" : "Add 4 products"}
           </button>
           {editingId && (
             <button type="button" onClick={onCancel} className="w-full rounded-lg border border-black/10 py-2 text-xs uppercase">
