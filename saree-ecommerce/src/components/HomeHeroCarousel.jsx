@@ -10,6 +10,7 @@ const heroBanners = [
     mobileAvif: "/hero/mobileimg/Bannerr-1-mobile.avif?v=3",
     mobileWebp: "/hero/mobileimg/Bannerr-1-mobile.webp?v=3",
     alt: "Traditional silk sarees at Karnan Pattu Centre",
+    imageClass: "object-cover object-center max-md:object-[24%_center]",
     copy: {
       align: "right",
       eyebrow: "Karnan Pattu Centre",
@@ -25,6 +26,7 @@ const heroBanners = [
     mobileAvif: "/hero/mobileimg/Bannerr-2-mobile.avif?v=3",
     mobileWebp: "/hero/mobileimg/Bannerr-2-mobile.webp?v=3",
     alt: "Sell old silk and Zari sarees",
+    imageClass: "object-cover object-center max-md:object-[78%_center]",
     copy: {
       align: "left",
       eyebrow: "Old Saree Buyers in Bangalore",
@@ -40,6 +42,7 @@ const heroBanners = [
     mobileAvif: "/hero/mobileimg/Bannerr-3-mobile.avif?v=3",
     mobileWebp: "/hero/mobileimg/Bannerr-3-mobile.webp?v=3",
     alt: "Traditional silk saree at Karnan Pattu Centre",
+    imageClass: "object-cover object-center max-md:object-[78%_center]",
     copy: {
       align: "left",
       eyebrow: "Karnan Pattu Centre",
@@ -137,7 +140,7 @@ export default function HomeHeroCarousel() {
                   <img
                     src={banner.webp}
                     alt={banner.alt}
-                    className="block h-full w-full object-cover object-center"
+                    className={`block h-full w-full ${banner.imageClass || "object-cover object-center"}`}
                     loading={isActive ? "eager" : "lazy"}
                     fetchPriority={isActive ? "high" : "low"}
                     decoding="async"

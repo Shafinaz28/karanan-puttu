@@ -1,3 +1,5 @@
+import { categoryIdFromText } from "./shopCategories"
+
 export const sareeImages = [
   "/sarees/soft/soft-01.avif",
   "/sarees/soft/soft-02.avif",
@@ -247,10 +249,11 @@ export function productDisplayTitle(product, options = {}) {
 }
 
 export function resolveShopCategory(product) {
-  if (product.shopCategory) return product.shopCategory
-  if (/tissue/i.test(`${product.fabric} ${product.category}`)) return "tissue"
-  if (product.party) return "party"
-  if (product.saleGroup === "traditional" || /traditional/i.test(product.category || "")) return "traditional"
+  const fromLabel = categoryIdFromText(product?.category)
+  if (fromLabel) return fromLabel
+  if (["soft", "tissue", "party", "traditional"].includes(product?.shopCategory)) return product.shopCategory
+  if (["soft", "tissue", "party", "traditional"].includes(product?.saleGroup)) return product.saleGroup
+  if (product?.party) return "party"
   return "soft"
 }
 

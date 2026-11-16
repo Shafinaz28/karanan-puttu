@@ -6,7 +6,7 @@ import { useProducts } from "../context/ProductsContext"
 import { useMobileShopDrawer } from "../context/MobileShopDrawerContext"
 import useShopMotion from "../hooks/useShopMotion"
 import { resolveShopCategory } from "../data/products"
-import { shopFilterCategories } from "../data/shopCategories"
+import { shopFilterCategories, shopOccasions } from "../data/shopCategories"
 
 const PAGE_SIZE = 12
 
@@ -28,6 +28,15 @@ const sortOptions = [
   { id: "price-desc", label: "Price: high to low" },
   { id: "newest", label: "Newest" },
 ]
+
+function matchesOccasion(product, occasion) {
+  if (product.occasion === occasion) return true
+  const badge = product.badge || ""
+  if (occasion === "wedding") return /wedding/i.test(badge)
+  if (occasion === "party") return Boolean(product.party) || resolveShopCategory(product) === "party"
+  if (occasion === "festivals") return /festival/i.test(`${badge} ${product.category || ""}`)
+  return false
+}
 
 function matchesCollection(product, collection) {
   if (!collection) return true
@@ -88,8 +97,6 @@ function ShopFiltersPanel({
   shopCategories,
   collection,
   updateParams,
-  fabricOptions,
-  fabricParam,
   occasionParam,
   minPrice,
   maxPrice,
@@ -119,39 +126,13 @@ function ShopFiltersPanel({
       </FilterSection>
 
       <FilterSection
-        title="Fabric"
-        chevron={chevron}
-        open={openFilters.fabric}
-        onToggle={() => setOpenFilters((c) => ({ ...c, fabric: !c.fabric }))}
-      >
-        <ul className="space-y-2">
-          {fabricOptions.map((name) => (
-            <li key={name}>
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-ink/75">
-                <input
-                  type="checkbox"
-                  checked={fabricParam === name}
-                  onChange={() => updateParams({ fabric: fabricParam === name ? "" : name })}
-                  className="accent-primary"
-                />
-                {name}
-              </label>
-            </li>
-          ))}
-        </ul>
-      </FilterSection>
-
-      <FilterSection
         title="Occasion"
         chevron={chevron}
         open={openFilters.occasion}
         onToggle={() => setOpenFilters((c) => ({ ...c, occasion: !c.occasion }))}
       >
         <ul className="space-y-2 text-sm">
-          {[
-            { id: "wedding", label: "Wedding" },
-            { id: "party", label: "Party" },
-          ].map((item) => (
+          {shopOccasions.map((item) => (
             <li key={item.id}>
               <label className="flex cursor-pointer items-center gap-2 text-ink/75">
                 <input
@@ -297,7 +278,6 @@ export default function Shop() {
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [openFilters, setOpenFilters] = useState({
     categories: true,
-    fabric: true,
     occasion: true,
     price: true,
   })
@@ -326,7 +306,6 @@ export default function Shop() {
 
   const collection = searchParams.get("collection") || ""
   const search = (searchParams.get("search") || "").trim().toLowerCase()
-  const fabricParam = searchParams.get("fabric") || ""
   const occasionParam = searchParams.get("occasion") || ""
   const sort = searchParams.get("sort") || "bestselling"
   const page = Math.max(1, Number(searchParams.get("page")) || 1)
@@ -335,10 +314,6 @@ export default function Shop() {
   const maxPrice = searchParams.get("max") || ""
 
   const pageTitle = collectionNames[collection] || "Full collection"
-
-  const fabricOptions = useMemo(() => {
-    return [...new Set(products.map((p) => p.fabric).filter(Boolean))]
-  }, [products])
 
   function updateParams(partial) {
     const next = new URLSearchParams(searchParams)
@@ -356,9 +331,7 @@ export default function Shop() {
 
     return products.filter((product) => {
       if (!matchesCollection(product, collection)) return false
-      if (fabricParam && product.fabric !== fabricParam) return false
-      if (occasionParam === "wedding" && !/wedding|wedding edit/i.test(product.badge || "")) return false
-      if (occasionParam === "party" && resolveShopCategory(product) !== "party") return false
+      if (occasionParam && !matchesOccasion(product, occasionParam)) return false
       if (min !== null && !Number.isNaN(min) && product.price < min) return false
       if (max !== null && !Number.isNaN(max) && product.price > max) return false
       if (
@@ -371,7 +344,7 @@ export default function Shop() {
       }
       return true
     })
-  }, [products, collection, fabricParam, occasionParam, minPrice, maxPrice, search])
+  }, [products, collection, occasionParam, minPrice, maxPrice, search])
 
   const sorted = useMemo(() => sortProducts(filtered, sort), [filtered, sort])
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE))
@@ -398,8 +371,6 @@ export default function Shop() {
     shopCategories,
     collection,
     updateParams,
-    fabricOptions,
-    fabricParam,
     occasionParam,
     minPrice,
     maxPrice,
@@ -506,11 +477,6 @@ export default function Shop() {
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-ink/60" data-shop-meta>
-              {fromDatabase && (
-                <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-medium text-emerald-800">
-                  Live from Supabase
-                </span>
-              )}
               {!loading && (
                 <span>
                   {sorted.length} saree{sorted.length === 1 ? "" : "s"}

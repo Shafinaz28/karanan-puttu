@@ -1,3 +1,4 @@
+import { categoryIdFromText } from "../data/shopCategories"
 import { products as catalogProducts } from "../data/products"
 
 const storageBucket = "product-images"
@@ -73,14 +74,30 @@ export function resolveProductImageUrl(image) {
   return `${base.replace(/\/$/, "")}/storage/v1/object/public/${storageBucket}/${path}`
 }
 
+const shopGroups = new Set(["soft", "tissue", "traditional", "party"])
+
+function shopCategoryFromRow(row) {
+  const fromLabel = categoryIdFromText(row.category)
+  if (fromLabel) return fromLabel
+  if (shopGroups.has(row.sale_group)) return row.sale_group
+  if (row.party) return "party"
+  return "soft"
+}
+
+function occasionFromRow(row) {
+  const stored = String(row.occasion || "").trim().toLowerCase()
+  if (stored === "wedding" || stored === "party" || stored === "festivals") return stored
+  const badge = String(row.badge || "")
+  if (/festival/i.test(badge)) return "festivals"
+  if (/wedding/i.test(badge)) return "wedding"
+  if (/\bparty\b/i.test(badge)) return "party"
+  return ""
+}
+
 /** Map a Supabase row to the shape used across the shop UI. */
 export function mapDbProduct(row) {
   const price = Number(row.price) || 2799
-  const shopCategory =
-    row.shop_category ||
-    (/tissue/i.test(`${row.fabric || ""} ${row.category || ""}`) ? "tissue" : null) ||
-    (row.party ? "party" : null) ||
-    (row.sale_group === "traditional" ? "traditional" : "soft")
+  const shopCategory = shopCategoryFromRow(row)
   const compareAt =
     Number(row.compare_at) ||
     (shopCategory === "tissue" || price >= 7000 ? 15999 : 5599)
@@ -88,11 +105,12 @@ export function mapDbProduct(row) {
   let image = resolveProductImageUrl(row.image)
   const rawImage = String(row.image || "").trim()
   const fallback = catalogFallbackImage(row)
-  const isHostedProductPhoto =
-    /^https?:\/\//i.test(rawImage) &&
-    !rawImage.includes(`/storage/v1/object/public/${storageBucket}/`)
+  const isUploadedPhoto = rawImage.includes(`/storage/v1/object/public/${storageBucket}/`)
+  const isHostedProductPhoto = /^https?:\/\//i.test(rawImage)
 
-  if (!isHostedProductPhoto && fallback) {
+  if (isUploadedPhoto) {
+    image = rawImage
+  } else if (!isHostedProductPhoto && fallback) {
     const needsFallback =
       !rawImage ||
       /\.jpe?g$/i.test(rawImage) ||
@@ -111,10 +129,11 @@ export function mapDbProduct(row) {
     price: [2800, 5599].includes(price) ? 2799 : price,
     compareAt,
     badge: row.badge || null,
-    saleGroup: row.sale_group || shopCategory,
     line: row.line || "",
     featured: Boolean(row.featured),
     party: Boolean(row.party),
+    occasion: occasionFromRow(row),
+    saleGroup: shopCategory,
     fabric: row.fabric || "Soft silk",
     length: row.length || "6.3 metres",
     color: row.color || "",
@@ -133,7 +152,8 @@ export function toDbPayload(product) {
     sale_group: product.saleGroup || "soft",
     line: product.line || null,
     featured: Boolean(product.featured),
-    party: Boolean(product.party),
+    party: product.saleGroup === "party",
+    occasion: product.occasion || null,
     fabric: product.fabric || "Soft silk",
     length: product.length || "6.3 metres",
     color: product.color || null,

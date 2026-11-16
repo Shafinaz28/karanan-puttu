@@ -7,18 +7,40 @@ export async function fetchAdminProducts() {
   return (data || []).map(mapDbProduct)
 }
 
-export async function createProduct(form) {
-  const payload = toDbPayload(form)
-  const { data, error } = await supabase.from("products").insert(payload).select("*").single()
+function withoutOccasionColumn(payload, occasion) {
+  const { occasion: _occasion, ...rest } = payload
+  if (!occasion) return rest
+  const badge = String(rest.badge || "")
+  const mark = occasion === "festivals" ? "Festivals" : occasion === "wedding" ? "Wedding" : "Party"
+  if (new RegExp(mark, "i").test(badge)) return rest
+  return { ...rest, badge: badge ? `${badge} · ${mark}` : mark }
+}
+
+async function writeProduct(query, payload, occasion) {
+  let { data, error } = await query(payload)
+  if (error && /occasion/i.test(error.message || "")) {
+    ;({ data, error } = await query(withoutOccasionColumn(payload, occasion)))
+  }
   if (error) throw error
   return mapDbProduct(data)
 }
 
+export async function createProduct(form) {
+  const payload = toDbPayload(form)
+  return writeProduct(
+    (body) => supabase.from("products").insert(body).select("*").single(),
+    payload,
+    form.occasion,
+  )
+}
+
 export async function updateProduct(id, form) {
   const payload = toDbPayload(form)
-  const { data, error } = await supabase.from("products").update(payload).eq("id", id).select("*").single()
-  if (error) throw error
-  return mapDbProduct(data)
+  return writeProduct(
+    (body) => supabase.from("products").update(body).eq("id", id).select("*").single(),
+    payload,
+    form.occasion,
+  )
 }
 
 export async function deleteProduct(id) {

@@ -16,6 +16,7 @@ create table if not exists public.products (
   color text,
   description text,
   image text not null,
+  occasion text,
   active boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

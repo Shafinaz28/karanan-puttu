@@ -31,10 +31,11 @@ import {
 
 const emptyForm = {
   name: "",
-  category: "Soft Silk",
+  category: "Silk collection",
   price: 2799,
   badge: "",
   saleGroup: "soft",
+  occasion: "",
   line: "",
   fabric: "Soft silk",
   length: "6.3 metres",
@@ -348,10 +349,13 @@ export default function AdminDashboard() {
     setTab("products")
     setForm({
       name: product.name,
-      category: product.category,
       price: product.price,
       badge: product.badge || "",
-      saleGroup: product.saleGroup || "soft",
+      saleGroup: ["soft", "tissue", "party", "traditional"].includes(product.saleGroup) ? product.saleGroup : "soft",
+      occasion: product.occasion || "",
+      category: ["soft", "tissue", "party", "traditional"].includes(product.saleGroup)
+        ? { soft: "Silk collection", tissue: "Tissue", party: "Party wear", traditional: "Traditional wear" }[product.saleGroup]
+        : product.category,
       line: product.line || "",
       fabric: product.fabric || "Soft silk",
       length: product.length || "6.3 metres",
@@ -1789,13 +1793,18 @@ function CouponsPanel() {
   )
 }
 
-const saleGroupOptions = [
-  ["soft", "Soft silk"],
+const shopCategoryOptions = [
+  ["soft", "Silk collection"],
   ["tissue", "Tissue"],
-  ["traditional", "Traditional"],
   ["party", "Party wear"],
+  ["traditional", "Traditional wear"],
+]
+
+const occasionOptions = [
+  ["", "None"],
   ["wedding", "Wedding"],
-  ["new", "New arrivals"],
+  ["party", "Party"],
+  ["festivals", "Festivals"],
 ]
 
 function ProductsPanel({
@@ -1900,6 +1909,15 @@ function ProductsPanel({
                     {product.party && (
                       <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase">Party</span>
                     )}
+                    {product.occasion === "festivals" && (
+                      <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase">Festivals</span>
+                    )}
+                    {product.occasion === "wedding" && (
+                      <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase">Wedding</span>
+                    )}
+                    <span className="rounded bg-[#faf8f4] px-1.5 py-0.5 text-[10px] font-medium uppercase">
+                      {product.category}
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs uppercase tracking-wide">
@@ -1975,7 +1993,7 @@ function ProductsPanel({
               className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
             />
           </label>
-          {[["name", "Name *", "text"], ["price", "Price (₹) *", "number"], ["badge", "Badge", "text"], ["category", "Category", "text"], ["color", "Colour", "text"], ["fabric", "Fabric", "text"], ["length", "Length", "text"], ["line", "Short line", "text"]].map(
+          {[["name", "Name *", "text"], ["price", "Price (₹) *", "number"], ["badge", "Badge", "text"], ["color", "Colour", "text"], ["fabric", "Fabric", "text"], ["length", "Length", "text"], ["line", "Short line", "text"]].map(
             ([key, label, type]) => (
               <label key={key} className="block text-[10px] tracking-wide text-ink/45 uppercase">
                 {label}
@@ -1995,14 +2013,32 @@ function ProductsPanel({
             ),
           )}
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
-            Shop collection
+            Category
             <select
               value={form.saleGroup}
-              onChange={(event) => setForm((current) => ({ ...current, saleGroup: event.target.value }))}
+              onChange={(event) => {
+                const saleGroup = event.target.value
+                const label = shopCategoryOptions.find(([value]) => value === saleGroup)?.[1] || "Silk collection"
+                setForm((current) => ({ ...current, saleGroup, category: label }))
+              }}
               className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
             >
-              {saleGroupOptions.map(([value, label]) => (
+              {shopCategoryOptions.map(([value, label]) => (
                 <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
+            Occasion
+            <select
+              value={form.occasion || ""}
+              onChange={(event) => setForm((current) => ({ ...current, occasion: event.target.value }))}
+              className="mt-1 w-full rounded border border-black/10 px-2.5 py-2 text-sm normal-case outline-none focus:border-primary"
+            >
+              {occasionOptions.map(([value, label]) => (
+                <option key={value || "none"} value={value}>
                   {label}
                 </option>
               ))}
@@ -2025,14 +2061,6 @@ function ProductsPanel({
                 onChange={(event) => setForm((current) => ({ ...current, featured: event.target.checked }))}
               />
               Featured on home
-            </label>
-            <label className="flex items-center gap-2 text-sm normal-case text-ink">
-              <input
-                type="checkbox"
-                checked={form.party}
-                onChange={(event) => setForm((current) => ({ ...current, party: event.target.checked }))}
-              />
-              Party wear filter
             </label>
             <label className="flex items-center gap-2 text-sm normal-case text-ink">
               <input

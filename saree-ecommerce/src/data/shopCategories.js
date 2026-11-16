@@ -37,3 +37,30 @@ export const shopFilterCategories = [
     label: id === "soft" ? "Silk collection" : id === "tissue" ? "Tissue" : id === "party" ? "Party wear" : "Traditional wear",
   })),
 ]
+
+export const shopOccasions = [
+  { id: "wedding", label: "Wedding" },
+  { id: "party", label: "Party" },
+  { id: "festivals", label: "Festivals" },
+]
+
+const categoryLabels = [
+  [/^(silk collection|soft silk|soft|silk)$/i, "soft"],
+  [/^(tissue|tissue sarees|tissue collection)$/i, "tissue"],
+  [/^(party wear|party)$/i, "party"],
+  [/^(traditional wear|traditional)$/i, "traditional"],
+]
+
+/** Map a saved category name onto one of the four shop categories. */
+export function categoryIdFromText(value) {
+  const text = String(value || "").trim()
+  if (!text) return ""
+  for (const [pattern, id] of categoryLabels) {
+    if (pattern.test(text)) return id
+  }
+  return ""
+}
+
+export function categoryLabel(id) {
+  return shopFilterCategories.find((item) => item.id === id)?.label || "Silk collection"
+}
