@@ -59,6 +59,8 @@ export async function setProductActive(id, active) {
 export function validateProductForm(form) {
   if (!String(form.name || "").trim()) return "Enter a product name."
   if (!Number.isFinite(Number(form.price)) || Number(form.price) <= 0) return "Enter a valid price."
-  if (!String(form.image || "").trim()) return "Add a photo or paste an image URL."
+  if (!String(form.image || "").trim() && !(form.images || []).some((image) => String(image || "").trim())) {
+    return "Add a photo or paste an image URL."
+  }
   return ""
 }
