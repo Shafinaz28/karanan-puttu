@@ -49,6 +49,22 @@ export function productImageSrc(product) {
   return catalogFallbackImage(product)
 }
 
+/** Up to four photo URLs stored on one product. A JSON list shares the image column. */
+export function productImageList(raw) {
+  const text = String(raw || "").trim()
+  if (text.startsWith("[")) {
+    try {
+      const parsed = JSON.parse(text)
+      if (Array.isArray(parsed)) {
+        return parsed.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 4)
+      }
+    } catch {
+      return text ? [text] : []
+    }
+  }
+  return text ? [text] : []
+}
+
 /** Public URL for DB image field (full URL, site path, or bucket object path). */
 export function resolveProductImageUrl(image) {
   const raw = String(image || "").trim()
@@ -102,24 +118,11 @@ export function mapDbProduct(row) {
     Number(row.compare_at) ||
     (shopCategory === "tissue" || price >= 7000 ? 15999 : 5599)
 
-  let image = resolveProductImageUrl(row.image)
-  const rawImage = String(row.image || "").trim()
+  const rawList = productImageList(row.image)
+  let images = rawList.map((item) => resolveProductImageUrl(item)).filter(Boolean)
   const fallback = catalogFallbackImage(row)
-  const isUploadedPhoto = rawImage.includes(`/storage/v1/object/public/${storageBucket}/`)
-  const isHostedProductPhoto = /^https?:\/\//i.test(rawImage)
-
-  if (isUploadedPhoto) {
-    image = rawImage
-  } else if (!isHostedProductPhoto && fallback) {
-    const needsFallback =
-      !rawImage ||
-      /\.jpe?g$/i.test(rawImage) ||
-      (rawImage.startsWith("/sarees/") && !/\.avif$/i.test(rawImage)) ||
-      (!rawImage.startsWith("/") && !/^https?:\/\//i.test(rawImage))
-    if (needsFallback) image = fallback
-  }
-
-  if (!image && fallback) image = fallback
+  if (!images.length && fallback) images = [fallback]
+  const image = images[0] || ""
 
   return {
     id: row.id,
@@ -139,11 +142,17 @@ export function mapDbProduct(row) {
     color: row.color || "",
     description: row.description || "",
     image,
+    images,
     active: row.active !== false,
   }
 }
 
 export function toDbPayload(product) {
+  const images = (Array.isArray(product.images) ? product.images : [])
+    .map((item) => String(item || "").trim())
+    .filter(Boolean)
+    .slice(0, 4)
+  const cover = images[0] || String(product.image || "").trim()
   return {
     name: product.name,
     category: product.category || "Soft Silk",
@@ -158,7 +167,7 @@ export function toDbPayload(product) {
     length: product.length || "6.3 metres",
     color: product.color || null,
     description: product.description || null,
-    image: product.image,
+    image: images.length > 1 ? JSON.stringify(images) : cover,
     active: product.active !== false,
     updated_at: new Date().toISOString(),
   }

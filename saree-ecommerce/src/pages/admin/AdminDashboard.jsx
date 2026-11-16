@@ -363,6 +363,7 @@ export default function AdminDashboard() {
       color: product.color || "",
       description: product.description || "",
       image: product.image,
+      images: [...(product.images?.length ? product.images : [product.image || ""]), "", "", ""].slice(0, 4),
       featured: Boolean(product.featured),
       party: Boolean(product.party),
       active: product.active !== false,
@@ -405,29 +406,20 @@ export default function AdminDashboard() {
     setSaving(true)
     setError("")
     setProductNotice("")
+    const shots = (form.images || []).map((item) => String(item || "").trim()).filter(Boolean).slice(0, 4)
+    const cover = shots[0] || String(form.image || "").trim()
+    if (!cover) {
+      setSaving(false)
+      setError("Add at least one product photo.")
+      return
+    }
     try {
       if (editingId) {
-        await updateProduct(editingId, form)
+        await updateProduct(editingId, { ...form, image: cover, images: shots })
         setProductNotice("Product updated.")
       } else {
-        const shots = shopCategoryOptions
-          .map(([saleGroup, category], index) => ({
-            image: String(form.images?.[index] || "").trim(),
-            saleGroup,
-            category,
-          }))
-          .filter((shot) => shot.image)
-        if (!shots.length) {
-          setError("Add at least one product photo.")
-          setSaving(false)
-          return
-        }
-        for (const shot of shots) {
-          await createProduct({ ...form, image: shot.image, saleGroup: shot.saleGroup, category: shot.category })
-        }
-        setProductNotice(
-          shots.length === 1 ? "Added 1 product." : `Added ${shots.length} products, one for each photo.`,
-        )
+        await createProduct({ ...form, image: cover, images: shots })
+        setProductNotice("Product added.")
       }
       resetForm()
       await loadRows()
@@ -1865,15 +1857,11 @@ function ProductsPanel({
     setUploadError("")
     try {
       const url = await uploadProductImage(file)
-      if (editingId) {
-        setForm((current) => ({ ...current, image: url }))
-      } else {
-        setForm((current) => {
-          const images = current.images?.length === 4 ? [...current.images] : ["", "", "", ""]
-          images[slot] = url
-          return { ...current, images, image: images.find(Boolean) || "" }
-        })
-      }
+      setForm((current) => {
+        const images = current.images?.length === 4 ? [...current.images] : ["", "", "", ""]
+        images[slot] = url
+        return { ...current, images, image: images.find(Boolean) || "" }
+      })
     } catch (error) {
       setUploadError(error.message || "The photo could not be uploaded.")
     }
@@ -1969,9 +1957,7 @@ function ProductsPanel({
         <h3 className="text-lg font-semibold">{editingId ? "Edit product" : "Add product"}</h3>
         <p className="mt-1 text-xs text-ink/50">Fields marked with * are required.</p>
         <form onSubmit={onSave} className="mt-4 space-y-3">
-          <p className="text-[10px] tracking-wide text-ink/45 uppercase">
-            {editingId ? "Product photo *" : "Product photos *"}
-          </p>
+          <p className="text-[10px] tracking-wide text-ink/45 uppercase">Product photos *</p>
           <input
             ref={fileInputRef}
             type="file"
@@ -1981,59 +1967,47 @@ function ProductsPanel({
             tabIndex={-1}
             aria-hidden
           />
-          {editingId ? (
-            <button
-              type="button"
-              onClick={() => openFilePicker(0)}
-              disabled={uploadingSlot !== null}
-              className="group relative flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-primary/25 bg-white py-8 transition hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-70"
-            >
-              {form.image ? (
-                <span className="flex flex-col items-center gap-3 px-4 text-center">
-                  <span className="h-24 w-[4.5rem] shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-black/10">
-                    <img src={form.image} alt="" className="h-full w-full object-cover object-top" />
+          <div className="grid grid-cols-2 gap-2">
+            {photos.map((photo, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => openFilePicker(index)}
+                disabled={uploadingSlot !== null}
+                className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-primary/25 bg-white px-2 py-3 text-center transition hover:border-primary/50 disabled:cursor-wait disabled:opacity-70"
+              >
+                {photo ? (
+                  <span className="h-20 w-16 overflow-hidden rounded-lg ring-1 ring-black/10">
+                    <img src={photo} alt="" className="h-full w-full object-cover object-top" />
                   </span>
-                  <span className="text-sm font-medium text-primary">
-                    {uploadingSlot !== null ? "Uploading…" : "Click to change photo"}
-                  </span>
-                </span>
-              ) : (
-                <span className="flex flex-col items-center gap-2 px-4 py-2 text-center">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-2xl text-primary" aria-hidden>
+                ) : (
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xl text-primary" aria-hidden>
                     +
                   </span>
-                  <span className="text-sm font-medium text-primary">
-                    {uploadingSlot !== null ? "Uploading…" : "Click to upload image"}
-                  </span>
+                )}
+                <span className="mt-2 text-[11px] font-medium text-primary">
+                  {uploadingSlot === index ? "Uploading…" : `Photo ${index + 1}`}
                 </span>
-              )}
-            </button>
-          ) : (
-            <div className="grid grid-cols-2 gap-2">
-              {shopCategoryOptions.map(([value, label], index) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => openFilePicker(index)}
-                  disabled={uploadingSlot !== null}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-primary/25 bg-white px-2 py-3 text-center transition hover:border-primary/50 disabled:cursor-wait disabled:opacity-70"
-                >
-                  {photos[index] ? (
-                    <span className="h-20 w-16 overflow-hidden rounded-lg ring-1 ring-black/10">
-                      <img src={photos[index]} alt="" className="h-full w-full object-cover object-top" />
-                    </span>
-                  ) : (
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xl text-primary" aria-hidden>
-                      +
-                    </span>
-                  )}
-                  <span className="mt-2 text-[11px] font-medium text-primary">
-                    {uploadingSlot === index ? "Uploading…" : label}
+                {photo && (
+                  <span
+                    role="presentation"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setForm((current) => {
+                        const images = current.images?.length === 4 ? [...current.images] : ["", "", "", ""]
+                        images[index] = ""
+                        return { ...current, images, image: images.find(Boolean) || "" }
+                      })
+                    }}
+                    className="mt-1 text-[10px] normal-case text-ink/45 underline"
+                  >
+                    Remove
                   </span>
-                </button>
-              ))}
-            </div>
-          )}
+                )}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs normal-case text-ink/50">All four photos stay on this one product.</p>
           {uploadError && <p className="text-xs text-red-700">{uploadError}</p>}
           {editingId && (
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
@@ -2067,7 +2041,6 @@ function ProductsPanel({
               </label>
             ),
           )}
-          {editingId && (
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
             Category
             <select
@@ -2086,7 +2059,6 @@ function ProductsPanel({
               ))}
             </select>
           </label>
-          )}
           <label className="block text-[10px] tracking-wide text-ink/45 uppercase">
             Occasion
             <select
@@ -2133,7 +2105,7 @@ function ProductsPanel({
             disabled={saving || !supabaseReady}
             className="w-full rounded-lg bg-primary py-2.5 text-xs font-semibold tracking-wide text-cream uppercase disabled:opacity-50"
           >
-            {saving ? "Saving…" : editingId ? "Update product" : `Add ${Math.max(photos.filter(Boolean).length, 1)} product${photos.filter(Boolean).length === 1 ? "" : "s"}`}
+            {saving ? "Saving…" : editingId ? "Update product" : "Add product"}
           </button>
           {editingId && (
             <button type="button" onClick={onCancel} className="w-full rounded-lg border border-black/10 py-2 text-xs uppercase">
